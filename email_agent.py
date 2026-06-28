@@ -11,6 +11,7 @@ import os
 import requests
 import json
 from datetime import datetime, timedelta
+from dashboard_data import add_event
 
 # ── Configuração (via variáveis de ambiente / GitHub Secrets) ──
 GMAIL_USER = os.environ["GMAIL_USER"]
@@ -29,7 +30,6 @@ EMOJIS = {
 
 
 def fetch_unread_emails(limit=10):
-    """Liga ao Gmail via IMAP e busca emails não lidos das últimas 24h."""
     mail = imaplib.IMAP4_SSL("imap.gmail.com")
     mail.login(GMAIL_USER, GMAIL_APP_PASSWORD)
     mail.select("inbox")
@@ -76,7 +76,6 @@ def fetch_unread_emails(limit=10):
 
 
 def classify_and_draft(email_item):
-    """Pede à Claude para classificar o email e sugerir resposta."""
     prompt = f"""Analisa este email recebido pela Swift Delux (marca de joias).
 
 De: {email_item['sender']}
@@ -152,6 +151,7 @@ def main():
                 continue
             message = format_message(email_item, analysis)
             send_telegram_message(message)
+            add_event("email", f"{analysis['categoria'].capitalize()}: {analysis['resumo']}")
             print(f"✅ Processado: {email_item['subject']}")
         except Exception as e:
             print(f"⚠️ Erro a processar email '{email_item['subject']}': {e}")
