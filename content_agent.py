@@ -9,6 +9,7 @@ import requests
 import json
 import random
 from datetime import datetime
+from dashboard_data import add_event
 
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
@@ -96,6 +97,7 @@ def main():
     idea = generate_post_idea()
     message = format_message(idea)
     send_telegram_message(message)
+    add_event("post", idea["legenda"][:80])
     print("✅ Ideia de post enviada para o Telegram.")
 
 
