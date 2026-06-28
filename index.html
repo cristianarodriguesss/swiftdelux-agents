@@ -1,61 +1,112 @@
-name: Swift Delux Agents
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Swift Delux — Agentes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #0e0e10;
+    color: #f4f1ea;
+    padding: 24px 16px 64px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; margin: 0 0 4px; }
+  .sub { color: #9a988f; font-size: 13px; margin: 0 0 24px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 24px; }
+  .stat { background: #1a1a1c; border-radius: 12px; padding: 14px 16px; }
+  .stat .label { font-size: 12px; color: #9a988f; margin-bottom: 4px; }
+  .stat .value { font-size: 22px; font-weight: 600; }
+  .agents { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+  .agent { flex: 1; min-width: 160px; background: #1a1a1c; border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #4ad17a; flex-shrink: 0; }
+  .agent .name { font-size: 14px; font-weight: 500; }
+  .agent .status { font-size: 12px; color: #4ad17a; }
+  h2 { font-size: 14px; color: #9a988f; font-weight: 500; margin: 0 0 12px; }
+  .item { border: 1px solid #2a2a2c; border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; display: flex; gap: 10px; }
+  .item .bullet { width: 7px; height: 7px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .item .text { font-size: 14px; line-height: 1.4; }
+  .item .time { font-size: 12px; color: #75736b; margin-top: 2px; }
+  .empty { color: #75736b; font-size: 14px; padding: 24px 0; text-align: center; }
+  .b-email { background: #d85a30; }
+  .b-post { background: #7f77dd; }
+  .refresh { font-size: 12px; color: #75736b; text-align: center; margin-top: 32px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>✨ Swift Delux Agents</h1>
+  <p class="sub" id="updated">A carregar...</p>
 
-on:
-  schedule:
-    - cron: "0 8-20 * * *"
-    - cron: "0 9 * * *"
-  workflow_dispatch: {}
+  <div class="stats">
+    <div class="stat"><div class="label">Emails processados (7 dias)</div><div class="value" id="stat-emails">–</div></div>
+    <div class="stat"><div class="label">Posts sugeridos (7 dias)</div><div class="value" id="stat-posts">–</div></div>
+    <div class="stat"><div class="label">Última atividade</div><div class="value" id="stat-last">–</div></div>
+  </div>
 
-permissions:
-  contents: write
+  <div class="agents">
+    <div class="agent"><span class="dot"></span><div><div class="name">Agente de email</div><div class="status">Ativo · de hora a hora</div></div></div>
+    <div class="agent"><span class="dot"></span><div><div class="name">Agente de conteúdo</div><div class="status">Ativo · 1x por dia</div></div></div>
+  </div>
 
-jobs:
-  email-agent:
-    if: github.event.schedule == '0 8-20 * * *' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install requests
-      - name: Run email agent
-        env:
-          GMAIL_USER: ${{ secrets.GMAIL_USER }}
-          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python email_agent.py
-      - name: Guardar dados.json
-        run: |
-          git config user.name "swiftdelux-bot"
-          git config user.email "bot@swiftdelux.local"
-          git add dados.json
-          git diff --staged --quiet || git commit -m "Atualiza dados (email agent)"
-          git pull --rebase --autostash
-          git push
+  <h2>Atividade recente</h2>
+  <div id="feed"></div>
 
-  content-agent:
-    if: github.event.schedule == '0 9 * * *' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install requests
-      - name: Run content agent
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python content_agent.py
-      - name: Guardar dados.json
-        run: |
-          git config user.name "swiftdelux-bot"
-          git config user.email "bot@swiftdelux.local"
-          git add dados.json
-          git diff --staged --quiet || git commit -m "Atualiza dados (content agent)"
-          git pull --rebase --autostash
-          git push
+  <p class="refresh">Atualiza esta página para ver a atividade mais recente</p>
+</div>
+
+<script>
+  const DATA_URL = "./dados.json";
+
+  function timeAgo(iso) {
+    const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+    if (diff < 3600) return Math.round(diff / 60) + " min";
+    if (diff < 86400) return Math.round(diff / 3600) + " h";
+    return Math.round(diff / 86400) + " d";
+  }
+
+  fetch(DATA_URL, { cache: "no-store" })
+    .then(r => r.json())
+    .then(data => {
+      const events = (data.events || []).slice().reverse();
+      const now = new Date();
+
+      document.getElementById("updated").textContent =
+        "Atualizado em " + now.toLocaleDateString("pt-PT") + " às " + now.toLocaleTimeString("pt-PT");
+
+      const sevenDaysAgo = Date.now() - 7 * 86400000;
+      const recent = events.filter(e => new Date(e.timestamp).getTime() > sevenDaysAgo);
+
+      document.getElementById("stat-emails").textContent =
+        recent.filter(e => e.type === "email").length;
+      document.getElementById("stat-posts").textContent =
+        recent.filter(e => e.type === "post").length;
+      document.getElementById("stat-last").textContent =
+        events.length ? timeAgo(events[0].timestamp) : "–";
+
+      const feed = document.getElementById("feed");
+      if (!events.length) {
+        feed.innerHTML = '<div class="empty">Ainda sem atividade registada. Os agentes vão aparecer aqui depois de correrem.</div>';
+        return;
+      }
+
+      feed.innerHTML = events.slice(0, 20).map(e => `
+        <div class="item">
+          <span class="bullet ${e.type === 'email' ? 'b-email' : 'b-post'}"></span>
+          <div>
+            <div class="text">${e.summary}</div>
+            <div class="time">${timeAgo(e.timestamp)} atrás</div>
+          </div>
+        </div>
+      `).join("");
+    })
+    .catch(() => {
+      document.getElementById("updated").textContent = "Ainda sem dados — corre os agentes pelo menos uma vez.";
+      document.getElementById("feed").innerHTML = '<div class="empty">Sem dados ainda.</div>';
+    });
+</script>
+</body>
+</html>
