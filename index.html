@@ -6,50 +6,78 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   * { box-sizing: border-box; }
-  body {
+  html, body {
     margin: 0;
+    min-height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #0e0e10;
+    background: #0a0a0c;
     color: #f4f1ea;
-    padding: 24px 16px 64px;
   }
-  .wrap { max-width: 720px; margin: 0 auto; }
-  h1 { font-size: 20px; font-weight: 600; margin: 0 0 4px; }
-  .sub { color: #9a988f; font-size: 13px; margin: 0 0 24px; }
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 24px; }
-  .stat { background: #1a1a1c; border-radius: 12px; padding: 14px 16px; }
-  .stat .label { font-size: 12px; color: #9a988f; margin-bottom: 4px; }
-  .stat .value { font-size: 22px; font-weight: 600; }
+  canvas#graph {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.55;
+  }
+  .vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(circle at 50% 35%, transparent 0%, #0a0a0c 78%);
+    pointer-events: none;
+  }
+  .wrap {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 28px 18px 64px;
+  }
+  h1 { font-size: 21px; font-weight: 600; margin: 0 0 4px; letter-spacing: 0.2px; }
+  .sub { color: #a3a096; font-size: 13px; margin: 0 0 26px; }
+  .glass {
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    backdrop-filter: blur(10px);
+  }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 22px; }
+  .stat { padding: 14px 16px; }
+  .stat .label { font-size: 12px; color: #a3a096; margin-bottom: 4px; }
+  .stat .value { font-size: 24px; font-weight: 600; }
   .agents { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
-  .agent { flex: 1; min-width: 160px; background: #1a1a1c; border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: #4ad17a; flex-shrink: 0; }
+  .agent { flex: 1; min-width: 160px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: #5fe39a; flex-shrink: 0; box-shadow: 0 0 8px #5fe39a; }
   .agent .name { font-size: 14px; font-weight: 500; }
-  .agent .status { font-size: 12px; color: #4ad17a; }
-  h2 { font-size: 14px; color: #9a988f; font-weight: 500; margin: 0 0 12px; }
-  .item { border: 1px solid #2a2a2c; border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; display: flex; gap: 10px; }
+  .agent .status { font-size: 12px; color: #5fe39a; }
+  h2 { font-size: 13px; color: #a3a096; font-weight: 500; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.6px; }
+  .item { padding: 12px 14px; margin-bottom: 8px; display: flex; gap: 10px; }
   .item .bullet { width: 7px; height: 7px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
   .item .text { font-size: 14px; line-height: 1.4; }
-  .item .time { font-size: 12px; color: #75736b; margin-top: 2px; }
-  .empty { color: #75736b; font-size: 14px; padding: 24px 0; text-align: center; }
-  .b-email { background: #d85a30; }
-  .b-post { background: #7f77dd; }
-  .refresh { font-size: 12px; color: #75736b; text-align: center; margin-top: 32px; }
+  .item .time { font-size: 12px; color: #7c7a72; margin-top: 2px; }
+  .empty { color: #7c7a72; font-size: 14px; padding: 28px 0; text-align: center; }
+  .b-email { background: #ff7a59; box-shadow: 0 0 6px #ff7a59; }
+  .b-post { background: #9c8cff; box-shadow: 0 0 6px #9c8cff; }
+  .refresh { font-size: 12px; color: #7c7a72; text-align: center; margin-top: 32px; }
 </style>
 </head>
 <body>
+<canvas id="graph"></canvas>
+<div class="vignette"></div>
+
 <div class="wrap">
   <h1>✨ Swift Delux Agents</h1>
   <p class="sub" id="updated">A carregar...</p>
 
   <div class="stats">
-    <div class="stat"><div class="label">Emails processados (7 dias)</div><div class="value" id="stat-emails">–</div></div>
-    <div class="stat"><div class="label">Posts sugeridos (7 dias)</div><div class="value" id="stat-posts">–</div></div>
-    <div class="stat"><div class="label">Última atividade</div><div class="value" id="stat-last">–</div></div>
+    <div class="stat glass"><div class="label">Emails processados (7 dias)</div><div class="value" id="stat-emails">–</div></div>
+    <div class="stat glass"><div class="label">Posts sugeridos (7 dias)</div><div class="value" id="stat-posts">–</div></div>
+    <div class="stat glass"><div class="label">Última atividade</div><div class="value" id="stat-last">–</div></div>
   </div>
 
   <div class="agents">
-    <div class="agent"><span class="dot"></span><div><div class="name">Agente de email</div><div class="status">Ativo · de hora a hora</div></div></div>
-    <div class="agent"><span class="dot"></span><div><div class="name">Agente de conteúdo</div><div class="status">Ativo · 1x por dia</div></div></div>
+    <div class="agent glass"><span class="dot"></span><div><div class="name">Agente de email</div><div class="status">Ativo · de hora a hora</div></div></div>
+    <div class="agent glass"><span class="dot"></span><div><div class="name">Agente de conteúdo</div><div class="status">Ativo · 1x por dia</div></div></div>
   </div>
 
   <h2>Atividade recente</h2>
@@ -59,6 +87,63 @@
 </div>
 
 <script>
+  const canvas = document.getElementById("graph");
+  const ctx = canvas.getContext("2d");
+  let W, H;
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  const PALETTE = ["#ff7a59", "#9c8cff", "#5fe39a", "#ffd166", "#7fd1ff"];
+  const N = 140;
+  const nodes = Array.from({ length: N }, () => {
+    const angle = Math.random() * Math.PI * 2;
+    const radius = Math.pow(Math.random(), 0.6) * Math.min(W, H) * 0.42;
+    return {
+      x: W / 2 + Math.cos(angle) * radius,
+      y: H * 0.4 + Math.sin(angle) * radius,
+      vx: (Math.random() - 0.5) * 0.15,
+      vy: (Math.random() - 0.5) * 0.15,
+      r: Math.random() * 1.6 + 0.6,
+      color: PALETTE[Math.floor(Math.random() * PALETTE.length)],
+    };
+  });
+
+  function step() {
+    ctx.clearRect(0, 0, W, H);
+    for (const n of nodes) {
+      n.x += n.vx;
+      n.y += n.vy;
+      if (n.x < 0 || n.x > W) n.vx *= -1;
+      if (n.y < 0 || n.y > H) n.vy *= -1;
+    }
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        const d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < 90) {
+          ctx.strokeStyle = "rgba(255,255,255," + (0.07 - d / 90 * 0.07) + ")";
+          ctx.lineWidth = 0.6;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+    for (const n of nodes) {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = n.color;
+      ctx.fill();
+    }
+    requestAnimationFrame(step);
+  }
+  step();
+
   const DATA_URL = "./dados.json";
 
   function timeAgo(iso) {
@@ -89,12 +174,12 @@
 
       const feed = document.getElementById("feed");
       if (!events.length) {
-        feed.innerHTML = '<div class="empty">Ainda sem atividade registada. Os agentes vão aparecer aqui depois de correrem.</div>';
+        feed.innerHTML = '<div class="empty glass">Ainda sem atividade registada. Os agentes vão aparecer aqui depois de correrem.</div>';
         return;
       }
 
       feed.innerHTML = events.slice(0, 20).map(e => `
-        <div class="item">
+        <div class="item glass">
           <span class="bullet ${e.type === 'email' ? 'b-email' : 'b-post'}"></span>
           <div>
             <div class="text">${e.summary}</div>
@@ -105,7 +190,7 @@
     })
     .catch(() => {
       document.getElementById("updated").textContent = "Ainda sem dados — corre os agentes pelo menos uma vez.";
-      document.getElementById("feed").innerHTML = '<div class="empty">Sem dados ainda.</div>';
+      document.getElementById("feed").innerHTML = '<div class="empty glass">Sem dados ainda.</div>';
     });
 </script>
 </body>
