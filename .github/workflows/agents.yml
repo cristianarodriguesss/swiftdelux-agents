@@ -4,11 +4,21 @@ on:
   schedule:
     - cron: "0 8-20 * * *"
     - cron: "0 9 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      followers:
+        description: "Nº de seguidores Instagram (deixa vazio se não for atualizar)"
+        required: false
+      partnership:
+        description: "Descreve a parceria fechada (deixa vazio se não for registar)"
+        required: false
+
+permissions:
+  contents: write
 
 jobs:
   email-agent:
-    if: github.event.schedule == '0 8-20 * * *' || github.event_name == 'workflow_dispatch'
+    if: github.event.schedule == '0 8-20 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.followers == '' && github.event.inputs.partnership == '')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,9 +34,17 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python email_agent.py
+      - name: Guardar dados.json
+        run: |
+          git config user.name "swiftdelux-bot"
+          git config user.email "bot@swiftdelux.local"
+          git add dados.json
+          git diff --staged --quiet || git commit -m "Atualiza dados (email agent)"
+          git pull --rebase --autostash
+          git push
 
   content-agent:
-    if: github.event.schedule == '0 9 * * *' || github.event_name == 'workflow_dispatch'
+    if: github.event.schedule == '0 9 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.followers == '' && github.event.inputs.partnership == '')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,3 +58,33 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python content_agent.py
+      - name: Guardar dados.json
+        run: |
+          git config user.name "swiftdelux-bot"
+          git config user.email "bot@swiftdelux.local"
+          git add dados.json
+          git diff --staged --quiet || git commit -m "Atualiza dados (content agent)"
+          git pull --rebase --autostash
+          git push
+
+  update-metrics:
+    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.followers != '' || github.event.inputs.partnership != '')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Update metrics
+        env:
+          FOLLOWERS: ${{ github.event.inputs.followers }}
+          PARTNERSHIP: ${{ github.event.inputs.partnership }}
+        run: python update_metrics.py
+      - name: Guardar dados.json
+        run: |
+          git config user.name "swiftdelux-bot"
+          git config user.email "bot@swiftdelux.local"
+          git add dados.json
+          git diff --staged --quiet || git commit -m "Atualiza metricas manuais"
+          git pull --rebase --autostash
+          git push
