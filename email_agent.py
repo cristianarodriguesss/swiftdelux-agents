@@ -13,7 +13,6 @@ import json
 from datetime import datetime, timedelta
 from dashboard_data import add_event
 
-# ── Configuração (via variáveis de ambiente / GitHub Secrets) ──
 GMAIL_USER = os.environ["GMAIL_USER"]
 GMAIL_APP_PASSWORD = os.environ["GMAIL_APP_PASSWORD"]
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
@@ -142,6 +141,10 @@ def main():
 
     if not emails:
         print("Sem emails novos.")
+        try:
+            send_telegram_message("📭 Sem emails novos por ler nesta verificação.")
+        except Exception:
+            pass
         return
 
     for email_item in emails:
@@ -154,6 +157,11 @@ def main():
             add_event("email", f"{analysis['categoria'].capitalize()}: {analysis['resumo']}")
             print(f"✅ Processado: {email_item['subject']}")
         except Exception as e:
+            error_msg = f"⚠️ <b>Erro a processar email</b>\n<i>{email_item['subject']}</i>\n\n{str(e)[:300]}"
+            try:
+                send_telegram_message(error_msg)
+            except Exception:
+                pass
             print(f"⚠️ Erro a processar email '{email_item['subject']}': {e}")
 
 
