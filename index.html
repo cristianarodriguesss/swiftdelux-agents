@@ -2,161 +2,421 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>Swift Delux — Painel</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agency OS — Swift Delux × Cristiana Rodrigues</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #f7f6f3;
-    color: #1c1b19;
-    padding: 28px 18px 64px;
-  }
-  .wrap { max-width: 820px; margin: 0 auto; }
-  h1 { font-size: 22px; font-weight: 600; margin: 0 0 4px; }
-  .sub { color: #807d72; font-size: 13px; margin: 0 0 26px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 28px; }
-  .card {
-    background: #fff;
-    border: 1px solid #eae8e2;
-    border-radius: 16px;
-    padding: 18px 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-  }
-  .card .icon { font-size: 20px; margin-bottom: 10px; }
-  .card .label { font-size: 13px; color: #807d72; margin-bottom: 6px; }
-  .card .value { font-size: 28px; font-weight: 600; }
-  .card .extra { font-size: 12px; color: #a9a69b; margin-top: 4px; }
-  .agents { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
-  .agent {
-    flex: 1; min-width: 180px;
-    background: #fff; border: 1px solid #eae8e2; border-radius: 14px;
-    padding: 14px 16px; display: flex; align-items: center; gap: 10px;
-  }
-  .dot { width: 7px; height: 7px; border-radius: 50%; background: #2fb866; flex-shrink: 0; }
-  .agent .name { font-size: 14px; font-weight: 500; }
-  .agent .status { font-size: 12px; color: #2fb866; }
-  h2 { font-size: 13px; color: #807d72; font-weight: 600; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .item {
-    background: #fff; border: 1px solid #eae8e2; border-radius: 12px;
-    padding: 13px 16px; margin-bottom: 8px; display: flex; gap: 10px;
-  }
-  .item .bullet { width: 7px; height: 7px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
-  .item .text { font-size: 14px; line-height: 1.4; }
-  .item .time { font-size: 12px; color: #a9a69b; margin-top: 2px; }
-  .empty { color: #a9a69b; font-size: 14px; padding: 24px 0; text-align: center; }
-  .b-email { background: #e8794a; }
-  .b-post { background: #6c63d6; }
-  .b-partnership { background: #d4a017; }
-  .refresh { font-size: 12px; color: #a9a69b; text-align: center; margin-top: 32px; }
-  .howto { background: #fff8ea; border: 1px solid #f0e0b0; border-radius: 12px; padding: 14px 16px; font-size: 13px; color: #6b5a1f; margin-bottom: 28px; line-height: 1.5; }
-  .howto b { color: #4a3d10; }
+:root{--bg:#f8f8f6;--surface:#ffffff;--border:#ebebea;--text:#1a1a18;--muted:#8a8880;--accent:#1a1a18;--swift:#c9a96e;--cris:#9b8ec4;--green:#2fb866;--red:#e05252;--radius:14px;--shadow:0 1px 4px rgba(0,0,0,0.05)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;font-size:14px}
+.sidebar{width:220px;min-height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.sidebar-logo{padding:0 20px 20px;border-bottom:1px solid var(--border)}
+.sidebar-logo .name{font-size:13px;font-weight:700;letter-spacing:0.5px}
+.sidebar-logo .sub{font-size:11px;color:var(--muted);margin-top:2px}
+.nav{flex:1;padding:12px 0;overflow-y:auto}
+.nav-section{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;padding:12px 20px 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 20px;cursor:pointer;font-size:13px;color:var(--muted);transition:background 0.15s}
+.nav-item:hover{background:var(--bg);color:var(--text)}
+.nav-item.active{background:var(--bg);color:var(--text);font-weight:500}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.icon{font-size:15px;width:18px;text-align:center}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.main{margin-left:220px;flex:1;min-height:100vh}
+.page{display:none;padding:28px 32px 64px}
+.page.active{display:block}
+.page-header{margin-bottom:24px}
+.page-header h1{font-size:20px;font-weight:600}
+.page-header .meta{font-size:13px;color:var(--muted);margin-top:4px}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px}
+.badge-swift{background:#fdf3e3;color:#9a6e2f}
+.badge-cris{background:#f0edf9;color:#6b5fa0}
+.grid{display:grid;gap:14px}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+.card-label{font-size:12px;color:var(--muted);margin-bottom:8px}
+.card-value{font-size:26px;font-weight:600;line-height:1}
+.card-value.sm{font-size:20px}
+.card-delta{font-size:12px;margin-top:6px}
+.delta-up{color:var(--green)}
+.briefing{background:var(--accent);color:#fff;border-radius:var(--radius);padding:22px 24px;margin-bottom:24px}
+.briefing-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.briefing-header .title{font-size:13px;font-weight:600;opacity:0.7;text-transform:uppercase;letter-spacing:0.5px}
+.briefing-content{font-size:14px;line-height:1.7;opacity:0.9}
+.briefing-content.loading{opacity:0.5;font-style:italic}
+.briefing-sections{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.briefing-section h4{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;opacity:0.5;margin-bottom:8px}
+.briefing-section ul{list-style:none}
+.briefing-section ul li{font-size:13px;opacity:0.85;padding:3px 0}
+.briefing-section ul li::before{content:"→ ";opacity:0.4}
+.btn-refresh{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px}
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:var(--border);border-radius:10px;padding:3px;width:fit-content}
+.tab{padding:7px 16px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);transition:all 0.15s}
+.tab.active{background:var(--surface);color:var(--text);font-weight:500;box-shadow:var(--shadow)}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.chart-title{font-size:13px;font-weight:600;margin-bottom:16px}
+.chart-wrap{position:relative;height:180px}
+.row{display:flex;gap:14px}
+.row>*{flex:1}
+.section{margin-bottom:28px}
+.section-title{font-size:13px;font-weight:600;margin-bottom:14px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+.pipeline{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;overflow-x:auto}
+.pipeline-col{min-width:150px}
+.pipeline-col-header{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);margin-bottom:10px}
+.pipeline-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;cursor:pointer}
+.pipeline-item:hover{border-color:#ccc}
+.pipeline-item .brand{font-size:13px;font-weight:500}
+.pipeline-item .detail{font-size:11px;color:var(--muted);margin-top:4px}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden}
+.cal-day-header{background:var(--surface);padding:8px;text-align:center;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase}
+.cal-day{background:var(--surface);padding:8px;min-height:80px}
+.cal-day .day-num{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:4px}
+.cal-day.today .day-num{background:var(--accent);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px}
+.cal-event{font-size:10px;padding:2px 6px;border-radius:4px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-event.swift{background:#fdf3e3;color:#9a6e2f}
+.cal-event.cris{background:#f0edf9;color:#6b5fa0}
+.cal-event.deal{background:#e8f9ee;color:#1a7a3d}
+.goal-item{margin-bottom:16px}
+.goal-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.goal-name{font-size:13px;font-weight:500}
+.goal-progress-text{font-size:12px;color:var(--muted)}
+.goal-bar-bg{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.goal-bar-fill{height:100%;border-radius:10px;transition:width 0.6s ease}
+.finance-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+.finance-row:last-child{border-bottom:none}
+.finance-row .amount{font-size:13px;font-weight:600}
+.finance-row .amount.income{color:var(--green)}
+.finance-row .amount.expense{color:var(--red)}
+.input-row{display:flex;gap:10px;align-items:flex-end;margin-bottom:16px;flex-wrap:wrap}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+.field input,.field select,.field textarea{border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;background:var(--surface);color:var(--text);outline:none}
+.field input:focus,.field select:focus{border-color:#aaa}
+.btn{padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;border:none;transition:all 0.15s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{opacity:0.85}
+.audience-bar{margin-bottom:10px}
+.audience-bar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.audience-bar-track{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.audience-bar-fill{height:100%;border-radius:10px;background:var(--accent)}
+.achievements{display:flex;gap:10px;flex-wrap:wrap}
+.achievement{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.achievement .ach-icon{font-size:22px}
+.achievement .ach-name{font-size:12px;font-weight:600}
+.achievement .ach-desc{font-size:11px;color:var(--muted)}
+.achievement.locked{opacity:0.35;filter:grayscale(1)}
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.lib-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;cursor:pointer}
+.lib-item:hover{border-color:#ccc}
+.lib-icon{font-size:24px;margin-bottom:8px}
+.lib-name{font-size:12px;font-weight:500}
+.lib-count{font-size:11px;color:var(--muted);margin-top:2px}
+.alert{background:#fff8ea;border:1px solid #f0d980;border-radius:10px;padding:12px 14px;font-size:13px;color:#7a5c00;margin-bottom:10px}
+.alert-green{background:#f0fdf4;border-color:#bbf7d0;color:#166534}
+.hint{font-size:11px;color:var(--muted);margin-top:6px}
+.mt16{margin-top:16px}
+.overflow-x{overflow-x:auto}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>✨ Swift Delux — Painel</h1>
-  <p class="sub" id="updated">A carregar...</p>
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="name">AGENCY OS</div>
+    <div class="sub">Swift Delux × Cristiana</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Geral</div>
+    <div class="nav-item active" onclick="nav('dashboard',this)"><span class="icon">⬡</span> Dashboard</div>
+    <div class="nav-item" onclick="nav('analytics',this)"><span class="icon">◎</span> Analytics</div>
+    <div class="nav-item" onclick="nav('goals',this)"><span class="icon">◈</span> Goals</div>
+    <div class="nav-section">Marcas</div>
+    <div class="nav-item" onclick="nav('swiftdelux',this)"><span class="dot" style="background:var(--swift)"></span> Swift Delux</div>
+    <div class="nav-item" onclick="nav('influencer',this)"><span class="dot" style="background:var(--cris)"></span> Influencer</div>
+    <div class="nav-section">Operações</div>
+    <div class="nav-item" onclick="nav('content',this)"><span class="icon">▦</span> Content Planner</div>
+    <div class="nav-item" onclick="nav('crm',this)"><span class="icon">◉</span> Brand Deals</div>
+    <div class="nav-item" onclick="nav('finance',this)"><span class="icon">◫</span> Finance</div>
+    <div class="nav-section">Recursos</div>
+    <div class="nav-item" onclick="nav('reports',this)"><span class="icon">◧</span> Reports</div>
+    <div class="nav-item" onclick="nav('library',this)"><span class="icon">◪</span> Biblioteca</div>
+  </nav>
+  <div class="sidebar-footer">
+    <div style="display:flex;align-items:center;gap:6px"><span class="live-dot"></span> Agentes ativos</div>
+    <div style="margin-top:4px" id="sidebar-time"></div>
+  </div>
+</aside>
 
-  <div class="grid">
-    <div class="card">
-      <div class="icon">📧</div>
-      <div class="label">Emails processados (7 dias)</div>
-      <div class="value" id="stat-emails">–</div>
+<main class="main">
+
+<!-- DASHBOARD -->
+<div class="page active" id="page-dashboard">
+  <div class="page-header"><h1>Dashboard</h1><div class="meta" id="dash-date"></div></div>
+  <div class="briefing">
+    <div class="briefing-header">
+      <div class="title">✦ Agency Briefing</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:12px;opacity:0.5" id="briefing-date"></div>
+        <button class="btn-refresh" onclick="loadBriefing()">↻ Atualizar</button>
+      </div>
     </div>
-    <div class="card">
-      <div class="icon">✨</div>
-      <div class="label">Posts sugeridos (7 dias)</div>
-      <div class="value" id="stat-posts">–</div>
-    </div>
-    <div class="card">
-      <div class="icon">🤝</div>
-      <div class="label">Parcerias fechadas (total)</div>
-      <div class="value" id="stat-partnerships">–</div>
-    </div>
-    <div class="card">
-      <div class="icon">👥</div>
-      <div class="label">Seguidores Instagram</div>
-      <div class="value" id="stat-followers">–</div>
-      <div class="extra" id="followers-updated"></div>
+    <div class="briefing-content loading" id="briefing-text">A gerar briefing com IA…</div>
+    <div class="briefing-sections" id="briefing-sections" style="display:none">
+      <div class="briefing-section"><h4>✓ Destaques</h4><ul id="briefing-highlights"></ul></div>
+      <div class="briefing-section"><h4>⚡ Tarefas de hoje</h4><ul id="briefing-tasks"></ul></div>
     </div>
   </div>
-
-  <div class="howto">
-    💡 <b>Para atualizar seguidores ou registar uma parceria:</b> vai ao GitHub → Actions → "Swift Delux Agents" → "Run workflow" → preenche o campo "followers" e/ou "partnership" → corre. O painel atualiza-se sozinho.
+  <div class="section">
+    <div class="section-title">KPIs principais</div>
+    <div class="grid grid-4">
+      <div class="card"><div class="card-label">👥 Seguidores Swift Delux IG</div><div class="card-value" id="kpi-sd-ig">—</div></div>
+      <div class="card"><div class="card-label">👤 Seguidores @cris IG</div><div class="card-value" id="kpi-cr-ig">—</div></div>
+      <div class="card"><div class="card-label">🤝 Parcerias fechadas</div><div class="card-value" id="kpi-deals">0</div></div>
+      <div class="card"><div class="card-label">✨ Posts sugeridos (7d)</div><div class="card-value" id="kpi-posts">—</div></div>
+      <div class="card"><div class="card-label">📧 Emails processados (7d)</div><div class="card-value" id="kpi-emails">—</div></div>
+      <div class="card"><div class="card-label">💰 Receita estimada (mês)</div><div class="card-value" id="kpi-revenue">€—</div></div>
+      <div class="card"><div class="card-label">📈 Objetivo Swift Delux</div><div class="card-value" id="kpi-goal-pct">—%</div><div class="card-delta">Meta: 10k seguidores</div></div>
+      <div class="card"><div class="card-label">🔔 Alertas</div><div class="card-value" id="kpi-alerts" style="color:var(--red)">0</div></div>
+    </div>
   </div>
-
-  <div class="agents">
-    <div class="agent"><span class="dot"></span><div><div class="name">Agente de email</div><div class="status">Ativo · de hora a hora</div></div></div>
-    <div class="agent"><span class="dot"></span><div><div class="name">Agente de conteúdo</div><div class="status">Ativo · 1x por dia</div></div></div>
+  <div class="row section">
+    <div class="chart-card"><div class="chart-title">Seguidores Swift Delux IG</div><div class="chart-wrap"><canvas id="chart-sd"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Seguidores @cristianarodriguesss IG</div><div class="chart-wrap"><canvas id="chart-cr"></canvas></div></div>
   </div>
-
-  <h2>Atividade recente</h2>
-  <div id="feed"></div>
-
-  <p class="refresh">Atualiza esta página para ver a atividade mais recente</p>
+  <div class="card section">
+    <div class="chart-title">Atualizar métricas</div>
+    <div class="input-row">
+      <div class="field"><label>Swift Delux IG seguidores</label><input id="inp-sd-ig" type="number" placeholder="ex: 8500"></div>
+      <div class="field"><label>@cris IG seguidores</label><input id="inp-cr-ig" type="number" placeholder="ex: 45000"></div>
+      <div class="field"><label>Receita mês (€)</label><input id="inp-revenue" type="number" placeholder="ex: 1200"></div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btn-primary" onclick="saveMetrics()">Guardar</button></div>
+    </div>
+    <div class="hint">💡 Para automático: requer ligação à Instagram Graph API (processo separado)</div>
+  </div>
+  <div class="section"><div class="section-title">Conquistas</div><div class="achievements" id="achievements-list"></div></div>
 </div>
 
-<script>
-  const DATA_URL = "./dados.json";
-  const BULLETS = { email: "b-email", post: "b-post", partnership: "b-partnership" };
+<!-- ANALYTICS -->
+<div class="page" id="page-analytics">
+  <div class="page-header"><h1>Analytics</h1><div class="meta">Visão geral das duas marcas</div></div>
+  <div class="row section">
+    <div class="chart-card"><div class="chart-title">Emails processados por dia</div><div class="chart-wrap"><canvas id="chart-emails"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Posts sugeridos (acumulado)</div><div class="chart-wrap"><canvas id="chart-posts"></canvas></div></div>
+  </div>
+  <div class="row section">
+    <div class="chart-card"><div class="chart-title">Parcerias por mês</div><div class="chart-wrap"><canvas id="chart-deals"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Receita por mês (€)</div><div class="chart-wrap"><canvas id="chart-rev"></canvas></div></div>
+  </div>
+</div>
 
-  function timeAgo(iso) {
-    const diff = (Date.now() - new Date(iso).getTime()) / 1000;
-    if (diff < 3600) return Math.round(diff / 60) + " min";
-    if (diff < 86400) return Math.round(diff / 3600) + " h";
-    return Math.round(diff / 86400) + " d";
-  }
-
-  fetch(DATA_URL, { cache: "no-store" })
-    .then(r => r.json())
-    .then(data => {
-      const events = (data.events || []).slice().reverse();
-      const now = new Date();
-
-      document.getElementById("updated").textContent =
-        "Atualizado em " + now.toLocaleDateString("pt-PT") + " às " + now.toLocaleTimeString("pt-PT");
-
-      const sevenDaysAgo = Date.now() - 7 * 86400000;
-      const recent = events.filter(e => new Date(e.timestamp).getTime() > sevenDaysAgo);
-
-      document.getElementById("stat-emails").textContent =
-        recent.filter(e => e.type === "email").length;
-      document.getElementById("stat-posts").textContent =
-        recent.filter(e => e.type === "post").length;
-      document.getElementById("stat-partnerships").textContent =
-        events.filter(e => e.type === "partnership").length;
-
-      if (data.followers && data.followers.count != null) {
-        document.getElementById("stat-followers").textContent =
-          Number(data.followers.count).toLocaleString("pt-PT");
-        document.getElementById("followers-updated").textContent =
-          "atualizado " + timeAgo(data.followers.updated_at) + " atrás";
-      } else {
-        document.getElementById("stat-followers").textContent = "—";
-      }
-
-      const feed = document.getElementById("feed");
-      if (!events.length) {
-        feed.innerHTML = '<div class="empty">Ainda sem atividade registada.</div>';
-        return;
-      }
-
-      feed.innerHTML = events.slice(0, 20).map(e => `
-        <div class="item">
-          <span class="bullet ${BULLETS[e.type] || 'b-email'}"></span>
-          <div>
-            <div class="text">${e.summary}</div>
-            <div class="time">${timeAgo(e.timestamp)} atrás</div>
-          </div>
+<!-- SWIFT DELUX -->
+<div class="page" id="page-swiftdelux">
+  <div class="page-header"><h1>Swift Delux <span class="badge badge-swift">Marca</span></h1><div class="meta">Métricas e audiência</div></div>
+  <div class="grid grid-4 section">
+    <div class="card"><div class="card-label">Seguidores IG</div><div class="card-value" id="sd-followers">—</div></div>
+    <div class="card"><div class="card-label">Taxa de engagement</div><div class="card-value sm">—</div></div>
+    <div class="card"><div class="card-label">Posts publicados</div><div class="card-value sm">—</div></div>
+    <div class="card"><div class="card-label">Alcance médio</div><div class="card-value sm">—</div></div>
+  </div>
+  <div class="section"><div class="section-title">Audiência</div>
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="chart-title" style="margin-bottom:14px">Género</div>
+          <div class="audience-bar"><div class="audience-bar-label"><span>Feminino</span><span>65%</span></div><div class="audience-bar-track"><div class="audience-bar-fill" style="width:65%;background:var(--swift)"></div></div></div>
+          <div class="audience-bar"><div class="audience-bar-label"><span>Masculino</span><span>35%</span></div><div class="audience-bar-track"><div class="audience-bar-fill" style="width:35%;background:#ddd"></div></div></div>
         </div>
-      `).join("");
-    })
-    .catch(() => {
-      document.getElementById("updated").textContent = "Ainda sem dados — corre os agentes pelo menos uma vez.";
-      document.getElementById("feed").innerHTML = '<div class="empty">Sem dados ainda.</div>';
-    });
+        <div>
+          <div class="chart-title" style="margin-bottom:14px">Países</div>
+          <div class="audience-bar"><div class="audience-bar-label"><span>🇵🇹 Portugal</span><span>42%</span></div><div class="audience-bar-track"><div class="audience-bar-fill" style="width:42%;background:var(--swift)"></div></div></div>
+          <div class="audience-bar"><div class="audience-bar-label"><span>🇧🇷 Brasil</span><span>28%</span></div><div class="audience-bar-track"><div class="audience-bar-fill" style="width:28%;background:var(--swift)"></div></div></div>
+          <div class="audience-bar"><div class="audience-bar-label"><span>🇪🇸 Espanha</span><span>12%</span></div><div class="audience-bar-track"><div class="audience-bar-fill" style="width:12%;background:var(--swift)"></div></div></div>
+        </div>
+        <div>
+          <div class="chart-title" style="margin-bottom:14px">Faixas etárias</div>
+          <div class="audience-bar"><div class="audience-bar-label"><span>18–24</span><span>22%</span></div><div class="audience-bar-track"><div class="audience-bar-fill" style="width:22%;background:var(--swift)"></div></div></div>
+          <div class="audience-bar"><div class="audience-bar-label"><span>25–34</span><span>45%</span></div><div class="audience-bar-track"><div class="audience-bar-fill" style="width:45%;background:var(--swift)"></div></div></div>
+          <div class="audience-bar"><div class="audience-bar-label"><span>35–44</span><span>21%</span></div><div class="audience-bar-track"><div class="audience-bar-fill" style="width:21%;background:var(--swift)"></div></div></div>
+          <div class="audience-bar"><div class="audience-bar-label"><span>45+</span><span>12%</span></div><div class="audience-bar-track"><div class="audience-bar-fill" style="width:12%;background:var(--swift)"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INFLUENCER -->
+<div class="page" id="page-influencer">
+  <div class="page-header"><h1>Cristiana Rodrigues <span class="badge badge-cris">Influencer</span></h1><div class="meta">@cristianarodriguesss</div></div>
+  <div class="grid grid-4 section">
+    <div class="card"><div class="card-label">Seguidores IG</div><div class="card-value" id="cr-followers">—</div></div>
+    <div class="card"><div class="card-label">Engagement rate</div><div class="card-value sm">—</div></div>
+    <div class="card"><div class="card-label">Parcerias ativas</div><div class="card-value sm" id="cr-deals">0</div></div>
+    <div class="card"><div class="card-label">Posts este mês</div><div class="card-value sm">—</div></div>
+  </div>
+  <div class="section"><div class="section-title">Banco de conteúdos</div>
+    <div class="input-row">
+      <div class="field"><label>Ideia</label><input id="content-idea" type="text" placeholder="Descrição do conteúdo" style="width:220px"></div>
+      <div class="field"><label>Marca</label><select id="content-brand"><option>Swift Delux</option><option>Influencer</option><option>Parceria</option></select></div>
+      <div class="field"><label>Estado</label><select id="content-status"><option>Ideia</option><option>A gravar</option><option>Gravado</option><option>Editado</option><option>Agendado</option><option>Publicado</option></select></div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btn-primary" onclick="addContent()">+ Adicionar</button></div>
+    </div>
+    <div id="content-bank"></div>
+  </div>
+  <div class="section"><div class="section-title">Wishlist de marcas</div>
+    <div class="input-row">
+      <div class="field"><label>Marca</label><input id="wish-brand" type="text" placeholder="ex: Mango"></div>
+      <div class="field"><label>Nicho</label><input id="wish-niche" type="text" placeholder="ex: Moda"></div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btn-primary" onclick="addWish()">+ Adicionar</button></div>
+    </div>
+    <div id="wishlist"></div>
+  </div>
+</div>
+
+<!-- CONTENT PLANNER -->
+<div class="page" id="page-content">
+  <div class="page-header"><h1>Content Planner</h1><div class="meta" id="cal-month-label"></div></div>
+  <div class="input-row section">
+    <div class="field"><label>Data</label><input id="cal-date" type="date"></div>
+    <div class="field"><label>Conteúdo</label><input id="cal-title" type="text" placeholder="Descrição" style="width:220px"></div>
+    <div class="field"><label>Tipo</label><select id="cal-type"><option value="swift">Swift Delux</option><option value="cris">Influencer</option><option value="deal">Parceria</option></select></div>
+    <div class="field" style="justify-content:flex-end"><button class="btn btn-primary" onclick="addCalEvent()">+ Agendar</button></div>
+  </div>
+  <div class="card">
+    <div style="display:flex;gap:16px;margin-bottom:14px;font-size:12px">
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#fdf3e3;border:1px solid #c9a96e;display:inline-block"></span> Swift Delux</span>
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#f0edf9;border:1px solid #9b8ec4;display:inline-block"></span> Influencer</span>
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#e8f9ee;border:1px solid #2fb866;display:inline-block"></span> Parceria</span>
+    </div>
+    <div class="calendar-grid" id="calendar"></div>
+  </div>
+</div>
+
+<!-- CRM -->
+<div class="page" id="page-crm">
+  <div class="page-header"><h1>Brand Deals — CRM</h1><div class="meta">Pipeline de parcerias</div></div>
+  <div class="input-row section">
+    <div class="field"><label>Marca</label><input id="crm-brand" type="text" placeholder="Nome da marca"></div>
+    <div class="field"><label>Email</label><input id="crm-email" type="email" placeholder="contacto@marca.com"></div>
+    <div class="field"><label>Estado</label>
+      <select id="crm-status">
+        <option>Quero contactar</option><option>Email enviado</option><option>Sem resposta</option>
+        <option>Em negociação</option><option>Parceria fechada</option><option>Conteúdo publicado</option><option>Pagamento recebido</option>
+      </select>
+    </div>
+    <div class="field"><label>Valor (€)</label><input id="crm-value" type="number" placeholder="0"></div>
+    <div class="field" style="justify-content:flex-end"><button class="btn btn-primary" onclick="addCRM()">+ Adicionar</button></div>
+  </div>
+  <div class="overflow-x"><div class="pipeline" id="pipeline"></div></div>
+</div>
+
+<!-- GOALS -->
+<div class="page" id="page-goals">
+  <div class="page-header"><h1>Goals</h1><div class="meta">Objetivos e progresso</div></div>
+  <div class="section"><div class="section-title">Swift Delux</div>
+    <div class="card">
+      <div class="goal-item"><div class="goal-header"><div class="goal-name">10.000 seguidores Instagram</div><div class="goal-progress-text"><span id="g-sd-val">0</span> / 10.000</div></div><div class="goal-bar-bg"><div class="goal-bar-fill" id="g-sd-bar" style="width:0%;background:var(--swift)"></div></div></div>
+      <div class="goal-item mt16"><div class="goal-header"><div class="goal-name">10 parcerias fechadas</div><div class="goal-progress-text"><span id="g-deals-val">0</span> / 10</div></div><div class="goal-bar-bg"><div class="goal-bar-fill" id="g-deals-bar" style="width:0%;background:var(--swift)"></div></div></div>
+    </div>
+  </div>
+  <div class="section"><div class="section-title">Cristiana Rodrigues</div>
+    <div class="card">
+      <div class="goal-item"><div class="goal-header"><div class="goal-name">50.000 seguidores Instagram</div><div class="goal-progress-text"><span id="g-cr-val">0</span> / 50.000</div></div><div class="goal-bar-bg"><div class="goal-bar-fill" id="g-cr-bar" style="width:0%;background:var(--cris)"></div></div></div>
+      <div class="goal-item mt16"><div class="goal-header"><div class="goal-name">Receita anual €12.000</div><div class="goal-progress-text">€<span id="g-rev-val">0</span> / €12.000</div></div><div class="goal-bar-bg"><div class="goal-bar-fill" id="g-rev-bar" style="width:0%;background:var(--cris)"></div></div></div>
+    </div>
+  </div>
+  <div class="section"><div class="section-title">Alertas</div><div id="alerts-list"></div></div>
+</div>
+
+<!-- FINANCE -->
+<div class="page" id="page-finance">
+  <div class="page-header"><h1>Finance</h1><div class="meta">Receitas e despesas</div></div>
+  <div class="grid grid-3 section">
+    <div class="card"><div class="card-label">💰 Receita total</div><div class="card-value" id="fin-total">€0</div></div>
+    <div class="card"><div class="card-label">📉 Despesas</div><div class="card-value" id="fin-expenses" style="color:var(--red)">€0</div></div>
+    <div class="card"><div class="card-label">✓ Lucro</div><div class="card-value" id="fin-profit" style="color:var(--green)">€0</div></div>
+  </div>
+  <div class="row section">
+    <div class="card" style="flex:2">
+      <div class="chart-title">Adicionar movimento</div>
+      <div class="input-row">
+        <div class="field"><label>Descrição</label><input id="fin-desc" type="text" placeholder="ex: Parceria Mango"></div>
+        <div class="field"><label>Valor (€)</label><input id="fin-amount" type="number" placeholder="0"></div>
+        <div class="field"><label>Tipo</label><select id="fin-type"><option value="income">Receita</option><option value="expense">Despesa</option></select></div>
+        <div class="field"><label>Marca</label><select id="fin-brand"><option>Swift Delux</option><option>Influencer</option></select></div>
+        <div class="field" style="justify-content:flex-end"><button class="btn btn-primary" onclick="addFinance()">+</button></div>
+      </div>
+      <div id="fin-list"></div>
+    </div>
+    <div class="chart-card"><div class="chart-title">Distribuição</div><div class="chart-wrap"><canvas id="chart-pie"></canvas></div></div>
+  </div>
+</div>
+
+<!-- REPORTS -->
+<div class="page" id="page-reports">
+  <div class="page-header"><h1>Monthly Reports</h1><div class="meta">Gerados com IA</div></div>
+  <div class="card section">
+    <div class="chart-title">Gerar relatório</div>
+    <div class="input-row">
+      <div class="field"><label>Mês</label><select id="report-month"><option>Janeiro 2026</option><option>Fevereiro 2026</option><option>Março 2026</option><option>Abril 2026</option><option>Maio 2026</option><option>Junho 2026</option><option selected>Julho 2026</option></select></div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btn-primary" onclick="generateReport()">✦ Gerar com IA</button></div>
+    </div>
+    <div id="report-output" style="margin-top:16px;line-height:1.7;font-size:14px;color:var(--muted)">O relatório aparece aqui.</div>
+  </div>
+</div>
+
+<!-- LIBRARY -->
+<div class="page" id="page-library">
+  <div class="page-header"><h1>Biblioteca</h1><div class="meta">Recursos organizados</div></div>
+  <div class="lib-grid">
+    <div class="lib-item"><div class="lib-icon">🎨</div><div class="lib-name">Logos</div><div class="lib-count">0 ficheiros</div></div>
+    <div class="lib-item"><div class="lib-icon">📐</div><div class="lib-name">Templates</div><div class="lib-count">0 ficheiros</div></div>
+    <div class="lib-item"><div class="lib-icon">📋</div><div class="lib-name">Media Kit</div><div class="lib-count">0 ficheiros</div></div>
+    <div class="lib-item"><div class="lib-icon">📄</div><div class="lib-name">Contratos</div><div class="lib-count">0 ficheiros</div></div>
+    <div class="lib-item"><div class="lib-icon">🖼️</div><div class="lib-name">Fotografias</div><div class="lib-count">0 ficheiros</div></div>
+    <div class="lib-item"><div class="lib-icon">🎬</div><div class="lib-name">Vídeos</div><div class="lib-count">0 ficheiros</div></div>
+    <div class="lib-item"><div class="lib-icon">📁</div><div class="lib-name">Documentos</div><div class="lib-count">0 ficheiros</div></div>
+    <div class="lib-item"><div class="lib-icon">🎨</div><div class="lib-name">Paleta</div><div class="lib-count">Swift + Cris</div></div>
+  </div>
+  <div class="hint mt16">💡 Guarda links para ficheiros no Google Drive ou Dropbox.</div>
+</div>
+
+</main>
+<script>
+const S={sdIG:null,crIG:null,revenue:0,crm:[],content:[],wishlist:[],finance:[],calEvents:[],dados:{events:[],followers:null}};
+function nav(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');el.classList.add('active');if(id==='analytics')initAnalyticsCharts();if(id==='content')renderCalendar();if(id==='crm')renderPipeline();if(id==='finance')renderFinance();}
+function switchTab(el){el.closest('.tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');}
+function setText(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
+function updateTime(){const now=new Date();const opts={weekday:'long',day:'numeric',month:'long',year:'numeric'};const str=now.toLocaleDateString('pt-PT',opts);setText('sidebar-time',now.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}));const d=document.getElementById('dash-date');if(d)d.textContent=str.charAt(0).toUpperCase()+str.slice(1);const b=document.getElementById('briefing-date');if(b)b.textContent=str;}
+setInterval(updateTime,1000);updateTime();
+async function loadDados(){try{const r=await fetch('./dados.json',{cache:'no-store'});if(r.ok){S.dados=await r.json();applyDados();}}catch(e){}}
+function applyDados(){const events=S.dados.events||[];const ago7=Date.now()-7*86400000;const recent=events.filter(e=>new Date(e.timestamp).getTime()>ago7);setText('kpi-emails',recent.filter(e=>e.type==='email').length);setText('kpi-posts',recent.filter(e=>e.type==='post').length);const deals=events.filter(e=>e.type==='partnership').length;setText('kpi-deals',deals);setText('cr-deals',deals);if(S.dados.followers){S.sdIG=S.dados.followers.count;setText('kpi-sd-ig',S.sdIG.toLocaleString('pt-PT'));setText('sd-followers',S.sdIG.toLocaleString('pt-PT'));setText('kpi-goal-pct',Math.min(100,Math.round(S.sdIG/10000*100))+'%');}S.crm=[...S.crm,...events.filter(e=>e.type==='partnership').map(e=>({brand:e.summary,status:'Parceria fechada',value:0,email:''}))];updateGoals();updateAchievements();updateAlerts();}
+function saveMetrics(){const sdIG=parseInt(document.getElementById('inp-sd-ig').value)||S.sdIG;const crIG=parseInt(document.getElementById('inp-cr-ig').value)||S.crIG;const rev=parseFloat(document.getElementById('inp-revenue').value)||S.revenue;if(sdIG){S.sdIG=sdIG;setText('kpi-sd-ig',sdIG.toLocaleString('pt-PT'));setText('sd-followers',sdIG.toLocaleString('pt-PT'));setText('kpi-goal-pct',Math.min(100,Math.round(sdIG/10000*100))+'%');}if(crIG){S.crIG=crIG;setText('kpi-cr-ig',crIG.toLocaleString('pt-PT'));setText('cr-followers',crIG.toLocaleString('pt-PT'));}if(rev){S.revenue=rev;setText('kpi-revenue','€'+rev.toLocaleString('pt-PT'));}updateGoals();updateAchievements();updateAlerts();}
+function updateGoals(){const sdIG=S.sdIG||0;const crIG=S.crIG||0;const deals=S.crm.filter(c=>c.status==='Parceria fechada').length;const rev=S.revenue||0;setText('g-sd-val',sdIG.toLocaleString('pt-PT'));const b1=document.getElementById('g-sd-bar');if(b1)b1.style.width=Math.min(100,sdIG/10000*100)+'%';setText('g-cr-val',crIG.toLocaleString('pt-PT'));const b2=document.getElementById('g-cr-bar');if(b2)b2.style.width=Math.min(100,crIG/50000*100)+'%';setText('g-deals-val',deals);const b3=document.getElementById('g-deals-bar');if(b3)b3.style.width=Math.min(100,deals/10*100)+'%';setText('g-rev-val',rev.toLocaleString('pt-PT'));const b4=document.getElementById('g-rev-bar');if(b4)b4.style.width=Math.min(100,rev/12000*100)+'%';}
+const ACHS=[{icon:'✨',name:'Primeiros 1.000',desc:'Swift Delux: 1k seguidores',check:()=>(S.sdIG||0)>=1000},{icon:'💎',name:'5.000 seguidores',desc:'Swift Delux: 5k seguidores',check:()=>(S.sdIG||0)>=5000},{icon:'👑',name:'10k seguidores',desc:'Swift Delux: meta atingida!',check:()=>(S.sdIG||0)>=10000},{icon:'🤝',name:'1ª Parceria',desc:'Primeira parceria fechada',check:()=>S.crm.filter(c=>c.status==='Parceria fechada').length>=1},{icon:'🚀',name:'5 Parcerias',desc:'Cinco parcerias fechadas',check:()=>S.crm.filter(c=>c.status==='Parceria fechada').length>=5},{icon:'💰',name:'€1.000 receita',desc:'Primeiro milhar',check:()=>S.revenue>=1000},{icon:'🌟',name:'Agente ativo',desc:'Primeiro email processado',check:()=>(S.dados.events||[]).filter(e=>e.type==='email').length>0},{icon:'🎯',name:'10 posts sugeridos',desc:'Dez ideias de conteúdo',check:()=>(S.dados.events||[]).filter(e=>e.type==='post').length>=10}];
+function updateAchievements(){const el=document.getElementById('achievements-list');if(!el)return;el.innerHTML=ACHS.map(a=>`<div class="achievement ${a.check()?'':'locked'}"><div class="ach-icon">${a.icon}</div><div><div class="ach-name">${a.name}</div><div class="ach-desc">${a.desc}</div></div></div>`).join('');}
+function updateAlerts(){const el=document.getElementById('alerts-list');if(!el)return;const alerts=[];if(!S.sdIG)alerts.push('Sem dados de seguidores — atualiza no Dashboard');if(S.sdIG&&S.sdIG<1000)alerts.push(`Swift Delux: apenas ${S.sdIG} seguidores — foco em crescimento!`);const posts7=(S.dados.events||[]).filter(e=>e.type==='post'&&Date.now()-new Date(e.timestamp)<7*86400000).length;if(!posts7)alerts.push('Nenhum post sugerido esta semana — corre o agente de conteúdo');setText('kpi-alerts',alerts.length);el.innerHTML=alerts.length?alerts.map(a=>`<div class="alert">${a}</div>`).join(''):`<div class="alert alert-green">✓ Tudo em ordem!</div>`;}
+const CRM_COLS=['Quero contactar','Email enviado','Sem resposta','Em negociação','Parceria fechada','Conteúdo publicado','Pagamento recebido'];
+function addCRM(){const brand=document.getElementById('crm-brand').value.trim();if(!brand)return;S.crm.push({brand,email:document.getElementById('crm-email').value,status:document.getElementById('crm-status').value,value:parseFloat(document.getElementById('crm-value').value)||0});renderPipeline();updateGoals();updateAchievements();document.getElementById('crm-brand').value='';document.getElementById('crm-email').value='';document.getElementById('crm-value').value='';}
+function renderPipeline(){const el=document.getElementById('pipeline');if(!el)return;el.innerHTML=CRM_COLS.map(col=>{const items=S.crm.filter(c=>c.status===col);return`<div class="pipeline-col"><div class="pipeline-col-header">${col} (${items.length})</div>${items.map(c=>`<div class="pipeline-item"><div class="brand">${c.brand}</div>${c.email?`<div class="detail">${c.email}</div>`:''} ${c.value?`<div class="detail">€${c.value}</div>`:''}</div>`).join('')}</div>`;}).join('');}
+function addContent(){const idea=document.getElementById('content-idea').value.trim();if(!idea)return;S.content.push({idea,brand:document.getElementById('content-brand').value,status:document.getElementById('content-status').value});renderContent();document.getElementById('content-idea').value='';}
+const CS=['Ideia','A gravar','Gravado','Editado','Agendado','Publicado'];
+function renderContent(){const el=document.getElementById('content-bank');if(!el)return;if(!S.content.length){el.innerHTML='<div style="color:var(--muted);font-size:13px;padding:12px 0">Ainda sem conteúdos.</div>';return;}el.innerHTML=`<table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:8px"><thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:8px 0;color:var(--muted);font-weight:500">Ideia</th><th style="text-align:left;padding:8px 0;color:var(--muted);font-weight:500">Marca</th><th style="text-align:left;padding:8px 0;color:var(--muted);font-weight:500">Estado</th></tr></thead><tbody>${S.content.map((c,i)=>`<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 0">${c.idea}</td><td style="padding:10px 0">${c.brand}</td><td style="padding:10px 0"><select onchange="S.content[${i}].status=this.value" style="border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px">${CS.map(s=>`<option ${s===c.status?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join('')}</tbody></table>`;}
+function addWish(){const brand=document.getElementById('wish-brand').value.trim();if(!brand)return;S.wishlist.push({brand,niche:document.getElementById('wish-niche').value});renderWishlist();document.getElementById('wish-brand').value='';document.getElementById('wish-niche').value='';}
+function renderWishlist(){const el=document.getElementById('wishlist');if(!el)return;if(!S.wishlist.length){el.innerHTML='<div style="color:var(--muted);font-size:13px;padding:8px 0">Ainda vazia.</div>';return;}el.innerHTML=S.wishlist.map(w=>`<div style="display:inline-flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:6px 12px;margin:4px;font-size:13px">✦ ${w.brand}${w.niche?` <span style="color:var(--muted);font-size:11px">(${w.niche})</span>`:''}</div>`).join('');}
+function addCalEvent(){const date=document.getElementById('cal-date').value;const title=document.getElementById('cal-title').value.trim();if(!date||!title)return;S.calEvents.push({date,title,type:document.getElementById('cal-type').value});renderCalendar();document.getElementById('cal-title').value='';}
+function renderCalendar(){const el=document.getElementById('calendar');if(!el)return;const now=new Date();const yr=now.getFullYear(),mo=now.getMonth();const firstDay=new Date(yr,mo,1).getDay();const days=new Date(yr,mo+1,0).getDate();const dnames=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];const lbl=document.getElementById('cal-month-label');if(lbl)lbl.textContent=now.toLocaleDateString('pt-PT',{month:'long',year:'numeric'});let html=dnames.map(d=>`<div class="cal-day-header">${d}</div>`).join('');for(let i=0;i<firstDay;i++)html+='<div class="cal-day"></div>';for(let d=1;d<=days;d++){const ds=`${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;const evs=S.calEvents.filter(e=>e.date===ds);const today=d===now.getDate();html+=`<div class="cal-day ${today?'today':''}"><div class="day-num">${d}</div>${evs.map(e=>`<div class="cal-event ${e.type}">${e.title}</div>`).join('')}</div>`;}el.innerHTML=html;}
+function addFinance(){const desc=document.getElementById('fin-desc').value.trim();const amount=parseFloat(document.getElementById('fin-amount').value)||0;if(!desc||!amount)return;S.finance.push({desc,amount,type:document.getElementById('fin-type').value,brand:document.getElementById('fin-brand').value});renderFinance();document.getElementById('fin-desc').value='';document.getElementById('fin-amount').value='';}
+function renderFinance(){const el=document.getElementById('fin-list');if(!el)return;const income=S.finance.filter(f=>f.type==='income').reduce((s,f)=>s+f.amount,0);const expense=S.finance.filter(f=>f.type==='expense').reduce((s,f)=>s+f.amount,0);setText('fin-total','€'+income.toLocaleString('pt-PT',{minimumFractionDigits:2}));setText('fin-expenses','€'+expense.toLocaleString('pt-PT',{minimumFractionDigits:2}));setText('fin-profit','€'+(income-expense).toLocaleString('pt-PT',{minimumFractionDigits:2}));S.revenue=income;setText('kpi-revenue','€'+income.toLocaleString('pt-PT'));el.innerHTML=S.finance.length?S.finance.slice().reverse().map(f=>`<div class="finance-row"><div><div>${f.desc}</div><div style="font-size:11px;color:var(--muted)">${f.brand}</div></div><div class="amount ${f.type}">${f.type==='income'?'+':'-'}€${f.amount.toLocaleString('pt-PT',{minimumFractionDigits:2})}</div></div>`).join(''):'<div style="color:var(--muted);font-size:13px;padding:12px 0">Sem movimentos.</div>';if(window._finChart){window._finChart.data.datasets[0].data=[income,expense];window._finChart.update();}updateGoals();}
+let _aCharts=false;
+function initAnalyticsCharts(){if(_aCharts)return;_aCharts=true;const o={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f0f0ee'}}}};const l7=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];const m6=['Fev','Mar','Abr','Mai','Jun','Jul'];new Chart(document.getElementById('chart-emails'),{type:'bar',data:{labels:l7,datasets:[{data:[2,0,3,1,0,2,1],backgroundColor:'#1a1a18',borderRadius:6}]},options:o});new Chart(document.getElementById('chart-posts'),{type:'line',data:{labels:l7,datasets:[{data:[1,2,2,3,3,4,4],borderColor:'#9b8ec4',tension:0.4,fill:true,backgroundColor:'rgba(155,142,196,0.1)',borderWidth:2}]},options:o});new Chart(document.getElementById('chart-deals'),{type:'bar',data:{labels:m6,datasets:[{data:[0,1,0,2,1,0],backgroundColor:'#c9a96e',borderRadius:6}]},options:o});new Chart(document.getElementById('chart-rev'),{type:'line',data:{labels:m6,datasets:[{data:[0,200,150,500,350,0],borderColor:'#2fb866',tension:0.4,fill:true,backgroundColor:'rgba(47,184,102,0.08)',borderWidth:2}]},options:o});}
+function initDashCharts(){const o={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f0f0ee'},beginAtZero:true}}};const m=['Jan','Fev','Mar','Abr','Mai','Jun','Jul'];new Chart(document.getElementById('chart-sd'),{type:'line',data:{labels:m,datasets:[{data:[0,0,0,0,0,0,S.sdIG||0],borderColor:'#c9a96e',tension:0.4,fill:true,backgroundColor:'rgba(201,169,110,0.08)',borderWidth:2,pointBackgroundColor:'#c9a96e'}]},options:o});new Chart(document.getElementById('chart-cr'),{type:'line',data:{labels:m,datasets:[{data:[0,0,0,0,0,0,S.crIG||0],borderColor:'#9b8ec4',tension:0.4,fill:true,backgroundColor:'rgba(155,142,196,0.08)',borderWidth:2,pointBackgroundColor:'#9b8ec4'}]},options:o});}
+function initPie(){const ctx=document.getElementById('chart-pie');if(!ctx)return;window._finChart=new Chart(ctx,{type:'doughnut',data:{labels:['Receita','Despesas'],datasets:[{data:[0,0],backgroundColor:['#2fb866','#e05252'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});}
+async function callClaude(prompt,maxT){const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','anthropic-version':'2023-06-01','x-api-key':''},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:maxT||400,messages:[{role:'user',content:prompt}]})});const d=await r.json();return d.content?.[0]?.text||'';}
+async function loadBriefing(){const el=document.getElementById('briefing-text');const sec=document.getElementById('briefing-sections');el.textContent='A gerar briefing…';el.classList.add('loading');sec.style.display='none';const sdIG=S.sdIG||0;const crIG=S.crIG||0;const deals=S.crm.filter(c=>c.status==='Parceria fechada').length;const emails=(S.dados.events||[]).filter(e=>e.type==='email').length;const posts=(S.dados.events||[]).filter(e=>e.type==='post').length;const prompt=`És assistente de uma agência de marketing portuguesa. Gera um briefing diário conciso em português europeu.\n\nDados:\n- Swift Delux IG: ${sdIG||'não definido'} seguidores (meta: 10.000)\n- @cristianarodriguesss IG: ${crIG||'não definido'} seguidores\n- Parcerias: ${deals}\n- Emails processados: ${emails}\n- Posts sugeridos: ${posts}\n\nResponde APENAS em JSON válido:\n{"resumo":"1-2 frases","destaques":["d1","d2","d3"],"tarefas":["t1","t2","t3","t4"]}`;try{let text=await callClaude(prompt,400);text=text.replace(/\`\`\`json|\`\`\`/g,'').trim();const p=JSON.parse(text);el.textContent=p.resumo||'';el.classList.remove('loading');document.getElementById('briefing-highlights').innerHTML=(p.destaques||[]).map(h=>`<li>${h}</li>`).join('');document.getElementById('briefing-tasks').innerHTML=(p.tarefas||[]).map(t=>`<li>${t}</li>`).join('');sec.style.display='grid';}catch(e){el.textContent='Para ativar o briefing com IA, define a API key no código: x-api-key: "sk-ant-..."';el.classList.remove('loading');}}
+async function generateReport(){const el=document.getElementById('report-output');const month=document.getElementById('report-month').value;el.textContent='A gerar relatório…';el.style.color='var(--muted)';const prompt=`Gera um relatório mensal de marketing em português europeu para ${month}.\n\nContexto:\n- Swift Delux (joias): ${S.sdIG||'?'} seguidores IG, meta 10k\n- Cristiana Rodrigues (influencer): ${S.crIG||'?'} seguidores IG\n- Parcerias fechadas: ${S.crm.filter(c=>c.status==='Parceria fechada').length}\n- Receita: €${S.revenue}\n\nEscreve um relatório executivo de 200-300 palavras: performance, destaques, melhorias, recomendações.`;try{const text=await callClaude(prompt,600);el.textContent=text;el.style.color='var(--text)';}catch(e){el.textContent='Erro. Verifica a API key.';}}
+window.addEventListener('DOMContentLoaded',async()=>{await loadDados();initDashCharts();initPie();renderCalendar();renderPipeline();updateAchievements();updateAlerts();loadBriefing();});
 </script>
 </body>
 </html>
