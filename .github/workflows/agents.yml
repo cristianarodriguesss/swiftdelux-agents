@@ -7,7 +7,10 @@ on:
   workflow_dispatch:
     inputs:
       followers:
-        description: "Nº de seguidores Instagram (deixa vazio se não for atualizar)"
+        description: "Swift Delux IG seguidores (deixa vazio se não for atualizar)"
+        required: false
+      cr_followers:
+        description: "Cristiana IG seguidores (deixa vazio se não for atualizar)"
         required: false
       partnership:
         description: "Descreve a parceria fechada (deixa vazio se não for registar)"
@@ -68,7 +71,7 @@ jobs:
           git push
 
   update-metrics:
-    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.followers != '' || github.event.inputs.partnership != '')
+    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.followers != '' || github.event.inputs.cr_followers != '' || github.event.inputs.partnership != '')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -78,6 +81,7 @@ jobs:
       - name: Update metrics
         env:
           FOLLOWERS: ${{ github.event.inputs.followers }}
+          CR_FOLLOWERS: ${{ github.event.inputs.cr_followers }}
           PARTNERSHIP: ${{ github.event.inputs.partnership }}
         run: python update_metrics.py
       - name: Guardar dados.json
