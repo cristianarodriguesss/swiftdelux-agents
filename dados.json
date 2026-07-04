@@ -19,10 +19,15 @@
       "type": "post",
       "summary": "A beleza está nos detalhes que só quem sabe, repara. Cada acabamento é pensado p",
       "timestamp": "2026-07-03T16:00:04.246695+00:00"
+    },
+    {
+      "type": "partnership",
+      "summary": "0",
+      "timestamp": "2026-07-04T12:46:50.575257+00:00"
     }
   ],
   "followers": {
-    "count": 7004,
-    "updated_at": "2026-06-30T19:34:57.056654+00:00"
+    "count": 6959,
+    "updated_at": "2026-07-04T12:46:50.575012+00:00"
   }
 }
