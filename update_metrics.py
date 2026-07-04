@@ -1,27 +1,64 @@
 """
-✨ Swift Delux — Update Metrics ✨
-Script manual: atualiza o número de seguidores do Instagram e/ou
-regista uma nova parceria fechada. Corre via "Run workflow" no GitHub,
-preenchendo os campos que aparecem (followers / parceria).
+✨ THE AGENCY — Update Metrics ✨
+Atualiza seguidores do Instagram (Swift Delux e Cristiana) e/ou
+regista uma nova parceria. Corre via "Run workflow" no GitHub.
 """
 
 import os
+import json
+from datetime import datetime, timezone
 from dashboard_data import set_followers, add_event
+
+DATA_FILE = "dados.json"
+
+
+def load_data():
+    try:
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {"events": []}
+
+
+def save_data(data):
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
 
 def main():
-    followers = os.environ.get("FOLLOWERS", "").strip()
+    sd_followers = os.environ.get("FOLLOWERS", "").strip()
+    cr_followers = os.environ.get("CR_FOLLOWERS", "").strip()
     partnership = os.environ.get("PARTNERSHIP", "").strip()
 
-    if followers:
-        set_followers(followers)
-        print(f"✅ Seguidores atualizados: {followers}")
+    data = load_data()
+
+    if sd_followers:
+        data["followers"] = {
+            "count": int(sd_followers),
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }
+        print(f"✅ Swift Delux seguidores: {sd_followers}")
+
+    if cr_followers:
+        data["cr_followers"] = {
+            "count": int(cr_followers),
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }
+        print(f"✅ Cristiana seguidores: {cr_followers}")
 
     if partnership:
-        add_event("partnership", partnership)
+        if "events" not in data:
+            data["events"] = []
+        data["events"].append({
+            "type": "partnership",
+            "summary": partnership,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        })
         print(f"✅ Parceria registada: {partnership}")
 
-    if not followers and not partnership:
+    if sd_followers or cr_followers or partnership:
+        save_data(data)
+    else:
         print("Nada para atualizar — preenche pelo menos um campo.")
 
 
