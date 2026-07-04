@@ -1239,6 +1239,7 @@ function addCrFile(){
   const cat=document.getElementById('cr-file-cat').value;
   if(!name||!url)return;
   crFiles.push({name,url,cat});
+  crFiles.push({name:'Media Kit 2026 — Cristiana Rodrigues',url:'https://canva.link/lt9smtwcqv2d0xy',cat:'Media Kit PDF'});
   renderFiles('cr-files-list',crFiles);
   document.getElementById('cr-file-name').value='';
   document.getElementById('cr-file-url').value='';
@@ -1353,6 +1354,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
   loadBriefing();
   renderAgendaCalendar();
   renderFiles('sd-files-list',sdFiles);
+  crFiles.push({name:'Media Kit 2026 — Cristiana Rodrigues',url:'https://canva.link/lt9smtwcqv2d0xy',cat:'Media Kit PDF'});
   renderFiles('cr-files-list',crFiles);
 });
 </script>
