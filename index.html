@@ -299,6 +299,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     </div>
   </div>
 
+
+  <!-- AGENDA DIÁRIA -->
+  <div class="sec">
+    <div class="stitle" style="display:flex;align-items:center;justify-content:space-between">
+      📅 Agenda do mês
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btno" onclick="prevMonth()" style="padding:4px 10px;font-size:12px">←</button>
+        <span id="agenda-month-label" style="font-size:12px;font-weight:500"></span>
+        <button class="btn btno" onclick="nextMonth()" style="padding:4px 10px;font-size:12px">→</button>
+      </div>
+    </div>
+    <div class="row" style="gap:14px;align-items:flex-start">
+      <div style="flex:1.4">
+        <div id="agenda-calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden"></div>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px" id="agenda-selected-label">Seleciona um dia</div>
+        <div class="ir" id="agenda-add-form" style="display:none">
+          <div class="field" style="width:100%"><label>Tarefa / Evento</label><input id="agenda-task-input" type="text" placeholder="ex: Publicar post Swift Delux" style="width:100%"></div>
+          <div class="field"><label>Tipo</label>
+            <select id="agenda-task-type">
+              <option value="swift">Swift Delux</option>
+              <option value="cris">Cristiana</option>
+              <option value="deal">Parceria</option>
+              <option value="task">Tarefa</option>
+            </select>
+          </div>
+          <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addAgendaTask()">+ Adicionar</button></div>
+        </div>
+        <div id="agenda-day-tasks"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- FINANCE -->
   <div class="sec">
     <div class="stitle">💰 Finance</div>
@@ -517,24 +551,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 
 <!-- ═══ SWIFT DELUX — MEDIA KIT ═══ -->
 <div class="page" id="page-sd-mediakit">
-  <div class="ph"><div><h1>Media Kit <span class="badge badge-swift">Swift Delux</span></h1></div></div>
-  <div class="mk-section"><div class="mk-title">Identidade</div>
-    <div class="mk-grid">
-      <div class="mk-item"><div class="mk-icon">🎨</div><div class="mk-name">Logos</div></div>
-      <div class="mk-item"><div class="mk-icon" style="display:flex;gap:3px"><span style="width:12px;height:12px;background:var(--swift);border-radius:2px"></span><span style="width:12px;height:12px;background:#1a1a18;border-radius:2px"></span><span style="width:12px;height:12px;background:#f4f1ea;border:1px solid #ddd;border-radius:2px"></span></div><div class="mk-name">Paleta</div></div>
-      <div class="mk-item"><div class="mk-icon">📐</div><div class="mk-name">Templates</div></div>
-      <div class="mk-item"><div class="mk-icon">📋</div><div class="mk-name">Media Kit PDF</div></div>
+  <div class="ph"><div><h1>Media Kit & Logos <span class="badge badge-swift">Swift Delux</span></h1></div></div>
+  <div class="hint" style="margin-bottom:16px">💡 Guarda os ficheiros no Google Drive/Dropbox e adiciona os links aqui. Ficam guardados nesta sessão.</div>
+
+  <div class="sec">
+    <div class="stitle">🎨 Logos & Identidade</div>
+    <div class="ir">
+      <div class="field"><label>Nome do ficheiro</label><input id="sd-file-name" type="text" placeholder="ex: Logo principal PNG" style="width:200px"></div>
+      <div class="field"><label>Link (Google Drive, Dropbox...)</label><input id="sd-file-url" type="url" placeholder="https://drive.google.com/..." style="width:300px"></div>
+      <div class="field"><label>Categoria</label>
+        <select id="sd-file-cat">
+          <option>Logo</option>
+          <option>Paleta de cores</option>
+          <option>Template</option>
+          <option>Media Kit PDF</option>
+          <option>Fotografia</option>
+          <option>Vídeo</option>
+          <option>Contrato</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addSdFile()">+ Adicionar</button></div>
+    </div>
+    <div id="sd-files-list"></div>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">🎨 Paleta de Cores Swift Delux</div>
+    <div class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#c9a96e;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Dourado</div><div style="font-size:10px;color:var(--muted)">#C9A96E</div></div>
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#1a1a18;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Preto</div><div style="font-size:10px;color:var(--muted)">#1A1A18</div></div>
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#f4f1ea;border:1px solid #eee;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Creme</div><div style="font-size:10px;color:var(--muted)">#F4F1EA</div></div>
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#f8f8f6;border:1px solid #eee;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Fundo</div><div style="font-size:10px;color:var(--muted)">#F8F8F6</div></div>
     </div>
   </div>
-  <div class="mk-section"><div class="mk-title">Documentos</div>
-    <div class="mk-grid">
-      <div class="mk-item"><div class="mk-icon">📄</div><div class="mk-name">Contratos</div></div>
-      <div class="mk-item"><div class="mk-icon">🖼️</div><div class="mk-name">Fotos</div></div>
-      <div class="mk-item"><div class="mk-icon">🎬</div><div class="mk-name">Vídeos</div></div>
-      <div class="mk-item"><div class="mk-icon">📁</div><div class="mk-name">Outros</div></div>
-    </div>
-  </div>
-  <div class="hint">💡 Guarda os ficheiros no Google Drive e adiciona os links aqui.</div>
 </div>
 
 <!-- ═══ CRISTIANA — FEED ═══ -->
@@ -618,15 +668,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 <!-- ═══ CRISTIANA — MEDIA KIT ═══ -->
 <div class="page" id="page-cr-mediakit">
   <div class="ph"><div><h1>Media Kit <span class="badge badge-cris">@cris</span></h1></div></div>
-  <div class="mk-section"><div class="mk-title">Identidade</div>
-    <div class="mk-grid">
-      <div class="mk-item"><div class="mk-icon">🎨</div><div class="mk-name">Logos</div></div>
-      <div class="mk-item"><div class="mk-icon" style="display:flex;gap:3px"><span style="width:12px;height:12px;background:var(--cris);border-radius:2px"></span><span style="width:12px;height:12px;background:#1a1a18;border-radius:2px"></span></div><div class="mk-name">Paleta</div></div>
-      <div class="mk-item"><div class="mk-icon">📋</div><div class="mk-name">Media Kit PDF</div></div>
-      <div class="mk-item"><div class="mk-icon">🖼️</div><div class="mk-name">Fotos</div></div>
+  <div class="hint" style="margin-bottom:16px">💡 Guarda os ficheiros no Google Drive/Dropbox e adiciona os links aqui.</div>
+
+  <div class="sec">
+    <div class="stitle">📁 Ficheiros & Recursos</div>
+    <div class="ir">
+      <div class="field"><label>Nome</label><input id="cr-file-name" type="text" placeholder="ex: Media Kit 2026 PDF" style="width:200px"></div>
+      <div class="field"><label>Link</label><input id="cr-file-url" type="url" placeholder="https://drive.google.com/..." style="width:300px"></div>
+      <div class="field"><label>Categoria</label>
+        <select id="cr-file-cat">
+          <option>Media Kit PDF</option>
+          <option>Fotografia</option>
+          <option>Vídeo</option>
+          <option>Contrato</option>
+          <option>Logo / Branding</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addCrFile()">+ Adicionar</button></div>
+    </div>
+    <div id="cr-files-list"></div>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">🎨 Paleta de Cores @cris</div>
+    <div class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#9b8ec4;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Lavanda</div><div style="font-size:10px;color:var(--muted)">#9B8EC4</div></div>
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#1a1a18;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Preto</div><div style="font-size:10px;color:var(--muted)">#1A1A18</div></div>
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#f4f1ea;border:1px solid #eee;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Creme</div><div style="font-size:10px;color:var(--muted)">#F4F1EA</div></div>
     </div>
   </div>
-  <div class="hint">💡 Guarda os ficheiros no Google Drive e adiciona os links aqui.</div>
 </div>
 
 <!-- ═══ CRISTIANA — WISHLIST ═══ -->
@@ -1057,6 +1128,131 @@ async function genReport(){
 function showIGSetup(){document.getElementById('ig-modal').style.display='flex';}
 
 // INIT
+// FILES LIBRARY
+const sdFiles = [];
+const crFiles = [];
+const FILE_ICONS = {'Logo':'🎨','Paleta de cores':'🎨','Template':'📐','Media Kit PDF':'📋','Fotografia':'🖼️','Vídeo':'🎬','Contrato':'📄','Outro':'📁','Logo / Branding':'🎨'};
+
+function addSdFile(){
+  const name=document.getElementById('sd-file-name').value.trim();
+  const url=document.getElementById('sd-file-url').value.trim();
+  const cat=document.getElementById('sd-file-cat').value;
+  if(!name||!url)return;
+  sdFiles.push({name,url,cat});
+  renderFiles('sd-files-list',sdFiles);
+  document.getElementById('sd-file-name').value='';
+  document.getElementById('sd-file-url').value='';
+}
+
+function addCrFile(){
+  const name=document.getElementById('cr-file-name').value.trim();
+  const url=document.getElementById('cr-file-url').value.trim();
+  const cat=document.getElementById('cr-file-cat').value;
+  if(!name||!url)return;
+  crFiles.push({name,url,cat});
+  renderFiles('cr-files-list',crFiles);
+  document.getElementById('cr-file-name').value='';
+  document.getElementById('cr-file-url').value='';
+}
+
+function renderFiles(containerId,arr){
+  const el=document.getElementById(containerId);
+  if(!el)return;
+  if(!arr.length){el.innerHTML='<div class="hint" style="padding:10px 0">Ainda sem ficheiros. Adiciona links do Google Drive ou Dropbox.</div>';return;}
+  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:12px">${arr.map((f,i)=>`
+    <a href="${f.url}" target="_blank" style="text-decoration:none">
+      <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:border-color 0.15s" onmouseover="this.style.borderColor='#aaa'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="font-size:22px;margin-bottom:8px">${FILE_ICONS[f.cat]||'📁'}</div>
+        <div style="font-size:12px;font-weight:500;color:var(--text)">${f.name}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px">${f.cat}</div>
+      </div>
+    </a>
+  `).join('')}</div>`;
+}
+
+// AGENDA DIÁRIA
+const agendaTasks = {};
+let agendaYear = new Date().getFullYear();
+let agendaMonth = new Date().getMonth();
+let agendaSelectedDay = null;
+
+const AGENDA_COLORS = {swift:'#c9a96e',cris:'#9b8ec4',deal:'#27a85f',task:'#4a90e8'};
+const AGENDA_LABELS = {swift:'Swift Delux',cris:'Cristiana',deal:'Parceria',task:'Tarefa'};
+
+function renderAgendaCalendar(){
+  const el=document.getElementById('agenda-calendar');
+  if(!el)return;
+  const now=new Date();
+  const fd=new Date(agendaYear,agendaMonth,1).getDay();
+  const dm=new Date(agendaYear,agendaMonth+1,0).getDate();
+  const dn=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const monthNames=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const lbl=document.getElementById('agenda-month-label');
+  if(lbl)lbl.textContent=monthNames[agendaMonth]+' '+agendaYear;
+  let h=dn.map(d=>`<div style="background:var(--surface);padding:6px;text-align:center;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase">${d}</div>`).join('');
+  for(let i=0;i<fd;i++)h+=`<div style="background:var(--surface);padding:6px;min-height:60px"></div>`;
+  for(let d=1;d<=dm;d++){
+    const ds=`${agendaYear}-${String(agendaMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const tasks=agendaTasks[ds]||[];
+    const today=d===now.getDate()&&agendaMonth===now.getMonth()&&agendaYear===now.getFullYear();
+    const selected=d===agendaSelectedDay;
+    h+=`<div onclick="selectAgendaDay(${d})" style="background:${selected?'#f0edf9':today?'#fdf3e3':'var(--surface)'};padding:6px;min-height:60px;cursor:pointer;border:${selected?'1.5px solid #9b8ec4':today?'1.5px solid #c9a96e':'1px solid var(--border)'}">
+      <div style="font-size:11px;font-weight:${today?'700':'500'};color:${today?'var(--accent)':'var(--muted)'};margin-bottom:3px">${d}</div>
+      ${tasks.slice(0,2).map(t=>`<div style="font-size:9px;padding:1px 4px;border-radius:3px;background:${AGENDA_COLORS[t.type]}22;color:${AGENDA_COLORS[t.type]};margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.title}</div>`).join('')}
+      ${tasks.length>2?`<div style="font-size:9px;color:var(--muted)">+${tasks.length-2}</div>`:''}
+    </div>`;
+  }
+  el.innerHTML=h;
+}
+
+function selectAgendaDay(d){
+  agendaSelectedDay=d;
+  const ds=`${agendaYear}-${String(agendaMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  const monthNames=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const lbl=document.getElementById('agenda-selected-label');
+  if(lbl)lbl.textContent=`${d} de ${monthNames[agendaMonth]} de ${agendaYear}`;
+  const form=document.getElementById('agenda-add-form');
+  if(form)form.style.display='flex';
+  renderAgendaDay(ds);
+  renderAgendaCalendar();
+}
+
+function addAgendaTask(){
+  const title=document.getElementById('agenda-task-input').value.trim();
+  if(!title||!agendaSelectedDay)return;
+  const ds=`${agendaYear}-${String(agendaMonth+1).padStart(2,'0')}-${String(agendaSelectedDay).padStart(2,'0')}`;
+  if(!agendaTasks[ds])agendaTasks[ds]=[];
+  agendaTasks[ds].push({title,type:document.getElementById('agenda-task-type').value});
+  document.getElementById('agenda-task-input').value='';
+  renderAgendaDay(ds);
+  renderAgendaCalendar();
+}
+
+function renderAgendaDay(ds){
+  const el=document.getElementById('agenda-day-tasks');
+  if(!el)return;
+  const tasks=agendaTasks[ds]||[];
+  if(!tasks.length){el.innerHTML='<div class="hint" style="padding:8px 0">Sem tarefas neste dia. Adiciona acima.</div>';return;}
+  el.innerHTML=tasks.map((t,i)=>`
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-left:3px solid ${AGENDA_COLORS[t.type]};border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:13px">${t.title}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">${AGENDA_LABELS[t.type]}</div>
+      </div>
+      <button onclick="removeAgendaTask('${ds}',${i})" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;padding:2px 6px">✕</button>
+    </div>
+  `).join('');
+}
+
+function removeAgendaTask(ds,i){
+  agendaTasks[ds].splice(i,1);
+  renderAgendaDay(ds);
+  renderAgendaCalendar();
+}
+
+function prevMonth(){agendaMonth--;if(agendaMonth<0){agendaMonth=11;agendaYear--;}agendaSelectedDay=null;document.getElementById('agenda-day-tasks').innerHTML='';const f=document.getElementById('agenda-add-form');if(f)f.style.display='none';renderAgendaCalendar();}
+function nextMonth(){agendaMonth++;if(agendaMonth>11){agendaMonth=0;agendaYear++;}agendaSelectedDay=null;document.getElementById('agenda-day-tasks').innerHTML='';const f=document.getElementById('agenda-add-form');if(f)f.style.display='none';renderAgendaCalendar();}
+
 window.addEventListener('DOMContentLoaded',async()=>{
   await loadDados();
   initDashCharts();initPie();renderCal();
@@ -1066,6 +1262,9 @@ window.addEventListener('DOMContentLoaded',async()=>{
   renderFeed('feed-cr',S.feedCR,'cris');
   updateAch();updateAlerts();
   loadBriefing();
+  renderAgendaCalendar();
+  renderFiles('sd-files-list',sdFiles);
+  renderFiles('cr-files-list',crFiles);
 });
 </script>
 </body>
