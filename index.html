@@ -936,19 +936,7 @@ function renderFeed(containerId,feedArr,brand){
   }).join('');
 }
 
-function setFeedCell(cid,i,brand){
-  const types=brand==='swift'?['swift','life','deal']:['cris','deal','swift','repost'];
-  const arr=brand==='swift'?S.feedSD:S.feedCR;
-  const cur=types.indexOf(arr[i]);
-  arr[i]=types[(cur+1)%types.length];
-  renderFeed(cid,arr,brand);
-}
 
-function clearFeedCell(cid,i,brand){
-  const arr=brand==='swift'?S.feedSD:S.feedCR;
-  arr[i]=null;
-  renderFeed(cid,arr,brand);
-}
 
 // AGENDA
 function addAgendaSD(){
@@ -1128,6 +1116,63 @@ async function genReport(){
 function showIGSetup(){document.getElementById('ig-modal').style.display='flex';}
 
 // INIT
+// FEED PLANNER COM IMAGENS
+function renderFeed(containerId, arr, brand){
+  const el=document.getElementById(containerId);
+  if(!el)return;
+  const COLORS={swift:'#c9a96e',life:'#e07a30',deal:'#4a90e8',cris:'#9b8ec4',repost:'#9b8ec4'};
+  const LABELS={swift:'Produto',life:'Lifestyle',deal:'Parceria',cris:'Lifestyle',repost:'Repost'};
+  el.innerHTML=arr.map((cell,i)=>{
+    if(!cell){
+      return`<div onclick="openFeedCell('${containerId}',${i},'${brand}')" style="width:100%;aspect-ratio:1;background:var(--bg);border:1.5px dashed var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--border)">+</div>`;
+    }
+    if(cell.img){
+      return`<div style="width:100%;aspect-ratio:1;position:relative;border-radius:4px;overflow:hidden;cursor:pointer" onclick="openFeedCell('${containerId}',${i},'${brand}')">
+        <img src="${cell.img}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s" onmouseover="this.style.opacity='1';this.style.background='rgba(0,0,0,0.4)'" onmouseout="this.style.opacity='0';this.style.background='rgba(0,0,0,0)'">
+          <span style="color:#fff;font-size:18px;cursor:pointer" onclick="clearFeedCellData('${containerId}',${i},'${brand}');event.stopPropagation()">✕</span>
+        </div>
+      </div>`;
+    }
+    return`<div onclick="openFeedCell('${containerId}',${i},'${brand}')" style="width:100%;aspect-ratio:1;background:${COLORS[cell.type]||'#eee'}33;border:1.5px solid ${COLORS[cell.type]||'#eee'};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:${COLORS[cell.type]};cursor:pointer;text-align:center;padding:4px">${LABELS[cell.type]||cell.type}</div>`;
+  }).join('');
+}
+
+let _feedModal={container:null,index:null,brand:null};
+function openFeedCell(cid,i,brand){
+  _feedModal={container:cid,index:i,brand};
+  const arr=brand==='swift'?S.feedSD:S.feedCR;
+  const cell=arr[i];
+  document.getElementById('feed-modal-img').value=cell&&cell.img?cell.img:'';
+  document.getElementById('feed-modal-type').value=cell&&cell.type?cell.type:(brand==='swift'?'swift':'cris');
+  document.getElementById('feed-modal-preview').src=cell&&cell.img?cell.img:'';
+  document.getElementById('feed-modal-preview').style.display=cell&&cell.img?'block':'none';
+  document.getElementById('feed-modal').style.display='flex';
+}
+
+function saveFeedCell(){
+  const {container,index,brand}=_feedModal;
+  const arr=brand==='swift'?S.feedSD:S.feedCR;
+  const img=document.getElementById('feed-modal-img').value.trim();
+  const type=document.getElementById('feed-modal-type').value;
+  arr[index]={img:img||null,type};
+  document.getElementById('feed-modal').style.display='none';
+  renderFeed(container,arr,brand);
+}
+
+function clearFeedCellData(cid,i,brand){
+  const arr=brand==='swift'?S.feedSD:S.feedCR;
+  arr[i]=null;
+  renderFeed(cid,arr,brand);
+}
+
+function previewFeedImg(){
+  const url=document.getElementById('feed-modal-img').value.trim();
+  const prev=document.getElementById('feed-modal-preview');
+  if(url){prev.src=url;prev.style.display='block';}
+  else{prev.style.display='none';}
+}
+
 // FILES LIBRARY
 const sdFiles = [];
 const crFiles = [];
@@ -1267,5 +1312,38 @@ window.addEventListener('DOMContentLoaded',async()=>{
   renderFiles('cr-files-list',crFiles);
 });
 </script>
+
+<!-- FEED IMAGE MODAL -->
+<div id="feed-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:16px;padding:24px;width:360px;max-width:90vw">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <div style="font-size:15px;font-weight:600">Editar célula do feed</div>
+      <button onclick="document.getElementById('feed-modal').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;color:#888">×</button>
+    </div>
+    <div style="margin-bottom:14px">
+      <label style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:5px">URL da imagem</label>
+      <input id="feed-modal-img" type="url" placeholder="Cola aqui o link da foto (Pinterest, Google Drive, etc.)" style="width:100%;border:1px solid #e8e8e6;border-radius:8px;padding:8px 10px;font-size:13px;outline:none" oninput="previewFeedImg()">
+      <div style="font-size:11px;color:#888;margin-top:5px">Pinterest: clica na imagem → botão direito → "Copiar endereço da imagem"</div>
+    </div>
+    <div style="margin-bottom:14px">
+      <img id="feed-modal-preview" src="" style="display:none;width:100%;border-radius:8px;object-fit:cover;max-height:200px;margin-bottom:10px">
+    </div>
+    <div style="margin-bottom:18px">
+      <label style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:5px">Tipo de conteúdo</label>
+      <select id="feed-modal-type" style="width:100%;border:1px solid #e8e8e6;border-radius:8px;padding:8px 10px;font-size:13px;outline:none">
+        <option value="swift">Produto — Swift Delux</option>
+        <option value="life">Lifestyle</option>
+        <option value="cris">Cristiana</option>
+        <option value="deal">Parceria</option>
+        <option value="repost">Repost</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="document.getElementById('feed-modal').style.display='none'" style="flex:1;padding:9px;border:1px solid #e8e8e6;border-radius:8px;background:transparent;cursor:pointer;font-size:13px">Cancelar</button>
+      <button onclick="saveFeedCell()" style="flex:1;padding:9px;border:none;border-radius:8px;background:#1a1a18;color:#fff;cursor:pointer;font-size:13px;font-weight:500">Guardar</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
