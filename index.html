@@ -542,52 +542,82 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 
 <!-- ═══ SWIFT DELUX — MÉTRICAS ═══ -->
 <div class="page" id="page-sd-metrics">
-  <div class="ph"><div><h1>Métricas <span class="badge badge-swift">Swift Delux</span></h1></div></div>
-  <div class="connect-banner">
-    <div class="cb-text">
-      <h3>📊 Métricas automáticas do Instagram</h3>
-      <p>Para seguidores, engagement, alcance e audiência em tempo real, é necessário ligar o Instagram Graph API.</p>
-    </div>
-    <button class="cb-btn" onclick="showIGSetup()">Ver como configurar →</button>
+  <div class="ph"><div><h1>Métricas <span class="badge badge-swift">Swift Delux</span></h1><div class="meta">Últimos 30 dias — 4 Jun a 3 Jul 2026</div></div></div>
+
+  <div class="grid g4 sec">
+    <div class="card"><div class="cl">Seguidores IG</div><div class="cv" id="sd-m-ig">1.254</div></div>
+    <div class="card"><div class="cl">Contas alcançadas</div><div class="cv">1.166</div></div>
+    <div class="card"><div class="cl">Atividade do perfil</div><div class="cv" style="color:var(--green)">+644%</div><div class="cd">vs mês anterior</div></div>
+    <div class="card"><div class="cl">Visitas ao perfil</div><div class="cv">66</div><div class="cd" style="color:var(--green)">+633%</div></div>
   </div>
-  <div class="sec">
-    <div class="stitle">Atualizar manualmente (por agora)</div>
+
+  <div class="row sec">
     <div class="card">
-      <div class="ir">
-        <div class="field"><label>Seguidores IG</label><input id="sd-ig-f" type="number" placeholder="ex: 8500"></div>
-        <div class="field"><label>Seguidores TikTok</label><input id="sd-tt-f" type="number" placeholder="ex: 2000"></div>
-        <div class="field"><label>Posts publicados</label><input id="sd-posts-f" type="number" placeholder="ex: 24"></div>
-        <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="saveSdMetrics()">Guardar</button></div>
+      <div class="ct" style="margin-bottom:16px">Visualizações por tipo de conteúdo</div>
+      <div class="abar"><div class="abar-lbl"><span>🎬 Reels</span><span>44,3%</span></div><div class="abar-track"><div class="abar-fill" style="width:44%;background:var(--swift)"></div></div></div>
+      <div class="abar"><div class="abar-lbl"><span>📱 Stories</span><span>34,8%</span></div><div class="abar-track"><div class="abar-fill" style="width:35%;background:var(--swift)"></div></div></div>
+      <div class="abar"><div class="abar-lbl"><span>🖼️ Posts</span><span>21,0%</span></div><div class="abar-track"><div class="abar-fill" style="width:21%;background:var(--swift)"></div></div></div>
+      <div class="hint mt12">💡 Os Reels são o teu conteúdo com mais alcance — foca aqui!</div>
+    </div>
+    <div class="card">
+      <div class="ct" style="margin-bottom:16px">Origem das visualizações</div>
+      <div class="abar"><div class="abar-lbl"><span>👤 Seguidores</span><span>38,5%</span></div><div class="abar-track"><div class="abar-fill" style="width:38%;background:var(--swift)"></div></div></div>
+      <div class="abar"><div class="abar-lbl"><span>🌍 Não seguidores</span><span>61,5%</span></div><div class="abar-track"><div class="abar-fill" style="width:61%;background:#c9a96e88)"></div></div></div>
+      <div class="hint mt12">✅ 61,5% das visualizações são de pessoas novas — excelente alcance orgânico!</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">🌍 Países que te viram (visualizações)</div>
+    <div class="card">
+      <div class="row">
+        <div style="flex:1">
+          <div class="abar"><div class="abar-lbl"><span>🇵🇹 Portugal</span><span>26,9%</span></div><div class="abar-track"><div class="abar-fill" style="width:27%;background:var(--swift)"></div></div></div>
+          <div class="abar"><div class="abar-lbl"><span>🇮🇷 Irão</span><span>17,3%</span></div><div class="abar-track"><div class="abar-fill" style="width:17%;background:var(--swift)"></div></div></div>
+          <div class="abar"><div class="abar-lbl"><span>🇨🇾 Chipre</span><span>11,0%</span></div><div class="abar-track"><div class="abar-fill" style="width:11%;background:var(--swift)"></div></div></div>
+          <div class="abar"><div class="abar-lbl"><span>🇷🇴 Roménia</span><span>7,1%</span></div><div class="abar-track"><div class="abar-fill" style="width:7%;background:var(--swift)"></div></div></div>
+        </div>
+        <div style="flex:1;padding-left:20px">
+          <div style="background:var(--bg);border-radius:10px;padding:14px;font-size:13px;line-height:1.7">
+            <div style="font-weight:600;margin-bottom:8px">💡 Análise</div>
+            <div style="color:var(--muted);font-size:12px">Tens muita visibilidade internacional (Irão, Chipre, Roménia). Conteúdo em inglês pode ajudar a converter estes visitantes em seguidores. Portugal continua a ser o teu mercado principal.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="grid g4 sec">
-    <div class="card"><div class="cl">Seguidores IG</div><div class="cv" id="sd-m-ig">—</div></div>
-    <div class="card"><div class="cl">Seguidores TikTok</div><div class="cv" id="sd-m-tt">—</div></div>
-    <div class="card"><div class="cl">Posts publicados</div><div class="cv" id="sd-m-posts">—</div></div>
-    <div class="card"><div class="cl">Engagement (est.)</div><div class="cv">—</div></div>
-  </div>
-  <div class="sec"><div class="stitle">Audiência (estimada)</div>
+
+  <div class="sec">
+    <div class="stitle">⏰ Melhores horários para publicar</div>
     <div class="card">
-      <div class="row">
-        <div>
-          <div class="ct" style="margin-bottom:12px">Género</div>
-          <div class="abar"><div class="abar-lbl"><span>Feminino</span><span>65%</span></div><div class="abar-track"><div class="abar-fill" style="width:65%;background:var(--swift)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>Masculino</span><span>35%</span></div><div class="abar-track"><div class="abar-fill" style="width:35%;background:#ddd"></div></div></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div style="flex:1;min-width:140px;background:var(--bg);border-radius:10px;padding:14px;border-left:3px solid var(--swift)">
+          <div style="font-size:18px;margin-bottom:6px">🏆</div>
+          <div style="font-size:13px;font-weight:600">18h–21h</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">Pico máximo do teu público</div>
         </div>
-        <div>
-          <div class="ct" style="margin-bottom:12px">Países</div>
-          <div class="abar"><div class="abar-lbl"><span>🇵🇹 Portugal</span><span>42%</span></div><div class="abar-track"><div class="abar-fill" style="width:42%;background:var(--swift)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>🇧🇷 Brasil</span><span>28%</span></div><div class="abar-track"><div class="abar-fill" style="width:28%;background:var(--swift)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>🇪🇸 Espanha</span><span>12%</span></div><div class="abar-track"><div class="abar-fill" style="width:12%;background:var(--swift)"></div></div></div>
+        <div style="flex:1;min-width:140px;background:var(--bg);border-radius:10px;padding:14px">
+          <div style="font-size:18px;margin-bottom:6px">🎬</div>
+          <div style="font-size:13px;font-weight:600">Reels primeiro</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">44% das views — formato prioritário</div>
         </div>
-        <div>
-          <div class="ct" style="margin-bottom:12px">Idades</div>
-          <div class="abar"><div class="abar-lbl"><span>18–24</span><span>22%</span></div><div class="abar-track"><div class="abar-fill" style="width:22%;background:var(--swift)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>25–34</span><span>45%</span></div><div class="abar-track"><div class="abar-fill" style="width:45%;background:var(--swift)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>35–44</span><span>21%</span></div><div class="abar-track"><div class="abar-fill" style="width:21%;background:var(--swift)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>45+</span><span>12%</span></div><div class="abar-track"><div class="abar-fill" style="width:12%;background:var(--swift)"></div></div></div>
+        <div style="flex:1;min-width:140px;background:var(--bg);border-radius:10px;padding:14px">
+          <div style="font-size:18px;margin-bottom:6px">🌍</div>
+          <div style="font-size:13px;font-weight:600">Inglês ajuda</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">61% alcance internacional — legendas bilíngue</div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">Atualizar seguidores</div>
+    <div class="card">
+      <div class="ir">
+        <div class="field"><label>Seguidores IG</label><input id="sd-ig-f" type="number" placeholder="ex: 1254"></div>
+        <div class="field"><label>Seguidores TikTok</label><input id="sd-tt-f" type="number" placeholder="ex: 2000"></div>
+        <div class="field"><label>Posts publicados</label><input id="sd-posts-f" type="number" placeholder="ex: 24"></div>
+        <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="saveSdMetrics()">Guardar</button></div>
       </div>
     </div>
   </div>
