@@ -2,18 +2,22 @@ name: Swift Delux Agents
 
 on:
   schedule:
+    # Email agent: de hora a hora, 8h-20h UTC
     - cron: "0 8-20 * * *"
+    # Content agent: 1x por dia às 9h UTC
     - cron: "0 9 * * *"
+    # Followers agent: 1x por semana, segunda-feira às 8h UTC
+    - cron: "0 8 * * 1"
   workflow_dispatch:
     inputs:
       followers:
-        description: "Swift Delux IG seguidores (deixa vazio se não for atualizar)"
+        description: "Swift Delux IG seguidores (manual)"
         required: false
       cr_followers:
-        description: "Cristiana IG seguidores (deixa vazio se não for atualizar)"
+        description: "Cristiana IG seguidores (manual)"
         required: false
       partnership:
-        description: "Descreve a parceria fechada (deixa vazio se não for registar)"
+        description: "Descreve a parceria fechada"
         required: false
 
 permissions:
@@ -21,7 +25,7 @@ permissions:
 
 jobs:
   email-agent:
-    if: github.event.schedule == '0 8-20 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.followers == '' && github.event.inputs.partnership == '')
+    if: github.event.schedule == '0 8-20 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.followers == '' && github.event.inputs.cr_followers == '' && github.event.inputs.partnership == '')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -47,7 +51,7 @@ jobs:
           git push
 
   content-agent:
-    if: github.event.schedule == '0 9 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.followers == '' && github.event.inputs.partnership == '')
+    if: github.event.schedule == '0 9 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.followers == '' && github.event.inputs.cr_followers == '' && github.event.inputs.partnership == '')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -67,6 +71,31 @@ jobs:
           git config user.email "bot@swiftdelux.local"
           git add dados.json
           git diff --staged --quiet || git commit -m "Atualiza dados (content agent)"
+          git pull --rebase --autostash
+          git push
+
+  followers-agent:
+    if: github.event.schedule == '0 8 * * 1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests
+      - name: Fetch followers automaticamente
+        env:
+          SD_FOLLOWERS_FALLBACK: "1254"
+          CR_FOLLOWERS_FALLBACK: "6959"
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python fetch_followers.py
+      - name: Guardar dados.json
+        run: |
+          git config user.name "swiftdelux-bot"
+          git config user.email "bot@swiftdelux.local"
+          git add dados.json
+          git diff --staged --quiet || git commit -m "Atualiza seguidores (auto)"
           git pull --rebase --autostash
           git push
 
