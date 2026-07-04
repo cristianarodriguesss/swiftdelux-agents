@@ -641,27 +641,98 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 <!-- ═══ CRISTIANA — MÉTRICAS ═══ -->
 <div class="page" id="page-cr-metrics">
   <div class="ph"><div><h1>Métricas <span class="badge badge-cris">@cris</span></h1></div></div>
-  <div class="connect-banner">
-    <div class="cb-text">
-      <h3>📊 Métricas automáticas do Instagram</h3>
-      <p>Conecta a conta @cristianarodriguesss ao Instagram Graph API para dados em tempo real.</p>
-    </div>
-    <button class="cb-btn" onclick="showIGSetup()">Ver como configurar →</button>
+
+  <div class="grid g4 sec">
+    <div class="card"><div class="cl">Seguidores IG</div><div class="cv" id="cr-m-ig">—</div></div>
+    <div class="card"><div class="cl">Seguidores TikTok</div><div class="cv" id="cr-m-tt">—</div></div>
+    <div class="card"><div class="cl">Engagement rate</div><div class="cv" id="cr-m-eng">—</div></div>
+    <div class="card"><div class="cl">Parcerias ativas</div><div class="cv" id="cr-m-deals">0</div></div>
   </div>
+
   <div class="sec">
     <div class="card">
+      <div class="ct">Atualizar métricas manualmente</div>
       <div class="ir">
-        <div class="field"><label>Seguidores IG</label><input id="cr-ig-f" type="number" placeholder="ex: 45000"></div>
-        <div class="field"><label>Seguidores TikTok</label><input id="cr-tt-f" type="number" placeholder="ex: 15000"></div>
+        <div class="field"><label>Seguidores IG</label><input id="cr-ig-f" type="number" placeholder="ex: 6959"></div>
+        <div class="field"><label>Seguidores TikTok</label><input id="cr-tt-f" type="number" placeholder="ex: 5000"></div>
+        <div class="field"><label>Engagement rate %</label><input id="cr-eng-f" type="text" placeholder="ex: 4.2%" style="width:100px"></div>
         <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="saveCrMetrics()">Guardar</button></div>
       </div>
     </div>
   </div>
-  <div class="grid g4 sec">
-    <div class="card"><div class="cl">Seguidores IG</div><div class="cv" id="cr-m-ig">—</div></div>
-    <div class="card"><div class="cl">Seguidores TikTok</div><div class="cv" id="cr-m-tt">—</div></div>
-    <div class="card"><div class="cl">Engagement rate</div><div class="cv">—</div></div>
-    <div class="card"><div class="cl">Parcerias ativas</div><div class="cv" id="cr-m-deals">0</div></div>
+
+  <div class="sec">
+    <div class="stitle">👥 Audiência — @cristianarodriguesss</div>
+    <div class="card">
+      <div class="ct" style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+        Dados da audiência
+        <button class="btn btno" onclick="editAudience('cr')" style="font-size:11px;padding:4px 10px">✏️ Editar</button>
+      </div>
+      <div class="row">
+        <div>
+          <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px">GÉNERO</div>
+          <div class="abar"><div class="abar-lbl"><span>Feminino</span><span id="cr-aud-f-val">—</span></div><div class="abar-track"><div class="abar-fill" id="cr-aud-f-bar" style="width:0%;background:var(--cris)"></div></div></div>
+          <div class="abar"><div class="abar-lbl"><span>Masculino</span><span id="cr-aud-m-val">—</span></div><div class="abar-track"><div class="abar-fill" id="cr-aud-m-bar" style="width:0%;background:#ddd"></div></div></div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px">TOP PAÍSES</div>
+          <div id="cr-countries-list"><div class="hint">Ainda sem dados — clica em Editar</div></div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px">FAIXAS ETÁRIAS</div>
+          <div id="cr-ages-list"><div class="hint">Ainda sem dados — clica em Editar</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">⏰ Melhores horários para publicar</div>
+    <div class="card">
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div style="flex:1;min-width:160px;background:var(--bg);border-radius:10px;padding:14px">
+          <div style="font-size:20px;margin-bottom:6px">🌙</div>
+          <div style="font-size:13px;font-weight:500">19h00 – 21h00</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">Pico de engagement • Reels e carrosséis</div>
+        </div>
+        <div style="flex:1;min-width:160px;background:var(--bg);border-radius:10px;padding:14px">
+          <div style="font-size:20px;margin-bottom:6px">☀️</div>
+          <div style="font-size:13px;font-weight:500">12h00 – 13h00</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">Pausa do almoço • Stories e posts</div>
+        </div>
+        <div style="flex:1;min-width:160px;background:var(--bg);border-radius:10px;padding:14px">
+          <div style="font-size:20px;margin-bottom:6px">🌅</div>
+          <div style="font-size:13px;font-weight:500">Terça a Quinta</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">Melhores dias • Evita segunda e domingo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AUDIENCE EDIT MODAL -->
+<div id="aud-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:16px;padding:24px;width:460px;max-width:90vw;max-height:85vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <div style="font-size:15px;font-weight:600">Editar audiência</div>
+      <button onclick="document.getElementById('aud-modal').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;color:#888">×</button>
+    </div>
+    <div style="margin-bottom:14px">
+      <label style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:5px">% Feminino</label>
+      <input id="aud-female" type="number" placeholder="ex: 72" style="width:100%;border:1px solid #e8e8e6;border-radius:8px;padding:8px 10px;font-size:13px;outline:none">
+    </div>
+    <div style="margin-bottom:14px">
+      <label style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:5px">Top países (formato: Portugal:60,Brasil:25,Espanha:8)</label>
+      <input id="aud-countries" type="text" placeholder="Portugal:60,Brasil:25,Espanha:8" style="width:100%;border:1px solid #e8e8e6;border-radius:8px;padding:8px 10px;font-size:13px;outline:none">
+    </div>
+    <div style="margin-bottom:18px">
+      <label style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:5px">Faixas etárias (formato: 18-24:22,25-34:45,35-44:21,45+:12)</label>
+      <input id="aud-ages" type="text" placeholder="18-24:22,25-34:45,35-44:21,45+:12" style="width:100%;border:1px solid #e8e8e6;border-radius:8px;padding:8px 10px;font-size:13px;outline:none">
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="document.getElementById('aud-modal').style.display='none'" style="flex:1;padding:9px;border:1px solid #e8e8e6;border-radius:8px;background:transparent;cursor:pointer;font-size:13px">Cancelar</button>
+      <button onclick="saveAudience()" style="flex:1;padding:9px;border:none;border-radius:8px;background:#1a1a18;color:#fff;cursor:pointer;font-size:13px;font-weight:500">Guardar</button>
+    </div>
   </div>
 </div>
 
@@ -899,8 +970,10 @@ function saveSdMetrics(){
 function saveCrMetrics(){
   S.crIG=parseInt(document.getElementById('cr-ig-f').value)||S.crIG;
   S.crTT=parseInt(document.getElementById('cr-tt-f').value)||S.crTT;
+  const eng=document.getElementById('cr-eng-f').value.trim();
   if(S.crIG)st('cr-m-ig',S.crIG.toLocaleString('pt-PT'));
   if(S.crTT)st('cr-m-tt',S.crTT.toLocaleString('pt-PT'));
+  if(eng)st('cr-m-eng',eng);
   updateKPIs();
 }
 
@@ -1217,6 +1290,49 @@ function previewFeedImg(){
   };
 }
 
+// AUDIENCE
+const audienceData = {cr:{female:0,countries:[],ages:[]}};
+
+function editAudience(brand){
+  const d=audienceData[brand]||{female:0,countries:[],ages:[]};
+  document.getElementById('aud-female').value=d.female||'';
+  document.getElementById('aud-countries').value=d.countries.map(c=>c.name+':'+c.pct).join(',');
+  document.getElementById('aud-ages').value=d.ages.map(a=>a.range+':'+a.pct).join(',');
+  document.getElementById('aud-modal').style.display='flex';
+}
+
+function saveAudience(){
+  const female=parseInt(document.getElementById('aud-female').value)||0;
+  const male=100-female;
+  const countries=document.getElementById('aud-countries').value.split(',').filter(Boolean).map(s=>{const p=s.split(':');return{name:p[0].trim(),pct:parseInt(p[1])||0};});
+  const ages=document.getElementById('aud-ages').value.split(',').filter(Boolean).map(s=>{const p=s.split(':');return{range:p[0].trim(),pct:parseInt(p[1])||0};});
+  audienceData.cr={female,male,countries,ages};
+  renderAudience();
+  document.getElementById('aud-modal').style.display='none';
+}
+
+function renderAudience(){
+  const d=audienceData.cr;
+  if(!d)return;
+  // Gender
+  const fEl=document.getElementById('cr-aud-f-val');const fBar=document.getElementById('cr-aud-f-bar');
+  const mEl=document.getElementById('cr-aud-m-val');const mBar=document.getElementById('cr-aud-m-bar');
+  if(fEl){fEl.textContent=d.female+'%';fBar.style.width=d.female+'%';}
+  if(mEl){mEl.textContent=d.male+'%';mBar.style.width=d.male+'%';}
+  // Countries
+  const cEl=document.getElementById('cr-countries-list');
+  if(cEl&&d.countries.length){
+    const flags={'Portugal':'🇵🇹','Brasil':'🇧🇷','Espanha':'🇪🇸','Reino Unido':'🇬🇧','França':'🇫🇷','EUA':'🇺🇸','Alemanha':'🇩🇪','Itália':'🇮🇹','Angola':'🇦🇴','Moçambique':'🇲🇿'};
+    cEl.innerHTML=d.countries.map(c=>`<div class="abar"><div class="abar-lbl"><span>${flags[c.name]||'🌍'} ${c.name}</span><span>${c.pct}%</span></div><div class="abar-track"><div class="abar-fill" style="width:${c.pct}%;background:var(--cris)"></div></div></div>`).join('');
+  }
+  // Ages
+  const aEl=document.getElementById('cr-ages-list');
+  if(aEl&&d.ages.length){
+    aEl.innerHTML=d.ages.map(a=>`<div class="abar"><div class="abar-lbl"><span>${a.range}</span><span>${a.pct}%</span></div><div class="abar-track"><div class="abar-fill" style="width:${a.pct}%;background:var(--cris)"></div></div></div>`).join('');
+  }
+}
+
+// AUDIENCE
 // FILES LIBRARY
 const sdFiles = [];
 const crFiles = [];
