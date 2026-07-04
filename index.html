@@ -180,11 +180,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .fc-deal{border-color:var(--green)!important;border-style:solid!important}
 /* INBOX BADGE */
 .inbox-count{background:var(--red);color:#fff;border-radius:10px;font-size:10px;font-weight:600;padding:1px 6px;margin-left:auto}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .sb{transform:translateX(-100%);transition:transform 0.25s ease;box-shadow:none}
+  .sb.open{transform:translateX(0);box-shadow:4px 0 20px rgba(0,0,0,0.15)}
+  .main{margin-left:0}
+  .page{padding:16px 14px 60px}
+  .grid.g4{grid-template-columns:repeat(2,1fr)}
+  .grid.g3{grid-template-columns:repeat(2,1fr)}
+  .row{flex-direction:column}
+  .ph h1{font-size:16px}
+  .pipeline{grid-template-columns:repeat(2,minmax(140px,1fr))}
+  .briefing-cols{grid-template-columns:1fr}
+}
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:99}
+.mob-overlay.open{display:block}
+.mob-menu-btn{display:none;position:fixed;top:14px;left:14px;z-index:200;background:var(--surface);border:0.5px solid var(--border);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:16px;box-shadow:var(--shadow)}
+@media (max-width: 768px){
+  .mob-menu-btn{display:flex;align-items:center;justify-content:center}
+  .page{padding-top:52px}
+}
 </style>
 </head>
 <body>
 
 <!-- SIDEBAR -->
+<button class="mob-menu-btn" id="mob-btn" onclick="toggleMobileMenu()" aria-label="Menu">☰</button>
+<div class="mob-overlay" id="mob-overlay" onclick="closeMobileMenu()"></div>
 <aside class="sb" id="sidebar">
   <div class="sb-logo">
     <div class="name">THE AGENCY</div>
@@ -782,12 +805,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 const S={sdIG:null,crIG:null,sdTT:null,crTT:null,revenue:0,crm:[],crd:[],wishlist:[],finance:[],calEvents:[],agendaSD:[],agendaCR:[],feedSD:Array(9).fill(null),feedCR:Array(9).fill(null),dados:{events:[],followers:null}};
 
 // NAVIGATION
+function toggleMobileMenu(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('mob-overlay').classList.toggle('open');
+}
+function closeMobileMenu(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('mob-overlay').classList.remove('open');
+}
 function nav(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));
   const pg=document.getElementById('page-'+id);
   if(pg)pg.classList.add('active');
   if(el)el.classList.add('active');
+  closeMobileMenu();
   if(id==='analytics')initAnalytics();
   if(id==='content')renderCal();
   if(id==='sd-crm')renderPipeline('pipeline',S.crm);
