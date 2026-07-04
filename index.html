@@ -1201,8 +1201,20 @@ function clearFeedCellData(cid,i,brand){
 function previewFeedImg(){
   const url=document.getElementById('feed-modal-img').value.trim();
   const prev=document.getElementById('feed-modal-preview');
-  if(url){prev.src=url;prev.style.display='block';}
-  else{prev.style.display='none';}
+  const err=document.getElementById('feed-modal-err');
+  const tip=document.getElementById('feed-modal-tip');
+  err.style.display='none';
+  if(!url){prev.style.display='none';tip.style.display='block';return;}
+  tip.style.display='none';
+  prev.style.display='block';
+  prev.src=url;
+  prev.onerror=function(){
+    prev.style.display='none';
+    err.style.display='block';
+  };
+  prev.onload=function(){
+    err.style.display='none';
+  };
 }
 
 // FILES LIBRARY
