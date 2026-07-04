@@ -24,10 +24,15 @@
       "type": "partnership",
       "summary": "0",
       "timestamp": "2026-07-04T12:46:50.575257+00:00"
+    },
+    {
+      "type": "partnership",
+      "summary": "0",
+      "timestamp": "2026-07-04T12:48:11.280147+00:00"
     }
   ],
   "followers": {
-    "count": 6959,
-    "updated_at": "2026-07-04T12:46:50.575012+00:00"
+    "count": 1254,
+    "updated_at": "2026-07-04T12:48:11.279903+00:00"
   }
 }
