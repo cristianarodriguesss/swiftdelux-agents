@@ -2,31 +2,46 @@
   "events": [
     {
       "type": "post",
-      "summary": "O brilho está nos detalhes. Cada peça Swift Delux é pensada para durar — e para ",
-      "timestamp": "2026-07-01T17:23:04.166822+00:00"
+      "summary": "O brilho está nos detalhes. Cada peça Swift Delux é pensada para durar",
+      "timestamp": "2026-07-01T17:23:04+00:00"
     },
     {
       "type": "post",
-      "summary": "Cada detalhe é intencional. Cada laço, uma promessa. Porque o cuidado começa mui",
-      "timestamp": "2026-07-02T16:18:10.408433+00:00"
+      "summary": "Cada detalhe é intencional. Cada laço, uma promessa.",
+      "timestamp": "2026-07-02T16:18:10+00:00"
     },
     {
       "type": "post",
-      "summary": "A beleza está nos detalhes que só quem sabe, repara. Cada acabamento é pensado p",
-      "timestamp": "2026-07-03T16:00:04.246695+00:00"
+      "summary": "A beleza está nos detalhes que só quem sabe, repara.",
+      "timestamp": "2026-07-03T16:00:04+00:00"
     },
     {
       "type": "post",
-      "summary": "É nos detalhes que mora a diferença. Cada acabamento é pensado para durar, brilh",
-      "timestamp": "2026-07-04T12:48:53.170777+00:00"
+      "summary": "É nos detalhes que mora a diferença.",
+      "timestamp": "2026-07-04T12:48:53+00:00"
     }
   ],
   "followers": {
     "count": 1254,
-    "updated_at": "2026-07-04T14:52:00.306815+00:00"
+    "updated_at": "2026-07-05T06:33:53.056243+00:00"
   },
   "cr_followers": {
     "count": 6959,
-    "updated_at": "2026-07-04T14:52:00.306815+00:00"
+    "updated_at": "2026-07-05T06:33:53.056328+00:00"
+  },
+  "briefing": {
+    "date": "05/07/2026",
+    "resumo": "A Swift Delux está a 13% da meta de 10k seguidores com um alcance orgânico excelente — 61,5% das visualizações são de não seguidores. A Cristiana tem 6.959 seguidores no Instagram com pico de atividade entre as 18h-21h.",
+    "destaques": [
+      "Swift Delux: +644% atividade do perfil vs mês anterior",
+      "61,5% das visualizações são de pessoas novas — excelente alcance",
+      "4 posts sugeridos esta semana pelo agente de conteúdo"
+    ],
+    "tarefas": [
+      "Publicar Reel Swift Delux entre as 18h-21h",
+      "Verificar emails de marcas no Gmail",
+      "Atualizar o CRM de parcerias",
+      "Planear conteúdo da próxima semana no Feed Planner"
+    ]
   }
 }
