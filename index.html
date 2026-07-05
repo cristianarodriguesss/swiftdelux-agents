@@ -181,6 +181,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 /* INBOX BADGE */
 .inbox-count{background:var(--red);color:#fff;border-radius:10px;font-size:10px;font-weight:600;padding:1px 6px;margin-left:auto}
 
+
+/* WELCOME MODAL */
+.wm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;align-items:center;justify-content:center;padding:20px}
+.wm-overlay.active{display:flex}
+.wm-box{background:#0e0e0c;border-radius:20px;padding:36px 28px;max-width:480px;width:100%;text-align:center}
+.wm-logo{font-size:11px;font-weight:700;letter-spacing:2.5px;color:rgba(255,255,255,0.35);margin-bottom:28px}
+.wm-title{font-size:32px;font-weight:300;color:#fff;letter-spacing:-0.5px;margin-bottom:8px}
+.wm-title b{font-weight:700}
+.wm-sub{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:32px}
+.wm-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.wm-btn{border:none;border-radius:12px;padding:16px 24px;cursor:pointer;font-size:13px;font-weight:600;min-width:160px;transition:transform 0.15s;text-align:left}
+.wm-btn:hover{transform:translateY(-2px)}
+.wm-btn:active{transform:translateY(0)}
+.wm-btn-sd{background:linear-gradient(135deg,#c9a96e,#a07840);color:#fff}
+.wm-btn-cr{background:linear-gradient(135deg,#9b8ec4,#6b5fa0);color:#fff}
+.wm-btn-label{font-size:10px;font-weight:500;opacity:0.7;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px}
+.wm-btn-name{font-size:16px;font-weight:700;margin-bottom:2px}
+.wm-btn-arrow{font-size:18px;float:right;margin-top:-22px}
+.wm-skip{background:none;border:none;color:rgba(255,255,255,0.3);font-size:12px;cursor:pointer;padding:4px 8px}
+.wm-skip:hover{color:rgba(255,255,255,0.6)}
 /* MOBILE */
 @media (max-width: 768px) {
   .sb{transform:translateX(-100%);transition:transform 0.25s ease;box-shadow:none}
@@ -223,6 +243,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     </button>
   </div>
   <button class="welcome-full" type="button" onclick="enterDashboard()">Ver dashboard completo →</button>
+</div>
+
+
+<!-- WELCOME MODAL -->
+<div class="wm-overlay active" id="wm-overlay">
+  <div class="wm-box">
+    <div class="wm-logo">THE AGENCY</div>
+    <div class="wm-title">Welcome,<br><b>Cristiana.</b></div>
+    <div class="wm-sub">O teu centro de operações está pronto.</div>
+    <div class="wm-btns">
+      <button class="wm-btn wm-btn-sd" onclick="wmEnter('sd')">
+        <div class="wm-btn-label">Marca de joias</div>
+        <div class="wm-btn-name">Swift Delux</div>
+        <span class="wm-btn-arrow">→</span>
+      </button>
+      <button class="wm-btn wm-btn-cr" onclick="wmEnter('cr')">
+        <div class="wm-btn-label">Influencer</div>
+        <div class="wm-btn-name">@cristiana</div>
+        <span class="wm-btn-arrow">→</span>
+      </button>
+    </div>
+    <button class="wm-skip" onclick="wmClose()">Ver dashboard completo →</button>
+  </div>
 </div>
 
 <button class="mob-menu-btn" id="mob-btn" onclick="toggleMobileMenu()" aria-label="Menu">☰</button>
@@ -930,6 +973,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 const S={sdIG:null,crIG:null,sdTT:null,crTT:null,revenue:0,crm:[],crd:[],wishlist:[],finance:[],calEvents:[],agendaSD:[],agendaCR:[],feedSD:Array(9).fill(null),feedCR:Array(9).fill(null),dados:{events:[],followers:null}};
 
 // NAVIGATION
+function wmClose(){
+  document.getElementById('wm-overlay').classList.remove('active');
+}
+function wmEnter(brand){
+  document.getElementById('wm-overlay').classList.remove('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));
+  if(brand==='sd'){
+    document.getElementById('sub-sd').classList.add('open');
+    document.getElementById('brand-sd').classList.add('open');
+    document.getElementById('page-sd-metrics').classList.add('active');
+  } else {
+    document.getElementById('sub-cr').classList.add('open');
+    document.getElementById('brand-cr').classList.add('open');
+    document.getElementById('page-cr-metrics').classList.add('active');
+  }
+}
 function toggleMobileMenu(){
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('mob-overlay').classList.toggle('open');
