@@ -182,8 +182,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .inbox-count{background:var(--red);color:#fff;border-radius:10px;font-size:10px;font-weight:600;padding:1px 6px;margin-left:auto}
 
 /* WELCOME PAGE */
-.welcome-page{display:none;position:fixed;inset:0;z-index:500;background:#0e0e0c;flex-direction:column;align-items:center;justify-content:center;padding:32px}
+.welcome-page{display:none;position:fixed;inset:0;z-index:1000;background:#0e0e0c;flex-direction:column;align-items:center;justify-content:center;padding:32px;touch-action:auto}
 .welcome-page.active{display:flex}
+.welcome-page *{pointer-events:auto}
 .welcome-logo{font-size:13px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.4);margin-bottom:48px;text-align:center}
 .welcome-title{font-size:42px;font-weight:300;color:#fff;letter-spacing:-1px;text-align:center;line-height:1.1;margin-bottom:12px}
 .welcome-title b{font-weight:700}
@@ -240,13 +241,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
       <div class="wc-label">Marca de joias</div>
       <div class="wc-name">Swift Delux</div>
       <div class="wc-desc">Feed planner, métricas, brand deals e media kit da marca.</div>
-      <button class="wc-btn">Entrar <span class="wc-arrow">→</span></button>
+      <div class="wc-btn" style="pointer-events:none">Entrar <span class="wc-arrow">→</span></div>
     </div>
     <div class="welcome-card welcome-card-cr" onclick="enterBrand('cr')">
       <div class="wc-label">Influencer</div>
       <div class="wc-name">@cristianarodriguesss</div>
       <div class="wc-desc">Feed planner, métricas, parcerias, media kit e audiência.</div>
-      <button class="wc-btn">Entrar <span class="wc-arrow">→</span></button>
+      <div class="wc-btn" style="pointer-events:none">Entrar <span class="wc-arrow">→</span></div>
     </div>
   </div>
   <button class="welcome-full" onclick="enterDashboard()">Ver dashboard completo →</button>
