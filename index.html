@@ -237,20 +237,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
   <div class="welcome-title">Welcome,<br><b>Cristiana.</b></div>
   <div class="welcome-sub">O teu centro de operações está pronto.</div>
   <div class="welcome-cards">
-    <div class="welcome-card welcome-card-sd" onclick="enterBrand('sd')">
+    <button class="welcome-card welcome-card-sd" type="button" onclick="enterBrand('sd')" style="text-align:left;width:100%;cursor:pointer">
       <div class="wc-label">Marca de joias</div>
       <div class="wc-name">Swift Delux</div>
       <div class="wc-desc">Feed planner, métricas, brand deals e media kit da marca.</div>
-      <div class="wc-btn" style="pointer-events:none">Entrar <span class="wc-arrow">→</span></div>
-    </div>
-    <div class="welcome-card welcome-card-cr" onclick="enterBrand('cr')">
+      <div class="wc-btn">Entrar →</div>
+    </button>
+    <button class="welcome-card welcome-card-cr" type="button" onclick="enterBrand('cr')" style="text-align:left;width:100%;cursor:pointer">
       <div class="wc-label">Influencer</div>
       <div class="wc-name">@cristianarodriguesss</div>
       <div class="wc-desc">Feed planner, métricas, parcerias, media kit e audiência.</div>
-      <div class="wc-btn" style="pointer-events:none">Entrar <span class="wc-arrow">→</span></div>
-    </div>
+      <div class="wc-btn">Entrar →</div>
+    </button>
   </div>
-  <button class="welcome-full" onclick="enterDashboard()">Ver dashboard completo →</button>
+  <button class="welcome-full" type="button" onclick="enterDashboard()">Ver dashboard completo →</button>
 </div>
 
 <button class="mob-menu-btn" id="mob-btn" onclick="toggleMobileMenu()" aria-label="Menu">☰</button>
