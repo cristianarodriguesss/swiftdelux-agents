@@ -959,18 +959,30 @@ const S={sdIG:null,crIG:null,sdTT:null,crTT:null,revenue:0,crm:[],crd:[],wishlis
 // NAVIGATION
 function enterBrand(brand){
   document.getElementById('welcome-page').classList.remove('active');
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));
   if(brand==='sd'){
-    toggleBrand('sd');
-    nav('sd-feed', document.querySelector('[onclick*="sd-feed"]'));
+    // Open Swift Delux submenu and go to feed
+    document.getElementById('sub-sd').classList.add('open');
+    document.getElementById('brand-sd').classList.add('open');
+    document.getElementById('page-sd-feed').classList.add('active');
+    renderFeed('feed-grid-sd',S.feedSD,'swift');
+    renderAgenda('agenda-sd',S.agendaSD);
   } else {
-    toggleBrand('cr');
-    nav('cr-feed', document.querySelector('[onclick*="cr-feed"]'));
+    // Open Cristiana submenu and go to feed
+    document.getElementById('sub-cr').classList.add('open');
+    document.getElementById('brand-cr').classList.add('open');
+    document.getElementById('page-cr-feed').classList.add('active');
+    renderFeed('feed-grid-cr',S.feedCR,'cris');
+    renderAgenda('agenda-cr',S.agendaCR);
   }
 }
 
 function enterDashboard(){
   document.getElementById('welcome-page').classList.remove('active');
-  nav('dashboard', document.querySelector('[onclick*="dashboard"]'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-dashboard').classList.add('active');
 }
 
 function toggleMobileMenu(){
