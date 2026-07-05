@@ -53,5 +53,19 @@
       "Atualizar o CRM de parcerias",
       "Planear conteúdo da próxima semana no Feed Planner"
     ]
+  },
+  "agenda": {
+    "2026-07-06": [
+      {
+        "title": "Criar conta no Ideogram e obter API key",
+        "type": "task",
+        "note": "ideogram.ai → Settings → API → copiar key. Depois diz ao Claude para montar o agente de criação de imagens para Swift Delux."
+      },
+      {
+        "title": "Ligar Instagram Swift Delux para publicação automática",
+        "type": "swift",
+        "note": "Passo 2 do agente de conteúdo visual — Meta Graph API para publicação"
+      }
+    ]
   }
 }
