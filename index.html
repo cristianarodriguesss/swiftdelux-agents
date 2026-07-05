@@ -181,31 +181,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 /* INBOX BADGE */
 .inbox-count{background:var(--red);color:#fff;border-radius:10px;font-size:10px;font-weight:600;padding:1px 6px;margin-left:auto}
 
-/* WELCOME PAGE */
-.welcome-page{display:none;position:fixed;inset:0;z-index:1000;background:#0e0e0c;flex-direction:column;align-items:center;justify-content:center;padding:32px;touch-action:auto}
-.welcome-page.active{display:flex}
-.welcome-page *{pointer-events:auto}
-.welcome-logo{font-size:13px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.4);margin-bottom:48px;text-align:center}
-.welcome-title{font-size:42px;font-weight:300;color:#fff;letter-spacing:-1px;text-align:center;line-height:1.1;margin-bottom:12px}
-.welcome-title b{font-weight:700}
-.welcome-sub{font-size:14px;color:rgba(255,255,255,0.4);text-align:center;margin-bottom:64px;letter-spacing:0.3px}
-.welcome-cards{display:flex;gap:16px;width:100%;max-width:520px;flex-wrap:wrap;justify-content:center}
-.welcome-card{flex:1;min-width:200px;max-width:240px;border-radius:16px;padding:24px;cursor:pointer;transition:transform 0.2s,opacity 0.2s;text-align:left;border:none;position:relative;overflow:hidden}
-.welcome-card:hover{transform:translateY(-3px)}
-.welcome-card-sd{background:linear-gradient(135deg,#c9a96e,#a07840)}
-.welcome-card-cr{background:linear-gradient(135deg,#9b8ec4,#6b5fa0)}
-.welcome-card .wc-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:0.7;color:#fff;margin-bottom:10px}
-.welcome-card .wc-name{font-size:20px;font-weight:600;color:#fff;margin-bottom:6px}
-.welcome-card .wc-desc{font-size:12px;color:rgba(255,255,255,0.75);line-height:1.4;margin-bottom:16px}
-.welcome-card .wc-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.2);color:#fff;font-size:12px;font-weight:500;padding:7px 14px;border-radius:20px;border:none;cursor:pointer}
-.welcome-card .wc-arrow{font-size:14px}
-.welcome-full{margin-top:24px;font-size:12px;color:rgba(255,255,255,0.3);cursor:pointer;letter-spacing:0.3px;background:none;border:none}
-.welcome-full:hover{color:rgba(255,255,255,0.6)}
-@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.welcome-page.active .welcome-title{animation:fadeIn 0.6s ease forwards}
-.welcome-page.active .welcome-sub{animation:fadeIn 0.6s 0.1s ease both}
-.welcome-page.active .welcome-cards{animation:fadeIn 0.6s 0.2s ease both}
-
 /* MOBILE */
 @media (max-width: 768px) {
   .sb{transform:translateX(-100%);transition:transform 0.25s ease;box-shadow:none}
@@ -231,9 +206,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 <body>
 
 <!-- SIDEBAR -->
-<!-- WELCOME PAGE -->
-<div class="welcome-page active" id="welcome-page">
-  <div class="welcome-logo">THE AGENCY</div>
   <div class="welcome-title">Welcome,<br><b>Cristiana.</b></div>
   <div class="welcome-sub">O teu centro de operações está pronto.</div>
   <div class="welcome-cards">
@@ -958,28 +930,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 const S={sdIG:null,crIG:null,sdTT:null,crTT:null,revenue:0,crm:[],crd:[],wishlist:[],finance:[],calEvents:[],agendaSD:[],agendaCR:[],feedSD:Array(9).fill(null),feedCR:Array(9).fill(null),dados:{events:[],followers:null}};
 
 // NAVIGATION
-function enterBrand(brand){
-  try{
-    document.getElementById('welcome-page').classList.remove('active');
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));
-    var pageId = brand==='sd' ? 'page-sd-metrics' : 'page-cr-metrics';
-    var subId = brand==='sd' ? 'sub-sd' : 'sub-cr';
-    var brandId = brand==='sd' ? 'brand-sd' : 'brand-cr';
-    document.getElementById(subId).classList.add('open');
-    document.getElementById(brandId).classList.add('open');
-    document.getElementById(pageId).classList.add('active');
-  } catch(e){ console.error(e); }
-}
-
-function enterDashboard(){
-  try{
-    document.getElementById('welcome-page').classList.remove('active');
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    document.getElementById('page-dashboard').classList.add('active');
-  } catch(e){ console.error(e); }
-}
-
 function toggleMobileMenu(){
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('mob-overlay').classList.toggle('open');
