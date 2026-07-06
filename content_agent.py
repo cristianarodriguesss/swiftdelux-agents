@@ -321,9 +321,44 @@ def main():
     # 6. Resumo semanal (so as segundas)
     weekly_summary(dados)
 
+    # 7. Lembrete semanal de seguidores (so as segundas)
+    followers_reminder()
+
     # Save dados
     save_dados(dados)
 
 
 if __name__ == "__main__":
     main()
+
+
+def followers_reminder():
+    """Lembrete semanal para actualizar seguidores manualmente."""
+    if datetime.now().weekday() != 0:  # So as segundas
+        return
+    sd_ig = 0
+    cr_ig = 0
+    try:
+        with open("dados.json", "r", encoding="utf-8") as f:
+            dados = json.load(f)
+            sd_ig = dados.get("followers", {}).get("count", 0)
+            cr_ig = dados.get("cr_followers", {}).get("count", 0)
+    except:
+        pass
+
+    line = "-" * 22
+    msg = (
+        f"📊 <b>ACTUALIZAR SEGUIDORES · Segunda-feira</b>\n"
+        f"<code>{line}</code>\n\n"
+        f"Ultimos valores guardados:\n"
+        f"💎 Swift Delux IG: <b>{sd_ig:,}</b>\n"
+        f"🌸 @cris IG: <b>{cr_ig:,}</b>\n\n"
+        f"Para actualizar:\n"
+        f"1. Abre o Instagram de cada conta\n"
+        f"2. Ve quantos seguidores tens agora\n"
+        f"3. GitHub → Actions → Swift Delux Agents → Run workflow\n"
+        f"4. Preenche os campos e corre\n\n"
+        f"<i>THE AGENCY · Followers Reminder</i>"
+    )
+    send_telegram(msg)
+    print("OK Lembrete de seguidores enviado")
