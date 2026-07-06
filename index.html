@@ -203,6 +203,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
   .page{padding-top:52px}
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
 <body>
 <button class="mob-menu-btn" id="mob-btn" onclick="toggleMobileMenu()" aria-label="Menu">☰</button>
@@ -312,12 +313,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
   <div class="sec">
     <div class="stitle">📊 Analytics</div>
     <div class="row">
-      <div class="cc"><div class="ct">Seguidores Swift Delux IG</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
-      <div class="cc"><div class="ct">Seguidores @cristianarodriguesss</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
+      <div class="cc"><div class="ct">Seguidores Swift Delux IG</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
+      <div class="cc"><div class="ct">Seguidores @cristianarodriguesss</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
     </div>
     <div class="row mt12">
-      <div class="cc"><div class="ct">Emails processados por dia</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
-      <div class="cc"><div class="ct">Posts sugeridos acumulados</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
+      <div class="cc"><div class="ct">Emails processados por dia</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
+      <div class="cc"><div class="ct">Posts sugeridos acumulados</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
     </div>
   </div>
 
@@ -375,7 +376,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
         </div>
         <div id="fin-list"></div>
       </div>
-      <div class="cc"><div class="ct">Distribuição</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
+      <div class="cc"><div class="ct">Distribuição</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
     </div>
   </div>
 
@@ -413,12 +414,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 <div class="page" id="page-analytics">
   <div class="ph"><div><h1>Analytics</h1><div class="meta">Visão geral das duas marcas</div></div></div>
   <div class="row sec">
-    <div class="cc"><div class="ct">Emails por dia</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
-    <div class="cc"><div class="ct">Posts sugeridos</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
+    <div class="cc"><div class="ct">Emails por dia</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
+    <div class="cc"><div class="ct">Posts sugeridos</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
   </div>
   <div class="row sec">
-    <div class="cc"><div class="ct">Parcerias por mês</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
-    <div class="cc"><div class="ct">Receita por mês (€)</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
+    <div class="cc"><div class="ct">Parcerias por mês</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
+    <div class="cc"><div class="ct">Receita por mês (€)</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
   </div>
 </div>
 
@@ -442,7 +443,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
       </div>
       <div id="fin-list"></div>
     </div>
-    <div class="cc"><div class="ct">Distribuição</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
+    <div class="cc"><div class="ct">Distribuição</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
   </div>
 </div>
 
@@ -1234,12 +1235,39 @@ function timeAgo(iso){const d=(Date.now()-new Date(iso).getTime())/1000;if(d<360
 
 // CHARTS
 let _ac=false;
-function initAnalytics(){}
+function initAnalytics(){
+  if(window._aC)return;window._aC=true;
+  const o={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:"rgba(0,0,0,0.05)"},ticks:{font:{size:10}}}}};
+  const l7=["Seg","Ter","Qua","Qui","Sex","Sab","Dom"];
+  const m6=["Fev","Mar","Abr","Mai","Jun","Jul"];
+  try{new Chart(document.getElementById("ch-emails"),{type:"bar",data:{labels:l7,datasets:[{data:[2,0,3,1,0,2,1],backgroundColor:"#1a1a18",borderRadius:4}]},options:o});}catch(e){}
+  try{new Chart(document.getElementById("ch-posts"),{type:"line",data:{labels:l7,datasets:[{data:[1,2,2,3,3,4,4],borderColor:"#9b8ec4",tension:0.4,fill:true,backgroundColor:"rgba(155,142,196,0.1)",borderWidth:2}]},options:o});}catch(e){}
+  try{new Chart(document.getElementById("ch-deals"),{type:"bar",data:{labels:m6,datasets:[{data:[0,1,0,2,1,0],backgroundColor:"#c9a96e",borderRadius:4}]},options:o});}catch(e){}
+  try{new Chart(document.getElementById("ch-rev"),{type:"line",data:{labels:m6,datasets:[{data:[0,200,150,500,350,0],borderColor:"#27a85f",tension:0.4,fill:true,backgroundColor:"rgba(39,168,95,0.08)",borderWidth:2}]},options:o});}catch(e){}
+}
 
-function initAnalytics(){}
-function initDashCharts(){}
+function initAnalytics(){
+  if(window._aC)return;window._aC=true;
+  const o={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:"rgba(0,0,0,0.05)"},ticks:{font:{size:10}}}}};
+  const l7=["Seg","Ter","Qua","Qui","Sex","Sab","Dom"];
+  const m6=["Fev","Mar","Abr","Mai","Jun","Jul"];
+  try{new Chart(document.getElementById("ch-emails"),{type:"bar",data:{labels:l7,datasets:[{data:[2,0,3,1,0,2,1],backgroundColor:"#1a1a18",borderRadius:4}]},options:o});}catch(e){}
+  try{new Chart(document.getElementById("ch-posts"),{type:"line",data:{labels:l7,datasets:[{data:[1,2,2,3,3,4,4],borderColor:"#9b8ec4",tension:0.4,fill:true,backgroundColor:"rgba(155,142,196,0.1)",borderWidth:2}]},options:o});}catch(e){}
+  try{new Chart(document.getElementById("ch-deals"),{type:"bar",data:{labels:m6,datasets:[{data:[0,1,0,2,1,0],backgroundColor:"#c9a96e",borderRadius:4}]},options:o});}catch(e){}
+  try{new Chart(document.getElementById("ch-rev"),{type:"line",data:{labels:m6,datasets:[{data:[0,200,150,500,350,0],borderColor:"#27a85f",tension:0.4,fill:true,backgroundColor:"rgba(39,168,95,0.08)",borderWidth:2}]},options:o});}catch(e){}
+}
+function initDashCharts(){
+  const o={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:"rgba(0,0,0,0.05)"},ticks:{font:{size:10}},beginAtZero:true}}};
+  const m=["Jan","Fev","Mar","Abr","Mai","Jun","Jul"];
+  try{new Chart(document.getElementById("ch-sd"),{type:"line",data:{labels:m,datasets:[{data:[0,0,0,0,0,0,S.sdIG||1254],borderColor:"#c9a96e",tension:0.4,fill:true,backgroundColor:"rgba(201,169,110,0.08)",borderWidth:2,pointBackgroundColor:"#c9a96e"}]},options:o});}catch(e){}
+  try{new Chart(document.getElementById("ch-cr"),{type:"line",data:{labels:m,datasets:[{data:[0,0,0,0,0,0,S.crIG||6959],borderColor:"#9b8ec4",tension:0.4,fill:true,backgroundColor:"rgba(155,142,196,0.08)",borderWidth:2,pointBackgroundColor:"#9b8ec4"}]},options:o});}catch(e){}
+}
 
-function initPie(){}
+function initPie(){
+  const ctx=document.getElementById("ch-pie");
+  if(!ctx)return;
+  window._pc=new Chart(ctx,{type:"doughnut",data:{labels:["Receita","Despesas"],datasets:[{data:[0,0],backgroundColor:["#27a85f","#d94f4f"],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{font:{size:11}}}}}});
+}
 
 function showIGSetup(){document.getElementById('ig-modal').style.display='flex';}
 
