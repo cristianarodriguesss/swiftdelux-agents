@@ -34,7 +34,7 @@ def fetch_unread_emails(limit=10):
     mail.select("inbox")
 
     since = (datetime.now() - timedelta(days=1)).strftime("%d-%b-%Y")
-    status, data = mail.search(None, f'(UNSEEN SINCE {since})')
+    status, data = mail.search(None, f'(SINCE {since})')
     ids = data[0].split()[-limit:]
 
     emails = []
