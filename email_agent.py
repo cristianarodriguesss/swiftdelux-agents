@@ -139,10 +139,11 @@ def format_message(email_item, analysis):
 def main():
     emails = fetch_unread_emails()
 
+    print(f"Total emails a processar: {len(emails)}")
     if not emails:
-        print("Sem emails novos.")
+        print("Sem emails nas ultimas 24h.")
         try:
-            send_telegram_message("📭 Sem emails novos por ler nesta verificação.")
+            send_telegram_message("Sem emails nas ultimas 24h.")
         except Exception:
             pass
         return
