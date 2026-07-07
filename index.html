@@ -1552,6 +1552,48 @@ function saveNotas(){
 function loadNotas(){
   try{const v=localStorage.getItem('notas-rapidas');if(v&&document.getElementById('notas-rapidas'))document.getElementById('notas-rapidas').value=v;}catch(e){}
 }
+function renderAgendaCalendar(){
+  const el=document.getElementById('agenda-calendar');
+  if(!el)return;
+  const now=new Date();
+  const yr=agendaYear;
+  const mo=agendaMonth;
+  const fd=new Date(yr,mo,1).getDay();
+  const dm=new Date(yr,mo+1,0).getDate();
+  const dn=['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+  const mNames=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const lbl=document.getElementById('agenda-month-label');
+  if(lbl)lbl.textContent=mNames[mo]+' '+yr;
+  const COLORS={swift:'#c9a96e',cris:'#9b8ec4',deal:'#27a85f',task:'#4a90e8'};
+  let h='';
+  dn.forEach(function(d){
+    h+='<div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">'+d+'</div>';
+  });
+  for(var i=0;i<fd;i++){
+    h+='<div style="background:var(--surface);min-height:44px"></div>';
+  }
+  for(var d=1;d<=dm;d++){
+    var ds=yr+'-'+String(mo+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    var tasks=agendaTasks[ds]||[];
+    var today=d===now.getDate()&&mo===now.getMonth()&&yr===now.getFullYear();
+    var selected=d===agendaSelectedDay;
+    var bg=selected?'#f0edf9':today?'#fdf3e3':'var(--surface)';
+    var brd=selected?'1.5px solid #9b8ec4':today?'1.5px solid #c9a96e':'none';
+    h+='<div onclick="selectAgendaDay('+d+')" style="background:'+bg+';padding:4px 3px;min-height:44px;cursor:pointer;border:'+brd+'">';
+    if(today){
+      h+='<div style="background:#1a1a18;color:#fff;width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600">'+d+'</div>';
+    } else {
+      h+='<div style="font-size:11px;color:var(--muted)">'+d+'</div>';
+    }
+    tasks.slice(0,2).forEach(function(t){
+      h+='<div style="font-size:8px;padding:1px 2px;border-radius:2px;margin-top:1px;background:'+(COLORS[t.type]||'#eee')+'33;color:'+(COLORS[t.type]||'#666')+';overflow:hidden;white-space:nowrap;text-overflow:ellipsis">'+t.title+'</div>';
+    });
+    if(tasks.length>2)h+='<div style="font-size:8px;color:var(--muted)">+'+( tasks.length-2)+'</div>';
+    h+='</div>';
+  }
+  el.innerHTML=h;
+}
+
 function prevMonth(){agendaMonth--;if(agendaMonth<0){agendaMonth=11;agendaYear--;}agendaSelectedDay=null;document.getElementById('agenda-day-tasks').innerHTML='';const f=document.getElementById('agenda-add-form');if(f)f.style.display='none';renderAgendaCalendar();}
 function nextMonth(){agendaMonth++;if(agendaMonth>11){agendaMonth=0;agendaYear++;}agendaSelectedDay=null;document.getElementById('agenda-day-tasks').innerHTML='';const f=document.getElementById('agenda-add-form');if(f)f.style.display='none';renderAgendaCalendar();}
 
