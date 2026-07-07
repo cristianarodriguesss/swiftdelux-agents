@@ -1653,6 +1653,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
     ]
   };
   renderAudience();
+  setTimeout(function(){renderAgendaCalendar();loadNotas();loadFiles();},100);
   renderFiles('sd-files-list',sdFiles);
   if(!crFiles.length) crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
   renderFiles('cr-files-list',crFiles);
