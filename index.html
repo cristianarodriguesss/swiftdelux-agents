@@ -668,7 +668,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
       <div class="row">
         <div>
           <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px">GÉNERO</div>
-          <div class="abar"><div class="abar-lbl"><span>Feminino</span><span id="cr-aud-f-val">54%</span></div><div class="abar-track"><div class="abar-fill" id="cr-aud-f-bar" style="width:54%;background:var(--cris)"></div></div></div>
+          <div class="abar"><div class="abar-lbl"><span>Feminino</span><span id="cr-aud-f-val">54%</span></div><div class="abar-track"><div class="abar-fill" id="cr-aud-f-bar" style="width:54%;background:var(--cris);height:100%;border-radius:10px"></div></div></div>
           <div class="abar"><div class="abar-lbl"><span>Masculino</span><span id="cr-aud-m-val">46%</span></div><div class="abar-track"><div class="abar-fill" id="cr-aud-m-bar" style="width:46%;background:#ddd"></div></div></div>
         </div>
         <div>
@@ -1341,7 +1341,17 @@ function previewFeedImg(){
 }
 
 // AUDIENCE
-const audienceData = {cr:{female:0,countries:[],ages:[]}};
+const audienceData = {cr:{
+  female:54, male:46,
+  countries:[
+    {name:'Portugal',pct:64},{name:'Brasil',pct:24},
+    {name:'França',pct:2},{name:'Suíça',pct:1},{name:'Espanha',pct:1}
+  ],
+  ages:[
+    {range:'13-17',pct:5},{range:'18-24',pct:18},{range:'25-34',pct:47},
+    {range:'35-44',pct:17},{range:'45-54',pct:9},{range:'55-64',pct:3},{range:'65+',pct:1}
+  ]
+}};
 
 function editAudience(brand){
   const d=audienceData[brand]||{female:0,countries:[],ages:[]};
