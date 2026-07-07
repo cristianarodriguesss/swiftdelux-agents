@@ -1401,6 +1401,8 @@ function addSdFile(){
   if(!name||!url)return;
   sdFiles.push({name,url,cat});
   saveFilesToDados();
+  saveFiles();
+  loadFiles();
   renderFiles('sd-files-list',sdFiles);
   document.getElementById('sd-file-name').value='';
   document.getElementById('sd-file-url').value='';
@@ -1413,6 +1415,7 @@ function addCrFile(){
   if(!name||!url)return;
   crFiles.push({name,url,cat});
   if(!crFiles.length) crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
+  saveFiles();
   renderFiles('cr-files-list',crFiles);
   document.getElementById('cr-file-name').value='';
   document.getElementById('cr-file-url').value='';
@@ -1421,51 +1424,40 @@ function addCrFile(){
 function renderFiles(containerId,arr){
   const el=document.getElementById(containerId);
   if(!el)return;
-  if(!arr.length){el.innerHTML='<div class="hint" style="padding:10px 0">Ainda sem ficheiros. Adiciona links do Google Drive ou Dropbox.</div>';return;}
-  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:12px">${arr.map((f,i)=>`
-    <a href="${f.url}" target="_blank" style="text-decoration:none">
-      <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:border-color 0.15s" onmouseover="this.style.borderColor='#aaa'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-size:22px;margin-bottom:8px">${FILE_ICONS[f.cat]||'📁'}</div>
-        <div style="font-size:12px;font-weight:500;color:var(--text)">${f.name}</div>
-        <div style="font-size:10px;color:var(--muted);margin-top:3px">${f.cat}</div>
-      </div>
-    </a>
-  `).join('')}</div>`;
+  if(!arr.length){el.innerHTML='<div class="hint" style="padding:10px 0">Ainda sem ficheiros.</div>';return;}
+  let html2='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:12px">';
+  arr.forEach(function(f,i){
+    html2+='<div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:14px;position:relative">';
+    html2+='<button onclick="deleteFile(\''+containerId+'\','+i+')" style="position:absolute;top:6px;right:8px;background:none;border:none;cursor:pointer;color:#aaa;font-size:13px">✕</button>';
+    html2+='<a href="'+f.url+'" target="_blank" style="text-decoration:none;display:block">';
+    html2+='<div style="font-size:20px;margin-bottom:6px">'+(FILE_ICONS[f.cat]||'📁')+'</div>';
+    html2+='<div style="font-size:12px;font-weight:500;color:var(--text)">'+f.name+'</div>';
+    html2+='<div style="font-size:10px;color:var(--muted);margin-top:2px">'+f.cat+'</div>';
+    html2+='</a></div>';
+  });
+  html2+='</div>';
+  el.innerHTML=html2;
 }
 
-// AGENDA DIÁRIA
-const agendaTasks = {};
-let agendaYear = new Date().getFullYear();
-let agendaMonth = new Date().getMonth();
-let agendaSelectedDay = null;
+function deleteFile(containerId,i){
+  if(!confirm('Eliminar?'))return;
+  const arr=containerId==='sd-files-list'?sdFiles:crFiles;
+  arr.splice(i,1);
+  try{localStorage.setItem('sd-files',JSON.stringify(sdFiles));localStorage.setItem('cr-files',JSON.stringify(crFiles));}catch(e){}
+  renderFiles(containerId,arr);
+}
 
-const AGENDA_COLORS = {swift:'#c9a96e',cris:'#9b8ec4',deal:'#27a85f',task:'#4a90e8'};
-const AGENDA_LABELS = {swift:'Swift Delux',cris:'Cristiana',deal:'Parceria',task:'Tarefa'};
+function saveFiles(){
+  try{localStorage.setItem('sd-files',JSON.stringify(sdFiles));localStorage.setItem('cr-files',JSON.stringify(crFiles));}catch(e){}
+}
 
-function renderAgendaCalendar(){
-  const el=document.getElementById('agenda-calendar');
-  if(!el)return;
-  const now=new Date();
-  const fd=new Date(agendaYear,agendaMonth,1).getDay();
-  const dm=new Date(agendaYear,agendaMonth+1,0).getDate();
-  const dn=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-  const monthNames=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  const lbl=document.getElementById('agenda-month-label');
-  if(lbl)lbl.textContent=monthNames[agendaMonth]+' '+agendaYear;
-  let h=dn.map(d=>`<div style="background:var(--surface);padding:6px;text-align:center;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase">${d}</div>`).join('');
-  for(let i=0;i<fd;i++)h+=`<div style="background:var(--surface);padding:6px;min-height:60px"></div>`;
-  for(let d=1;d<=dm;d++){
-    const ds=`${agendaYear}-${String(agendaMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const tasks=agendaTasks[ds]||[];
-    const today=d===now.getDate()&&agendaMonth===now.getMonth()&&agendaYear===now.getFullYear();
-    const selected=d===agendaSelectedDay;
-    h+=`<div onclick="selectAgendaDay(${d})" style="background:${selected?'#f0edf9':today?'#fdf3e3':'var(--surface)'};padding:6px;min-height:60px;cursor:pointer;border:${selected?'1.5px solid #9b8ec4':today?'1.5px solid #c9a96e':'1px solid var(--border)'}">
-      <div style="font-size:11px;font-weight:${today?'700':'500'};color:${today?'var(--accent)':'var(--muted)'};margin-bottom:3px">${d}</div>
-      ${tasks.slice(0,2).map(t=>`<div style="font-size:9px;padding:1px 4px;border-radius:3px;background:${AGENDA_COLORS[t.type]}22;color:${AGENDA_COLORS[t.type]};margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.title}</div>`).join('')}
-      ${tasks.length>2?`<div style="font-size:9px;color:var(--muted)">+${tasks.length-2}</div>`:''}
-    </div>`;
-  }
-  el.innerHTML=h;
+function loadFiles(){
+  try{
+    const sd=localStorage.getItem('sd-files');
+    const cr=localStorage.getItem('cr-files');
+    if(sd){JSON.parse(sd).forEach(function(f){sdFiles.push(f);});}
+    if(cr){JSON.parse(cr).forEach(function(f){crFiles.push(f);});}
+  }catch(e){}
 }
 
 function selectAgendaDay(d){
