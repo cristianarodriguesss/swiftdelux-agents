@@ -322,6 +322,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
   </div>
 
 
+  
   <!-- AGENDA DIÁRIA -->
   <div class="sec">
     <div class="stitle" style="display:flex;align-items:center;justify-content:space-between">
@@ -332,13 +333,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
         <button class="btn btno" onclick="nextMonth()" style="padding:4px 10px;font-size:12px">→</button>
       </div>
     </div>
-    <div class="row" style="gap:14px;align-items:flex-start">
-      <div style="flex:1.4">
-        <div id="agenda-calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden"></div>
-      </div>
-      <div style="flex:1">
+
+    <!-- Calendário full width no mobile -->
+    <div id="agenda-calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px"></div>
+
+    <!-- Dia seleccionado + Bloco de Notas lado a lado em desktop, empilhados em mobile -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <!-- Painel do dia -->
+      <div style="flex:1;min-width:280px">
         <div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px" id="agenda-selected-label">Seleciona um dia</div>
-        <div class="ir" id="agenda-add-form" style="display:none">
+        <div class="ir" id="agenda-add-form" style="display:none;flex-wrap:wrap">
           <div class="field" style="width:100%"><label>Tarefa / Evento</label><input id="agenda-task-input" type="text" placeholder="ex: Publicar post Swift Delux" style="width:100%"></div>
           <div class="field"><label>Tipo</label>
             <select id="agenda-task-type">
@@ -348,12 +352,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
               <option value="task">Tarefa</option>
             </select>
           </div>
-          <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addAgendaTask()">+ Adicionar</button></div>
+          <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addAgendaTask()">+</button></div>
         </div>
         <div id="agenda-day-tasks"></div>
       </div>
+
+      <!-- Bloco de notas -->
+      <div style="flex:1;min-width:280px">
+        <div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">📝 Notas rápidas</div>
+        <textarea id="notas-rapidas" placeholder="Escreve aqui as tuas notas..." onchange="saveNotas()" oninput="saveNotas()" style="width:100%;height:180px;border:0.5px solid var(--border);border-radius:10px;padding:12px;font-size:13px;font-family:inherit;resize:vertical;outline:none;background:var(--surface);color:var(--text);line-height:1.5"></textarea>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Guardado automaticamente</div>
+      </div>
     </div>
   </div>
+
+
 
   <!-- CONQUISTAS -->
   <div class="sec"><div class="stitle">🏆 Conquistas</div><div class="achiev" id="ach-list"></div></div>
@@ -1457,6 +1470,7 @@ function selectAgendaDay(d){
   if(form)form.style.display='flex';
   renderAgendaDay(ds);
   renderAgendaCalendar();
+  loadNotas();
   // Dados reais @cristianarodriguesss
   audienceData.cr = {
     female: 54,
@@ -1558,6 +1572,12 @@ function removeAgendaTask(ds,i){
   renderAudience();
 }
 
+function saveNotas(){
+  try{const v=document.getElementById('notas-rapidas').value;localStorage.setItem('notas-rapidas',v);}catch(e){}
+}
+function loadNotas(){
+  try{const v=localStorage.getItem('notas-rapidas');if(v&&document.getElementById('notas-rapidas'))document.getElementById('notas-rapidas').value=v;}catch(e){}
+}
 function prevMonth(){agendaMonth--;if(agendaMonth<0){agendaMonth=11;agendaYear--;}agendaSelectedDay=null;document.getElementById('agenda-day-tasks').innerHTML='';const f=document.getElementById('agenda-add-form');if(f)f.style.display='none';renderAgendaCalendar();}
 function nextMonth(){agendaMonth++;if(agendaMonth>11){agendaMonth=0;agendaYear++;}agendaSelectedDay=null;document.getElementById('agenda-day-tasks').innerHTML='';const f=document.getElementById('agenda-add-form');if(f)f.style.display='none';renderAgendaCalendar();}
 
