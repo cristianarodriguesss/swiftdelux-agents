@@ -1357,6 +1357,7 @@ function saveAudience(){
   const countries=document.getElementById('aud-countries').value.split(',').filter(Boolean).map(s=>{const p=s.split(':');return{name:p[0].trim(),pct:parseInt(p[1])||0};});
   const ages=document.getElementById('aud-ages').value.split(',').filter(Boolean).map(s=>{const p=s.split(':');return{range:p[0].trim(),pct:parseInt(p[1])||0};});
   audienceData.cr={female,male,countries,ages};
+  try{localStorage.setItem('audienceData',JSON.stringify(audienceData));}catch(e){}
   renderAudience();
   document.getElementById('aud-modal').style.display='none';
 }
