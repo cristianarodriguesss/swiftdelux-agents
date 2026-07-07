@@ -1400,6 +1400,7 @@ function addSdFile(){
   const cat=document.getElementById('sd-file-cat').value;
   if(!name||!url)return;
   sdFiles.push({name,url,cat});
+  saveFilesToDados();
   renderFiles('sd-files-list',sdFiles);
   document.getElementById('sd-file-name').value='';
   document.getElementById('sd-file-url').value='';
@@ -1411,7 +1412,7 @@ function addCrFile(){
   const cat=document.getElementById('cr-file-cat').value;
   if(!name||!url)return;
   crFiles.push({name,url,cat});
-  crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
+  if(!crFiles.length) crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
   renderFiles('cr-files-list',crFiles);
   document.getElementById('cr-file-name').value='';
   document.getElementById('cr-file-url').value='';
@@ -1634,7 +1635,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
   };
   renderAudience();
   renderFiles('sd-files-list',sdFiles);
-  crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
+  if(!crFiles.length) crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
   renderFiles('cr-files-list',crFiles);
 });
 </script>
