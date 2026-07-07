@@ -869,6 +869,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 </main>
 
 <script>
+const agendaTasks={};
+let agendaYear=new Date().getFullYear();
+let agendaMonth=new Date().getMonth();
+let agendaSelectedDay=null;
+
 const S={sdIG:null,crIG:null,sdTT:null,crTT:null,revenue:0,crm:[],crd:[],wishlist:[],finance:[],calEvents:[],agendaSD:[],agendaCR:[],feedSD:Array(9).fill(null),feedCR:Array(9).fill(null),dados:{events:[],followers:null}};
 
 // NAVIGATION
@@ -1552,11 +1557,6 @@ function saveNotas(){
 function loadNotas(){
   try{const v=localStorage.getItem('notas-rapidas');if(v&&document.getElementById('notas-rapidas'))document.getElementById('notas-rapidas').value=v;}catch(e){}
 }
-const agendaTasks={};
-let agendaYear=new Date().getFullYear();
-let agendaMonth=new Date().getMonth();
-let agendaSelectedDay=null;
-
 function renderAgendaCalendar(){
   const el=document.getElementById('agenda-calendar');
   if(!el)return;
