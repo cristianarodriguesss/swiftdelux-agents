@@ -312,18 +312,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
   <div class="sec">
     <div class="stitle">📊 Analytics</div>
     <div class="row">
-      <div class="cc"><div class="ct">Seguidores Swift Delux IG</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
-      <div class="cc"><div class="ct">Seguidores @cristianarodriguesss</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
+      <div class="cc">
+        <div class="ct">Seguidores Swift Delux IG</div>
+        <div id="chart-sd-wrap" style="height:170px;display:flex;align-items:flex-end;gap:4px;padding:10px 0"></div>
+      </div>
+      <div class="cc">
+        <div class="ct">Seguidores @cristianarodriguesss</div>
+        <div id="chart-cr-wrap" style="height:170px;display:flex;align-items:flex-end;gap:4px;padding:10px 0"></div>
+      </div>
     </div>
     <div class="row mt12">
-      <div class="cc"><div class="ct">Emails processados por dia</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
-      <div class="cc"><div class="ct">Posts sugeridos acumulados</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
+      <div class="cc">
+        <div class="ct">Emails processados por dia</div>
+        <div id="chart-emails-wrap" style="height:170px;display:flex;align-items:flex-end;gap:4px;padding:10px 0"></div>
+      </div>
+      <div class="cc">
+        <div class="ct">Posts sugeridos acumulados</div>
+        <div id="chart-posts-wrap" style="height:170px;display:flex;align-items:flex-end;gap:4px;padding:10px 0"></div>
+      </div>
     </div>
   </div>
 
-
-  
-  <!-- AGENDA DIÁRIA -->
+  <!-- AGENDA <!-- AGENDA DIÁRIA -->
   <div class="sec">
     <div class="stitle" style="display:flex;align-items:center;justify-content:space-between">
       📅 Agenda do mês
@@ -1155,13 +1165,9 @@ function renderWishlist(){const el=document.getElementById('wishlist-list');if(!
 
 
 function initAnalytics(){
-  if(window._aC)return;window._aC=true;
-  const l7=["Seg","Ter","Qua","Qui","Sex","Sab","Dom"];
-  const m6=["Fev","Mar","Abr","Mai","Jun","Jul"];
-  makeBarChart("ch-emails",[2,0,3,1,0,2,1],"#1a1a18",l7);
-  makeMiniChart("ch-posts",[1,2,2,3,3,4,4],"#9b8ec4",l7);
-  makeBarChart("ch-deals",[0,1,0,2,1,0],"#c9a96e",m6);
-  makeMiniChart("ch-rev",[0,200,150,500,350,0],"#27a85f",m6);
+  if(window._aC)return; window._aC=true;
+  drawBarChart('chart-emails-wrap',[2,0,3,1,0,2,1],'#1a1a18',['Seg','Ter','Qua','Qui','Sex','Sab','Dom']);
+  drawBarChart('chart-posts-wrap',[1,2,2,3,3,4,4],'#9b8ec4',['Seg','Ter','Qua','Qui','Sex','Sab','Dom']);
 }
 
 function makeBarChart(canvasId, values, color, labels){
@@ -1189,74 +1195,42 @@ function makeBarChart(canvasId, values, color, labels){
 }
 
 function initAnalytics(){
-  if(window._aC)return;window._aC=true;
-  const l7=["Seg","Ter","Qua","Qui","Sex","Sab","Dom"];
-  const m6=["Fev","Mar","Abr","Mai","Jun","Jul"];
-  makeBarChart("ch-emails",[2,0,3,1,0,2,1],"#1a1a18",l7);
-  makeMiniChart("ch-posts",[1,2,2,3,3,4,4],"#9b8ec4",l7);
-  makeBarChart("ch-deals",[0,1,0,2,1,0],"#c9a96e",m6);
-  makeMiniChart("ch-rev",[0,200,150,500,350,0],"#27a85f",m6);
+  if(window._aC)return; window._aC=true;
+  drawBarChart('chart-emails-wrap',[2,0,3,1,0,2,1],'#1a1a18',['Seg','Ter','Qua','Qui','Sex','Sab','Dom']);
+  drawBarChart('chart-posts-wrap',[1,2,2,3,3,4,4],'#9b8ec4',['Seg','Ter','Qua','Qui','Sex','Sab','Dom']);
 }
-function makeMiniChart(canvasId, values, color, labels){
-  const el = document.getElementById(canvasId);
+function drawBarChart(containerId, values, color, labels){
+  const el = document.getElementById(containerId);
   if(!el) return;
   const max = Math.max(...values) || 1;
-  const w = el.offsetWidth || 300;
-  const h = 160;
-  const pad = 30;
-  const bw = (w - pad*2) / values.length;
-  
-  // Create SVG
-  let svg = '<svg width="100%" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '" xmlns="http://www.w3.org/2000/svg">';
-  
-  // Draw line
-  let points = values.map((v,i) => {
-    const x = pad + i * bw + bw/2;
-    const y = h - pad - (v/max) * (h - pad*2);
-    return x + ',' + y;
-  }).join(' ');
-  
-  // Fill area
-  let fillPoints = (pad + bw/2) + ',' + (h-pad) + ' ' + points + ' ' + (pad + (values.length-1)*bw + bw/2) + ',' + (h-pad);
-  svg += '<polygon points="' + fillPoints + '" fill="' + color + '" fill-opacity="0.1"/>';
-  svg += '<polyline points="' + points + '" fill="none" stroke="' + color + '" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
-  
-  // Dots
-  values.forEach((v,i) => {
-    const x = pad + i * bw + bw/2;
-    const y = h - pad - (v/max) * (h - pad*2);
-    svg += '<circle cx="' + x + '" cy="' + y + '" r="3" fill="' + color + '"/>';
+  el.innerHTML = '';
+  el.style.alignItems = 'flex-end';
+  values.forEach(function(v, i){
+    const pct = Math.round((v/max)*100);
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;gap:4px';
+    const bar = document.createElement('div');
+    bar.style.cssText = 'width:100%;border-radius:4px 4px 0 0;background:' + color + ';height:' + pct + '%;min-height:' + (v>0?'4px':'0') + ';transition:height 0.5s';
+    const lbl = document.createElement('div');
+    lbl.style.cssText = 'font-size:9px;color:#aaa;text-align:center;white-space:nowrap';
+    lbl.textContent = labels ? labels[i] : '';
+    if(i === values.length-1 && v > 0){
+      const val = document.createElement('div');
+      val.style.cssText = 'font-size:10px;font-weight:600;color:' + color + ';text-align:center';
+      val.textContent = v.toLocaleString('pt-PT');
+      wrap.appendChild(val);
+    }
+    wrap.appendChild(bar);
+    wrap.appendChild(lbl);
+    el.appendChild(wrap);
   });
-  
-  // Labels
-  if(labels){
-    labels.forEach((l,i) => {
-      const x = pad + i * bw + bw/2;
-      svg += '<text x="' + x + '" y="' + (h-8) + '" text-anchor="middle" font-size="9" fill="#aaa">' + l + '</text>';
-    });
-  }
-  
-  // Current value label
-  const lastVal = values[values.length-1];
-  if(lastVal > 0){
-    const lx = pad + (values.length-1)*bw + bw/2;
-    const ly = h - pad - (lastVal/max) * (h-pad*2) - 8;
-    svg += '<text x="' + lx + '" y="' + ly + '" text-anchor="middle" font-size="10" fill="' + color + '" font-weight="600">' + lastVal.toLocaleString("pt-PT") + '</text>';
-  }
-  
-  svg += '</svg>';
-  
-  // Replace canvas with svg
-  const div = document.createElement("div");
-  div.style.height = "170px";
-  div.innerHTML = svg;
-  el.parentNode.replaceChild(div, el);
 }
 
+function makeMiniChart(a,b,c,d){ drawBarChart(a,b,c,d); }
+
 function initDashCharts(){
-  const m=["Jan","Fev","Mar","Abr","Mai","Jun","Jul"];
-  makeMiniChart("ch-sd",[0,0,0,0,0,0,S.sdIG||1254],"#c9a96e",m);
-  makeMiniChart("ch-cr",[0,0,0,0,0,0,S.crIG||6959],"#9b8ec4",m);
+  drawBarChart('chart-sd-wrap', [0,0,0,0,0,0,S.sdIG||1254], '#c9a96e', ['Jan','Fev','Mar','Abr','Mai','Jun','Jul']);
+  drawBarChart('chart-cr-wrap', [0,0,0,0,0,0,S.crIG||6959], '#9b8ec4', ['Jan','Fev','Mar','Abr','Mai','Jun','Jul']);
 }
 
 function initPie(){
