@@ -370,7 +370,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
       <!-- Bloco de notas -->
       <div style="flex:1;min-width:280px">
         <div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">📝 Notas rápidas</div>
-        <textarea id="notas-rapidas" placeholder="Escreve aqui as tuas notas..." onchange="saveNotas()" oninput="saveNotas()" style="width:100%;height:180px;border:0.5px solid var(--border);border-radius:10px;padding:12px;font-size:13px;font-family:inherit;resize:vertical;outline:none;background:var(--surface);color:var(--text);line-height:1.5"></textarea>
+        <textarea id="notas-rapidas" placeholder="Escreve aqui as tuas notas..." oninput="saveNotas()" style="width:100%;height:180px;border:0.5px solid var(--border);border-radius:10px;padding:12px;font-size:13px;font-family:inherit;resize:vertical;outline:none;background:var(--surface);color:var(--text);line-height:1.5"></textarea>
         <div style="font-size:10px;color:var(--muted);margin-top:4px">Guardado automaticamente</div>
       </div>
     </div>
@@ -1631,7 +1631,6 @@ window.addEventListener('DOMContentLoaded',async()=>{
   st('k-deals','0');
   st('k-emails','0');
   loadBriefing();
-  renderAgendaCalendar();
   // Dados reais @cristianarodriguesss
   audienceData.cr = {
     female: 54,
