@@ -1552,7 +1552,10 @@ function removeAgendaTask(ds,i){
 }
 
 function saveNotas(){
-  try{const v=document.getElementById('notas-rapidas').value;localStorage.setItem('notas-rapidas',v);}catch(e){}
+  try{
+    var el = document.getElementById('notas-rapidas');
+    if(el) localStorage.setItem('notas-rapidas', el.value);
+  }catch(e){ console.log('saveNotas error:', e); }
 }
 function loadNotas(){
   try{const v=localStorage.getItem('notas-rapidas');if(v&&document.getElementById('notas-rapidas'))document.getElementById('notas-rapidas').value=v;}catch(e){}
@@ -1653,7 +1656,17 @@ window.addEventListener('DOMContentLoaded',async()=>{
     ]
   };
   renderAudience();
-  setTimeout(function(){renderAgendaCalendar();loadNotas();loadFiles();},100);
+  // Reset agenda to current month explicitly
+  agendaYear = new Date().getFullYear();
+  agendaMonth = new Date().getMonth();
+  agendaSelectedDay = null;
+  renderAgendaCalendar();
+  // Load notes from localStorage
+  try{
+    var notasEl = document.getElementById('notas-rapidas');
+    var savedNotas = localStorage.getItem('notas-rapidas');
+    if(notasEl && savedNotas) notasEl.value = savedNotas;
+  }catch(e){}
   renderFiles('sd-files-list',sdFiles);
   if(!crFiles.length) crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
   renderFiles('cr-files-list',crFiles);
