@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
@@ -205,6 +205,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 </style>
 </head>
 <body>
+
+<!-- SIDEBAR -->
+  <div class="welcome-title">Welcome,<br><b>Cristiana.</b></div>
+  <div class="welcome-sub">O teu centro de operações está pronto.</div>
+  <div class="welcome-cards">
+    <button class="welcome-card welcome-card-sd" type="button" onclick="enterBrand('sd')" style="text-align:left;width:100%;cursor:pointer">
+      <div class="wc-label">Marca de joias</div>
+      <div class="wc-name">Swift Delux</div>
+      <div class="wc-desc">Feed planner, métricas, brand deals e media kit da marca.</div>
+      <div class="wc-btn">Entrar →</div>
+    </button>
+    <button class="welcome-card welcome-card-cr" type="button" onclick="enterBrand('cr')" style="text-align:left;width:100%;cursor:pointer">
+      <div class="wc-label">Influencer</div>
+      <div class="wc-name">@cristianarodriguesss</div>
+      <div class="wc-desc">Feed planner, métricas, parcerias, media kit e audiência.</div>
+      <div class="wc-btn">Entrar →</div>
+    </button>
+  </div>
+  <button class="welcome-full" type="button" onclick="enterDashboard()">Ver dashboard completo →</button>
+</div>
+
+
 <button class="mob-menu-btn" id="mob-btn" onclick="toggleMobileMenu()" aria-label="Menu">☰</button>
 <div class="mob-overlay" id="mob-overlay" onclick="closeMobileMenu()"></div>
 <aside class="sb" id="sidebar">
@@ -312,47 +334,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
   <div class="sec">
     <div class="stitle">📊 Analytics</div>
     <div class="row">
-      <div class="cc">
-        <div class="ct">Seguidores Swift Delux IG</div>
-        <div id="chart-sd-wrap" style="height:170px;display:flex;align-items:flex-end;gap:4px;padding:10px 0"></div>
-      </div>
-      <div class="cc">
-        <div class="ct">Seguidores @cristianarodriguesss</div>
-        <div id="chart-cr-wrap" style="height:170px;display:flex;align-items:flex-end;gap:4px;padding:10px 0"></div>
-      </div>
+      <div class="cc"><div class="ct">Seguidores Swift Delux IG</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
+      <div class="cc"><div class="ct">Seguidores @cristianarodriguesss</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
     </div>
     <div class="row mt12">
-      <div class="cc">
-        <div class="ct">Emails processados por dia</div>
-        <div id="chart-emails-wrap" style="height:170px;display:flex;align-items:flex-end;gap:4px;padding:10px 0"></div>
-      </div>
-      <div class="cc">
-        <div class="ct">Posts sugeridos acumulados</div>
-        <div id="chart-posts-wrap" style="height:170px;display:flex;align-items:flex-end;gap:4px;padding:10px 0"></div>
-      </div>
+      <div class="cc"><div class="ct">Emails processados por dia</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
+      <div class="cc"><div class="ct">Posts sugeridos acumulados</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
     </div>
   </div>
 
-  <!-- AGENDA <!-- AGENDA DIÁRIA -->
+
+  <!-- AGENDA DIÁRIA -->
   <div class="sec">
     <div class="stitle" style="display:flex;align-items:center;justify-content:space-between">
       📅 Agenda do mês
       <div style="display:flex;gap:8px;align-items:center">
         <button class="btn btno" onclick="prevMonth()" style="padding:4px 10px;font-size:12px">←</button>
-        <span id="agenda-month-label" style="font-size:12px;font-weight:500">Julho 2026</span>
+        <span id="agenda-month-label" style="font-size:12px;font-weight:500"></span>
         <button class="btn btno" onclick="nextMonth()" style="padding:4px 10px;font-size:12px">→</button>
       </div>
     </div>
-
-    <!-- Calendário full width no mobile -->
-    <div id="agenda-calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px"><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Dom</div><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Seg</div><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Ter</div><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Qua</div><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Qui</div><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Sex</div><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Sab</div><div style="background:var(--surface);min-height:44px;padding:4px"></div><div style="background:var(--surface);min-height:44px;padding:4px"></div><div onclick="selectAgendaDay(1)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">1</div></div><div onclick="selectAgendaDay(2)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">2</div></div><div onclick="selectAgendaDay(3)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">3</div></div><div onclick="selectAgendaDay(4)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">4</div></div><div onclick="selectAgendaDay(5)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">5</div></div><div onclick="selectAgendaDay(6)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">6</div></div><div onclick="selectAgendaDay(7)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">7</div></div><div onclick="selectAgendaDay(8)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">8</div></div><div onclick="selectAgendaDay(9)" style="background:#fdf3e3;padding:4px 3px;min-height:44px;cursor:pointer;border:1.5px solid #c9a96e"><div style="background:#1a1a18;color:#fff;width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600">9</div></div><div onclick="selectAgendaDay(10)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">10</div></div><div onclick="selectAgendaDay(11)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">11</div></div><div onclick="selectAgendaDay(12)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">12</div></div><div onclick="selectAgendaDay(13)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">13</div></div><div onclick="selectAgendaDay(14)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">14</div></div><div onclick="selectAgendaDay(15)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">15</div></div><div onclick="selectAgendaDay(16)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">16</div></div><div onclick="selectAgendaDay(17)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">17</div></div><div onclick="selectAgendaDay(18)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">18</div></div><div onclick="selectAgendaDay(19)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">19</div></div><div onclick="selectAgendaDay(20)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">20</div></div><div onclick="selectAgendaDay(21)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">21</div></div><div onclick="selectAgendaDay(22)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">22</div></div><div onclick="selectAgendaDay(23)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">23</div></div><div onclick="selectAgendaDay(24)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">24</div></div><div onclick="selectAgendaDay(25)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">25</div></div><div onclick="selectAgendaDay(26)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">26</div></div><div onclick="selectAgendaDay(27)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">27</div></div><div onclick="selectAgendaDay(28)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">28</div></div><div onclick="selectAgendaDay(29)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">29</div></div><div onclick="selectAgendaDay(30)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">30</div></div><div onclick="selectAgendaDay(31)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">31</div></div><div style="background:var(--surface);min-height:44px;padding:4px"></div><div style="background:var(--surface);min-height:44px;padding:4px"></div></div>
-
-    <!-- Dia seleccionado + Bloco de Notas lado a lado em desktop, empilhados em mobile -->
-    <div style="display:flex;gap:12px;flex-wrap:wrap">
-      <!-- Painel do dia -->
-      <div style="flex:1;min-width:280px">
+    <div class="row" style="gap:14px;align-items:flex-start">
+      <div style="flex:1.4">
+        <div id="agenda-calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden"></div>
+      </div>
+      <div style="flex:1">
         <div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px" id="agenda-selected-label">Seleciona um dia</div>
-        <div class="ir" id="agenda-add-form" style="display:none;flex-wrap:wrap">
+        <div class="ir" id="agenda-add-form" style="display:none">
           <div class="field" style="width:100%"><label>Tarefa / Evento</label><input id="agenda-task-input" type="text" placeholder="ex: Publicar post Swift Delux" style="width:100%"></div>
           <div class="field"><label>Tipo</label>
             <select id="agenda-task-type">
@@ -362,21 +370,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
               <option value="task">Tarefa</option>
             </select>
           </div>
-          <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addAgendaTask()">+</button></div>
+          <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addAgendaTask()">+ Adicionar</button></div>
         </div>
         <div id="agenda-day-tasks"></div>
-      </div>
-
-      <!-- Bloco de notas -->
-      <div style="flex:1;min-width:280px">
-        <div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">📝 Notas rápidas</div>
-        <textarea id="notas-rapidas" placeholder="Escreve aqui as tuas notas..." oninput="saveNotas()" style="width:100%;height:180px;border:0.5px solid var(--border);border-radius:10px;padding:12px;font-size:13px;font-family:inherit;resize:vertical;outline:none;background:var(--surface);color:var(--text);line-height:1.5"></textarea>
-        <div style="font-size:10px;color:var(--muted);margin-top:4px">Guardado automaticamente</div>
       </div>
     </div>
   </div>
 
-
+  <!-- FINANCE -->
+  <div class="sec">
+    <div class="stitle">💰 Finance</div>
+    <div class="grid g3" style="margin-bottom:14px">
+      <div class="card"><div class="cl">Receita total</div><div class="cv" id="fin-tot">€0</div></div>
+      <div class="card"><div class="cl">Despesas</div><div class="cv" id="fin-exp" style="color:var(--red)">€0</div></div>
+      <div class="card"><div class="cl">Lucro</div><div class="cv" id="fin-prf" style="color:var(--green)">€0</div></div>
+    </div>
+    <div class="row">
+      <div class="card" style="flex:2">
+        <div class="ct">Adicionar movimento</div>
+        <div class="ir">
+          <div class="field"><label>Descrição</label><input id="fd" type="text" placeholder="ex: Parceria Mango"></div>
+          <div class="field"><label>Valor €</label><input id="fa" type="number" placeholder="0" style="width:80px"></div>
+          <div class="field"><label>Tipo</label><select id="ft"><option value="income">Receita</option><option value="expense">Despesa</option></select></div>
+          <div class="field"><label>Marca</label><select id="fb"><option>Swift Delux</option><option>Influencer</option></select></div>
+          <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addFin()">+</button></div>
+        </div>
+        <div id="fin-list"></div>
+      </div>
+      <div class="cc"><div class="ct">Distribuição</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
+    </div>
+  </div>
 
   <!-- CONQUISTAS -->
   <div class="sec"><div class="stitle">🏆 Conquistas</div><div class="achiev" id="ach-list"></div></div>
@@ -412,12 +435,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 <div class="page" id="page-analytics">
   <div class="ph"><div><h1>Analytics</h1><div class="meta">Visão geral das duas marcas</div></div></div>
   <div class="row sec">
-    <div class="cc"><div class="ct">Emails por dia</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
-    <div class="cc"><div class="ct">Posts sugeridos</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
+    <div class="cc"><div class="ct">Emails por dia</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
+    <div class="cc"><div class="ct">Posts sugeridos</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
   </div>
   <div class="row sec">
-    <div class="cc"><div class="ct">Parcerias por mês</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
-    <div class="cc"><div class="ct">Receita por mês (€)</div><div class="cw"><canvas style="height:170px;width:100%"></canvas></div></div>
+    <div class="cc"><div class="ct">Parcerias por mês</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
+    <div class="cc"><div class="ct">Receita por mês (€)</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
+  </div>
+</div>
+
+<!-- ═══ FINANCE ═══ -->
+<div class="page" id="page-finance">
+  <div class="ph"><div><h1>Finance</h1></div></div>
+  <div class="grid g3 sec">
+    <div class="card"><div class="cl">💰 Receita total</div><div class="cv" id="fin-tot">€0</div></div>
+    <div class="card"><div class="cl">📉 Despesas</div><div class="cv" id="fin-exp" style="color:var(--red)">€0</div></div>
+    <div class="card"><div class="cl">✓ Lucro</div><div class="cv" id="fin-prf" style="color:var(--green)">€0</div></div>
+  </div>
+  <div class="row sec">
+    <div class="card" style="flex:2">
+      <div class="ct">Adicionar</div>
+      <div class="ir">
+        <div class="field"><label>Descrição</label><input id="fd" type="text" placeholder="ex: Parceria Mango"></div>
+        <div class="field"><label>Valor €</label><input id="fa" type="number" placeholder="0"></div>
+        <div class="field"><label>Tipo</label><select id="ft"><option value="income">Receita</option><option value="expense">Despesa</option></select></div>
+        <div class="field"><label>Marca</label><select id="fb"><option>Swift Delux</option><option>Influencer</option></select></div>
+        <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addFin()">+</button></div>
+      </div>
+      <div id="fin-list"></div>
+    </div>
+    <div class="cc"><div class="ct">Distribuição</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
   </div>
 </div>
 
@@ -603,7 +650,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div id="sd-files-list"></div>
   </div>
 
-  
+  <div class="sec">
+    <div class="stitle">🎨 Paleta de Cores Swift Delux</div>
+    <div class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#c9a96e;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Dourado</div><div style="font-size:10px;color:var(--muted)">#C9A96E</div></div>
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#1a1a18;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Preto</div><div style="font-size:10px;color:var(--muted)">#1A1A18</div></div>
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#f4f1ea;border:1px solid #eee;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Creme</div><div style="font-size:10px;color:var(--muted)">#F4F1EA</div></div>
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#f8f8f6;border:1px solid #eee;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Fundo</div><div style="font-size:10px;color:var(--muted)">#F8F8F6</div></div>
+    </div>
   </div>
 </div>
 
@@ -646,29 +700,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div class="card"><div class="cl">Parcerias ativas</div><div class="cv" id="cr-m-deals">0</div></div>
   </div>
 
-  <div class="row sec">
-    <div class="card">
-      <div class="ct" style="margin-bottom:16px">Visualizações por tipo de conteúdo <span style="font-size:11px;color:var(--muted);font-weight:400">· últimos 30 dias</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:12px">
-        <div style="text-align:center"><div style="font-size:22px;font-weight:600;color:var(--cris)">7.513</div><div style="font-size:11px;color:var(--muted)">Visualizações totais</div></div>
-        <div style="text-align:center"><div style="font-size:22px;font-weight:600;color:var(--green)">+60</div><div style="font-size:11px;color:var(--muted)">Seguidores efetivos</div></div>
-        <div style="text-align:center"><div style="font-size:22px;font-weight:600">3.702</div><div style="font-size:11px;color:var(--muted)">Contas alcançadas</div></div>
-        <div style="text-align:center"><div style="font-size:22px;font-weight:600;color:var(--orange)">1.534</div><div style="font-size:11px;color:var(--muted)">Visitas ao perfil</div></div>
-        <div style="text-align:center"><div style="font-size:22px;font-weight:600;color:var(--orange)">1.534</div><div style="font-size:11px;color:var(--muted)">Visitas ao perfil</div></div>
-      </div>
-      <div class="abar"><div class="abar-lbl"><span>📱 Histórias</span><span style="font-weight:600">6.1k</span></div><div class="abar-track"><div class="abar-fill" style="width:82%;background:var(--cris)"></div></div></div>
-      <div class="abar"><div class="abar-lbl"><span>🖼️ Publicações</span><span style="font-weight:600">1.3k</span></div><div class="abar-track"><div class="abar-fill" style="width:17%;background:var(--cris)"></div></div></div>
-      <div class="abar"><div class="abar-lbl"><span>🎬 Reels</span><span style="font-weight:600">67</span></div><div class="abar-track"><div class="abar-fill" style="width:1%;background:var(--cris)"></div></div></div>
-      <div class="hint mt12">💡 As Histórias são o teu conteúdo com mais alcance — foca aqui!</div>
-    </div>
-    <div class="card">
-      <div class="ct" style="margin-bottom:16px">Origem das visualizações</div>
-      <div class="abar"><div class="abar-lbl"><span>👤 Seguidores</span><span>33,4%</span></div><div class="abar-track"><div class="abar-fill" style="width:33%;background:var(--cris)"></div></div></div>
-      <div class="abar"><div class="abar-lbl"><span>🌍 Não seguidores</span><span>66,6%</span></div><div class="abar-track"><div class="abar-fill" style="width:67%;background:var(--cris);opacity:0.5"></div></div></div>
-      <div class="hint mt12">✅ 66,6% das visualizações são de pessoas novas — óptimo alcance orgânico!</div>
-    </div>
-  </div>
-
   <div class="sec">
     <div class="card">
       <div class="ct">Atualizar métricas manualmente</div>
@@ -691,30 +722,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
       <div class="row">
         <div>
           <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px">GÉNERO</div>
-          <div class="abar"><div class="abar-lbl"><span>Feminino</span><span id="cr-aud-f-val">54%</span></div><div class="abar-track"><div class="abar-fill" id="cr-aud-f-bar" style="width:54%;background:var(--cris);height:100%;border-radius:10px"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>Masculino</span><span id="cr-aud-m-val">46%</span></div><div class="abar-track"><div class="abar-fill" id="cr-aud-m-bar" style="width:46%;background:#ddd"></div></div></div>
+          <div class="abar"><div class="abar-lbl"><span>Feminino</span><span id="cr-aud-f-val">—</span></div><div class="abar-track"><div class="abar-fill" id="cr-aud-f-bar" style="width:0%;background:var(--cris)"></div></div></div>
+          <div class="abar"><div class="abar-lbl"><span>Masculino</span><span id="cr-aud-m-val">—</span></div><div class="abar-track"><div class="abar-fill" id="cr-aud-m-bar" style="width:0%;background:#ddd"></div></div></div>
         </div>
         <div>
           <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px">TOP PAÍSES</div>
-          <div id="cr-countries-list">
-          <div class="abar"><div class="abar-lbl"><span>🇵🇹 Portugal</span><span>64%</span></div><div class="abar-track"><div class="abar-fill" style="width:64%;background:var(--cris)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>🇧🇷 Brasil</span><span>24%</span></div><div class="abar-track"><div class="abar-fill" style="width:24%;background:var(--cris)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>🇫🇷 França</span><span>2%</span></div><div class="abar-track"><div class="abar-fill" style="width:2%;background:var(--cris)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>🇨🇭 Suíça</span><span>1%</span></div><div class="abar-track"><div class="abar-fill" style="width:1%;background:var(--cris)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>🇪🇸 Espanha</span><span>1%</span></div><div class="abar-track"><div class="abar-fill" style="width:1%;background:var(--cris)"></div></div></div>
-        </div>
+          <div id="cr-countries-list"><div class="hint">Ainda sem dados — clica em Editar</div></div>
         </div>
         <div>
           <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px">FAIXAS ETÁRIAS</div>
-          <div id="cr-ages-list">
-          <div class="abar"><div class="abar-lbl"><span>13-17</span><span>5%</span></div><div class="abar-track"><div class="abar-fill" style="width:5%;background:var(--cris)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>18-24</span><span>18%</span></div><div class="abar-track"><div class="abar-fill" style="width:18%;background:var(--cris)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>25-34</span><span>47%</span></div><div class="abar-track"><div class="abar-fill" style="width:47%;background:var(--cris)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>35-44</span><span>17%</span></div><div class="abar-track"><div class="abar-fill" style="width:17%;background:var(--cris)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>45-54</span><span>9%</span></div><div class="abar-track"><div class="abar-fill" style="width:9%;background:var(--cris)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>55-64</span><span>3%</span></div><div class="abar-track"><div class="abar-fill" style="width:3%;background:var(--cris)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>65+</span><span>1%</span></div><div class="abar-track"><div class="abar-fill" style="width:1%;background:var(--cris)"></div></div></div>
-        </div>
+          <div id="cr-ages-list"><div class="hint">Ainda sem dados — clica em Editar</div></div>
         </div>
       </div>
     </div>
@@ -823,7 +840,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div id="cr-files-list"></div>
   </div>
 
-  
+  <div class="sec">
+    <div class="stitle">🎨 Paleta de Cores @cris</div>
+    <div class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#9b8ec4;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Lavanda</div><div style="font-size:10px;color:var(--muted)">#9B8EC4</div></div>
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#1a1a18;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Preto</div><div style="font-size:10px;color:var(--muted)">#1A1A18</div></div>
+      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#f4f1ea;border:1px solid #eee;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Creme</div><div style="font-size:10px;color:var(--muted)">#F4F1EA</div></div>
+    </div>
   </div>
 </div>
 
@@ -906,11 +929,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 </main>
 
 <script>
-const agendaTasks={};
-let agendaYear=new Date().getFullYear();
-let agendaMonth=new Date().getMonth();
-let agendaSelectedDay=null;
-
 const S={sdIG:null,crIG:null,sdTT:null,crTT:null,revenue:0,crm:[],crd:[],wishlist:[],finance:[],calEvents:[],agendaSD:[],agendaCR:[],feedSD:Array(9).fill(null),feedCR:Array(9).fill(null),dados:{events:[],followers:null}};
 
 // NAVIGATION
@@ -939,7 +957,6 @@ function nav(id,el){
   if(id==='emails')renderEmails();
   if(id==='sd-goals')updateSDGoals();
   if(id==='cr-goals')updateCRGoals();
-  if(id==='cr-metrics'){renderAudience();}
 }
 
 function toggleBrand(b){
@@ -1204,92 +1221,47 @@ function addWish(){const b=document.getElementById('wl-b').value.trim();if(!b)re
 function renderWishlist(){const el=document.getElementById('wishlist-list');if(!el)return;if(!S.wishlist.length){el.innerHTML='<div class="hint">Ainda vazia.</div>';return;}el.innerHTML=S.wishlist.map(w=>`<div style="display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:6px 12px;margin:4px;font-size:12px">✦ ${w.brand}${w.niche?` <span style="color:var(--muted);font-size:10px">(${w.niche})</span>`:''}${w.ig?` <span style="color:var(--cris);font-size:10px">${w.ig}</span>`:''}</div>`).join('');}
 
 // FINANCE
-
-
-
-function initAnalytics(){
-  if(window._aC)return; window._aC=true;
-  drawBarChart('chart-emails-wrap',[2,0,3,1,0,2,1],'#1a1a18',['Seg','Ter','Qua','Qui','Sex','Sab','Dom']);
-  drawBarChart('chart-posts-wrap',[1,2,2,3,3,4,4],'#9b8ec4',['Seg','Ter','Qua','Qui','Sex','Sab','Dom']);
+function addFin(){const d=document.getElementById('fd').value.trim();const a=parseFloat(document.getElementById('fa').value)||0;if(!d||!a)return;S.finance.push({desc:d,amount:a,type:document.getElementById('ft').value,brand:document.getElementById('fb').value});renderFin();document.getElementById('fd').value='';document.getElementById('fa').value='';}
+function renderFin(){
+  const el=document.getElementById('fin-list');if(!el)return;
+  const inc=S.finance.filter(f=>f.type==='income').reduce((s,f)=>s+f.amount,0);
+  const exp=S.finance.filter(f=>f.type==='expense').reduce((s,f)=>s+f.amount,0);
+  st('fin-tot','€'+inc.toLocaleString('pt-PT',{minimumFractionDigits:2}));
+  st('fin-exp','€'+exp.toLocaleString('pt-PT',{minimumFractionDigits:2}));
+  st('fin-prf','€'+(inc-exp).toLocaleString('pt-PT',{minimumFractionDigits:2}));
+  S.revenue=inc;st('k-revenue','€'+inc.toLocaleString('pt-PT'));
+  el.innerHTML=S.finance.length?S.finance.slice().reverse().map(f=>`<div class="fin-row"><div><div>${f.desc}</div><div style="font-size:10px;color:var(--muted)">${f.brand}</div></div><div class="fin-amt ${f.type==='income'?'fin-inc':'fin-exp'}">${f.type==='income'?'+':'-'}€${f.amount.toLocaleString('pt-PT',{minimumFractionDigits:2})}</div></div>`).join(''):'<div class="hint" style="padding:10px 0">Sem movimentos.</div>';
+  if(window._pc){window._pc.data.datasets[0].data=[inc,exp];window._pc.update();}
+  updateSDGoals();updateCRGoals();
 }
 
-function makeBarChart(canvasId, values, color, labels){
-  const el = document.getElementById(canvasId);
-  if(!el) return;
-  const max = Math.max(...values) || 1;
-  const w = el.offsetWidth || 300;
-  const h = 160;
-  const pad = 24;
-  const bw = (w - pad*2) / values.length;
-  let svg = '<svg width="100%" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '" xmlns="http://www.w3.org/2000/svg">';
-  values.forEach((v,i) => {
-    const x = pad + i*bw + bw*0.15;
-    const bWidth = bw * 0.7;
-    const bHeight = (v/max) * (h-pad*2);
-    const y = h - pad - bHeight;
-    svg += '<rect x="' + x + '" y="' + y + '" width="' + bWidth + '" height="' + bHeight + '" fill="' + color + '" rx="3"/>';
-    if(labels) svg += '<text x="' + (x+bWidth/2) + '" y="' + (h-8) + '" text-anchor="middle" font-size="9" fill="#aaa">' + labels[i] + '</text>';
-  });
-  svg += '</svg>';
-  const div = document.createElement("div");
-  div.style.height = "170px";
-  div.innerHTML = svg;
-  el.parentNode.replaceChild(div, el);
+// ACHIEVEMENTS
+const ACHS=[{i:'✨',n:'Primeiros 1.000',d:'Swift Delux: 1k seg.',c:()=>(S.sdIG||0)>=1000},{i:'💎',n:'5.000 seguidores',d:'Swift Delux: 5k seg.',c:()=>(S.sdIG||0)>=5000},{i:'👑',n:'10k seguidores',d:'Meta atingida!',c:()=>(S.sdIG||0)>=10000},{i:'🤝',n:'1ª Parceria',d:'Primeira parceria',c:()=>S.crm.filter(c=>c.status==='Parceria fechada').length>=1},{i:'🚀',n:'5 Parcerias',d:'Cinco parcerias',c:()=>S.crm.filter(c=>c.status==='Parceria fechada').length>=5},{i:'💰',n:'€1.000 receita',d:'Primeiro milhar',c:()=>S.revenue>=1000},{i:'🌟',n:'Agente ativo',d:'Primeiro email',c:()=>(S.dados.events||[]).filter(e=>e.type==='email').length>0},{i:'🎯',n:'10 posts',d:'Dez sugestões',c:()=>(S.dados.events||[]).filter(e=>e.type==='post').length>=10}];
+function updateAch(){const el=document.getElementById('ach-list');if(!el)return;el.innerHTML=ACHS.map(a=>`<div class="ach ${a.c()?'':'locked'}"><div class="ach-icon">${a.i}</div><div><div class="ach-name">${a.n}</div><div class="ach-desc">${a.d}</div></div></div>`).join('');}
+
+// ALERTS
+function updateAlerts(){
+  const alerts=[];
+  if(!S.sdIG)alerts.push('Sem dados de seguidores Swift Delux — atualiza em Métricas');
+  if(S.sdIG&&S.sdIG<1000)alerts.push(`Swift Delux: apenas ${S.sdIG} seguidores — foco em crescimento!`);
+  const p7=(S.dados.events||[]).filter(e=>e.type==='post'&&Date.now()-new Date(e.timestamp)<7*86400000).length;
+  if(!p7)alerts.push('Nenhum post sugerido esta semana — corre o agente de conteúdo');
+  st('k-alerts',alerts.length);
+  const el=document.getElementById('sd-alerts');
+  if(el)el.innerHTML=alerts.length?alerts.map(a=>`<div class="alert">${a}</div>`).join(''):`<div class="alert alert-g">✓ Tudo em ordem!</div>`;
 }
 
-function initAnalytics(){
-  if(window._aC)return; window._aC=true;
-  drawBarChart('chart-emails-wrap',[2,0,3,1,0,2,1],'#1a1a18',['Seg','Ter','Qua','Qui','Sex','Sab','Dom']);
-  drawBarChart('chart-posts-wrap',[1,2,2,3,3,4,4],'#9b8ec4',['Seg','Ter','Qua','Qui','Sex','Sab','Dom']);
-}
-function drawBarChart(containerId, values, color, labels){
-  const el = document.getElementById(containerId);
-  if(!el) return;
-  const max = Math.max(...values) || 1;
-  el.innerHTML = '';
-  el.style.alignItems = 'flex-end';
-  values.forEach(function(v, i){
-    const pct = Math.round((v/max)*100);
-    const wrap = document.createElement('div');
-    wrap.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;gap:4px';
-    const bar = document.createElement('div');
-    bar.style.cssText = 'width:100%;border-radius:4px 4px 0 0;background:' + color + ';height:' + pct + '%;min-height:' + (v>0?'4px':'0') + ';transition:height 0.5s';
-    const lbl = document.createElement('div');
-    lbl.style.cssText = 'font-size:9px;color:#aaa;text-align:center;white-space:nowrap';
-    lbl.textContent = labels ? labels[i] : '';
-    if(i === values.length-1 && v > 0){
-      const val = document.createElement('div');
-      val.style.cssText = 'font-size:10px;font-weight:600;color:' + color + ';text-align:center';
-      val.textContent = v.toLocaleString('pt-PT');
-      wrap.appendChild(val);
-    }
-    wrap.appendChild(bar);
-    wrap.appendChild(lbl);
-    el.appendChild(wrap);
-  });
-}
+// TIME AGO
+function timeAgo(iso){const d=(Date.now()-new Date(iso).getTime())/1000;if(d<3600)return Math.round(d/60)+'min';if(d<86400)return Math.round(d/3600)+'h';return Math.round(d/86400)+'d';}
 
-function makeMiniChart(a,b,c,d){ drawBarChart(a,b,c,d); }
+// CHARTS
+let _ac=false;
+function initAnalytics(){}
 
-function initDashCharts(){
-  drawBarChart('chart-sd-wrap', [0,0,0,0,0,0,S.sdIG||1254], '#c9a96e', ['Jan','Fev','Mar','Abr','Mai','Jun','Jul']);
-  drawBarChart('chart-cr-wrap', [0,0,0,0,0,0,S.crIG||6959], '#9b8ec4', ['Jan','Fev','Mar','Abr','Mai','Jun','Jul']);
-}
+function initAnalytics(){}
+function initDashCharts(){}
 
-function initPie(){
-  // Simple donut using SVG
-  const ctx=document.getElementById("ch-pie");
-  if(!ctx)return;
-  const div=document.createElement("div");
-  div.style.height="170px";
-  div.style.display="flex";
-  div.style.alignItems="center";
-  div.style.justifyContent="center";
-  div.style.color="var(--muted)";
-  div.style.fontSize="12px";
-  div.textContent="Adiciona movimentos para ver distribuição";
-  ctx.parentNode.replaceChild(div,ctx);
-}
+function initPie(){}
 
 function showIGSetup(){document.getElementById('ig-modal').style.display='flex';}
 
@@ -1364,17 +1336,7 @@ function previewFeedImg(){
 }
 
 // AUDIENCE
-const audienceData = {cr:{
-  female:54, male:46,
-  countries:[
-    {name:'Portugal',pct:64},{name:'Brasil',pct:24},
-    {name:'França',pct:2},{name:'Suíça',pct:1},{name:'Espanha',pct:1}
-  ],
-  ages:[
-    {range:'13-17',pct:5},{range:'18-24',pct:18},{range:'25-34',pct:47},
-    {range:'35-44',pct:17},{range:'45-54',pct:9},{range:'55-64',pct:3},{range:'65+',pct:1}
-  ]
-}};
+const audienceData = {cr:{female:0,countries:[],ages:[]}};
 
 function editAudience(brand){
   const d=audienceData[brand]||{female:0,countries:[],ages:[]};
@@ -1390,7 +1352,6 @@ function saveAudience(){
   const countries=document.getElementById('aud-countries').value.split(',').filter(Boolean).map(s=>{const p=s.split(':');return{name:p[0].trim(),pct:parseInt(p[1])||0};});
   const ages=document.getElementById('aud-ages').value.split(',').filter(Boolean).map(s=>{const p=s.split(':');return{range:p[0].trim(),pct:parseInt(p[1])||0};});
   audienceData.cr={female,male,countries,ages};
-  try{localStorage.setItem('audienceData',JSON.stringify(audienceData));}catch(e){}
   renderAudience();
   document.getElementById('aud-modal').style.display='none';
 }
@@ -1428,9 +1389,6 @@ function addSdFile(){
   const cat=document.getElementById('sd-file-cat').value;
   if(!name||!url)return;
   sdFiles.push({name,url,cat});
-  saveFilesToDados();
-  saveFiles();
-  loadFiles();
   renderFiles('sd-files-list',sdFiles);
   document.getElementById('sd-file-name').value='';
   document.getElementById('sd-file-url').value='';
@@ -1442,8 +1400,7 @@ function addCrFile(){
   const cat=document.getElementById('cr-file-cat').value;
   if(!name||!url)return;
   crFiles.push({name,url,cat});
-  if(!crFiles.length) crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
-  saveFiles();
+  crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
   renderFiles('cr-files-list',crFiles);
   document.getElementById('cr-file-name').value='';
   document.getElementById('cr-file-url').value='';
@@ -1452,40 +1409,51 @@ function addCrFile(){
 function renderFiles(containerId,arr){
   const el=document.getElementById(containerId);
   if(!el)return;
-  if(!arr.length){el.innerHTML='<div class="hint" style="padding:10px 0">Ainda sem ficheiros.</div>';return;}
-  let html2='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:12px">';
-  arr.forEach(function(f,i){
-    html2+='<div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:14px;position:relative">';
-    html2+='<button onclick="deleteFile(\''+containerId+'\','+i+')" style="position:absolute;top:6px;right:8px;background:none;border:none;cursor:pointer;color:#aaa;font-size:13px">✕</button>';
-    html2+='<a href="'+f.url+'" target="_blank" style="text-decoration:none;display:block">';
-    html2+='<div style="font-size:20px;margin-bottom:6px">'+(FILE_ICONS[f.cat]||'📁')+'</div>';
-    html2+='<div style="font-size:12px;font-weight:500;color:var(--text)">'+f.name+'</div>';
-    html2+='<div style="font-size:10px;color:var(--muted);margin-top:2px">'+f.cat+'</div>';
-    html2+='</a></div>';
-  });
-  html2+='</div>';
-  el.innerHTML=html2;
+  if(!arr.length){el.innerHTML='<div class="hint" style="padding:10px 0">Ainda sem ficheiros. Adiciona links do Google Drive ou Dropbox.</div>';return;}
+  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:12px">${arr.map((f,i)=>`
+    <a href="${f.url}" target="_blank" style="text-decoration:none">
+      <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:border-color 0.15s" onmouseover="this.style.borderColor='#aaa'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="font-size:22px;margin-bottom:8px">${FILE_ICONS[f.cat]||'📁'}</div>
+        <div style="font-size:12px;font-weight:500;color:var(--text)">${f.name}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px">${f.cat}</div>
+      </div>
+    </a>
+  `).join('')}</div>`;
 }
 
-function deleteFile(containerId,i){
-  if(!confirm('Eliminar?'))return;
-  const arr=containerId==='sd-files-list'?sdFiles:crFiles;
-  arr.splice(i,1);
-  try{localStorage.setItem('sd-files',JSON.stringify(sdFiles));localStorage.setItem('cr-files',JSON.stringify(crFiles));}catch(e){}
-  renderFiles(containerId,arr);
-}
+// AGENDA DIÁRIA
+const agendaTasks = {};
+let agendaYear = new Date().getFullYear();
+let agendaMonth = new Date().getMonth();
+let agendaSelectedDay = null;
 
-function saveFiles(){
-  try{localStorage.setItem('sd-files',JSON.stringify(sdFiles));localStorage.setItem('cr-files',JSON.stringify(crFiles));}catch(e){}
-}
+const AGENDA_COLORS = {swift:'#c9a96e',cris:'#9b8ec4',deal:'#27a85f',task:'#4a90e8'};
+const AGENDA_LABELS = {swift:'Swift Delux',cris:'Cristiana',deal:'Parceria',task:'Tarefa'};
 
-function loadFiles(){
-  try{
-    const sd=localStorage.getItem('sd-files');
-    const cr=localStorage.getItem('cr-files');
-    if(sd){JSON.parse(sd).forEach(function(f){sdFiles.push(f);});}
-    if(cr){JSON.parse(cr).forEach(function(f){crFiles.push(f);});}
-  }catch(e){}
+function renderAgendaCalendar(){
+  const el=document.getElementById('agenda-calendar');
+  if(!el)return;
+  const now=new Date();
+  const fd=new Date(agendaYear,agendaMonth,1).getDay();
+  const dm=new Date(agendaYear,agendaMonth+1,0).getDate();
+  const dn=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const monthNames=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const lbl=document.getElementById('agenda-month-label');
+  if(lbl)lbl.textContent=monthNames[agendaMonth]+' '+agendaYear;
+  let h=dn.map(d=>`<div style="background:var(--surface);padding:6px;text-align:center;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase">${d}</div>`).join('');
+  for(let i=0;i<fd;i++)h+=`<div style="background:var(--surface);padding:6px;min-height:60px"></div>`;
+  for(let d=1;d<=dm;d++){
+    const ds=`${agendaYear}-${String(agendaMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const tasks=agendaTasks[ds]||[];
+    const today=d===now.getDate()&&agendaMonth===now.getMonth()&&agendaYear===now.getFullYear();
+    const selected=d===agendaSelectedDay;
+    h+=`<div onclick="selectAgendaDay(${d})" style="background:${selected?'#f0edf9':today?'#fdf3e3':'var(--surface)'};padding:6px;min-height:60px;cursor:pointer;border:${selected?'1.5px solid #9b8ec4':today?'1.5px solid #c9a96e':'1px solid var(--border)'}">
+      <div style="font-size:11px;font-weight:${today?'700':'500'};color:${today?'var(--accent)':'var(--muted)'};margin-bottom:3px">${d}</div>
+      ${tasks.slice(0,2).map(t=>`<div style="font-size:9px;padding:1px 4px;border-radius:3px;background:${AGENDA_COLORS[t.type]}22;color:${AGENDA_COLORS[t.type]};margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.title}</div>`).join('')}
+      ${tasks.length>2?`<div style="font-size:9px;color:var(--muted)">+${tasks.length-2}</div>`:''}
+    </div>`;
+  }
+  el.innerHTML=h;
 }
 
 function selectAgendaDay(d){
@@ -1498,7 +1466,6 @@ function selectAgendaDay(d){
   if(form)form.style.display='flex';
   renderAgendaDay(ds);
   renderAgendaCalendar();
-  loadNotas();
   // Dados reais @cristianarodriguesss
   audienceData.cr = {
     female: 54,
@@ -1600,57 +1567,6 @@ function removeAgendaTask(ds,i){
   renderAudience();
 }
 
-function saveNotas(){
-  try{
-    var el = document.getElementById('notas-rapidas');
-    if(el) localStorage.setItem('notas-rapidas', el.value);
-  }catch(e){ console.log('saveNotas error:', e); }
-}
-function loadNotas(){
-  try{const v=localStorage.getItem('notas-rapidas');if(v&&document.getElementById('notas-rapidas'))document.getElementById('notas-rapidas').value=v;}catch(e){}
-}
-function renderAgendaCalendar(){
-  const el=document.getElementById('agenda-calendar');
-  if(!el)return;
-  const now=new Date();
-  const yr=agendaYear;
-  const mo=agendaMonth;
-  const fd=new Date(yr,mo,1).getDay();
-  const dm=new Date(yr,mo+1,0).getDate();
-  const dn=['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
-  const mNames=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  const lbl=document.getElementById('agenda-month-label');
-  if(lbl)lbl.textContent=mNames[mo]+' '+yr;
-  const COLORS={swift:'#c9a96e',cris:'#9b8ec4',deal:'#27a85f',task:'#4a90e8'};
-  let h='';
-  dn.forEach(function(d){
-    h+='<div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">'+d+'</div>';
-  });
-  for(var i=0;i<fd;i++){
-    h+='<div style="background:var(--surface);min-height:44px"></div>';
-  }
-  for(var d=1;d<=dm;d++){
-    var ds=yr+'-'+String(mo+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    var tasks=agendaTasks[ds]||[];
-    var today=d===now.getDate()&&mo===now.getMonth()&&yr===now.getFullYear();
-    var selected=d===agendaSelectedDay;
-    var bg=selected?'#f0edf9':today?'#fdf3e3':'var(--surface)';
-    var brd=selected?'1.5px solid #9b8ec4':today?'1.5px solid #c9a96e':'none';
-    h+='<div onclick="selectAgendaDay('+d+')" style="background:'+bg+';padding:4px 3px;min-height:44px;cursor:pointer;border:'+brd+'">';
-    if(today){
-      h+='<div style="background:#1a1a18;color:#fff;width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600">'+d+'</div>';
-    } else {
-      h+='<div style="font-size:11px;color:var(--muted)">'+d+'</div>';
-    }
-    tasks.slice(0,2).forEach(function(t){
-      h+='<div style="font-size:8px;padding:1px 2px;border-radius:2px;margin-top:1px;background:'+(COLORS[t.type]||'#eee')+'33;color:'+(COLORS[t.type]||'#666')+';overflow:hidden;white-space:nowrap;text-overflow:ellipsis">'+t.title+'</div>';
-    });
-    if(tasks.length>2)h+='<div style="font-size:8px;color:var(--muted)">+'+( tasks.length-2)+'</div>';
-    h+='</div>';
-  }
-  el.innerHTML=h;
-}
-
 function prevMonth(){agendaMonth--;if(agendaMonth<0){agendaMonth=11;agendaYear--;}agendaSelectedDay=null;document.getElementById('agenda-day-tasks').innerHTML='';const f=document.getElementById('agenda-add-form');if(f)f.style.display='none';renderAgendaCalendar();}
 function nextMonth(){agendaMonth++;if(agendaMonth>11){agendaMonth=0;agendaYear++;}agendaSelectedDay=null;document.getElementById('agenda-day-tasks').innerHTML='';const f=document.getElementById('agenda-add-form');if(f)f.style.display='none';renderAgendaCalendar();}
 
@@ -1683,6 +1599,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
   st('k-deals','0');
   st('k-emails','0');
   loadBriefing();
+  renderAgendaCalendar();
   // Dados reais @cristianarodriguesss
   audienceData.cr = {
     female: 54,
@@ -1705,41 +1622,9 @@ window.addEventListener('DOMContentLoaded',async()=>{
     ]
   };
   renderAudience();
-  // Init charts
-  initDashCharts();
-  initAnalytics();
-
-  // Reset agenda to current month explicitly
-  agendaYear = new Date().getFullYear();
-  agendaMonth = new Date().getMonth();
-  agendaSelectedDay = null;
-  renderAgendaCalendar();
-  // Load notes from localStorage
-  try{
-    var notasEl = document.getElementById('notas-rapidas');
-    var savedNotas = localStorage.getItem('notas-rapidas');
-    if(notasEl && savedNotas) notasEl.value = savedNotas;
-  }catch(e){}
   renderFiles('sd-files-list',sdFiles);
-  if(!crFiles.length) crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
+  crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
   renderFiles('cr-files-list',crFiles);
-
-  // Init charts
-  initDashCharts();
-  initAnalytics();
-
-  // Init agenda - reset to current month
-  agendaYear = new Date().getFullYear();
-  agendaMonth = new Date().getMonth();
-  agendaSelectedDay = null;
-  renderAgendaCalendar();
-
-  // Load audience
-  try{
-    var savedAud = localStorage.getItem('audienceData');
-    if(savedAud){ var pa=JSON.parse(savedAud); if(pa.cr) audienceData.cr=pa.cr; }
-  }catch(e){}
-  if(audienceData.cr && audienceData.cr.female) renderAudience();
 });
 </script>
 
