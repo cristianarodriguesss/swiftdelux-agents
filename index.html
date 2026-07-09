@@ -1719,6 +1719,23 @@ window.addEventListener('DOMContentLoaded',async()=>{
   renderFiles('sd-files-list',sdFiles);
   if(!crFiles.length) crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
   renderFiles('cr-files-list',crFiles);
+
+  // Init charts
+  initDashCharts();
+  initAnalytics();
+
+  // Init agenda - reset to current month
+  agendaYear = new Date().getFullYear();
+  agendaMonth = new Date().getMonth();
+  agendaSelectedDay = null;
+  renderAgendaCalendar();
+
+  // Load audience
+  try{
+    var savedAud = localStorage.getItem('audienceData');
+    if(savedAud){ var pa=JSON.parse(savedAud); if(pa.cr) audienceData.cr=pa.cr; }
+  }catch(e){}
+  if(audienceData.cr && audienceData.cr.female) renderAudience();
 });
 </script>
 
