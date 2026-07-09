@@ -2,6 +2,12 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a1a18">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="THE AGENCY">
+<link rel="apple-touch-icon" href="icon-192.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>THE AGENCY</title>
 
@@ -1620,5 +1626,14 @@ window.addEventListener('DOMContentLoaded',async()=>{
   </div>
 </div>
 
+<script>
+if("serviceWorker" in navigator){
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("/swiftdelux-agents/sw.js")
+      .then(function(reg){ console.log("SW registered"); })
+      .catch(function(err){ console.log("SW error:", err); });
+  });
+}
+</script>
 </body>
 </html>
