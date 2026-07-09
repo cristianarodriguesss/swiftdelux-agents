@@ -906,21 +906,24 @@ function closeMobileMenu(){
   document.getElementById('mob-overlay').classList.remove('open');
 }
 function nav(id,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));
-  const pg=document.getElementById('page-'+id);
-  if(pg)pg.classList.add('active');
-  if(el)el.classList.add('active');
-  closeMobileMenu();
-  if(id==='analytics')initAnalytics();
-  if(id==='content')renderCal();
-  if(id==='cr-deals')renderPipeline('pipeline-cr',S.crd);
-  if(id==='sd-feed'){renderFeed('feed-sd',S.feedSD,'swift');renderAgenda('agenda-sd',S.agendaSD);}
-  if(id==='cr-feed'){renderFeed('feed-cr',S.feedCR,'cris');renderAgenda('agenda-cr',S.agendaCR);}
-  if(id==='finance')renderFin();
-  if(id==='emails')renderEmails();
-  if(id==='sd-goals')updateSDGoals();
-  if(id==='cr-goals')updateCRGoals();
+  try{
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));
+    const pg=document.getElementById('page-'+id);
+    if(pg)pg.classList.add('active');
+    if(el)el.classList.add('active');
+    try{closeMobileMenu();}catch(e){}
+    try{if(id==='analytics')initAnalytics();}catch(e){}
+    try{if(id==='content')renderCal();}catch(e){}
+    try{if(id==='cr-deals')renderPipeline('pipeline-cr',S.crd);}catch(e){}
+    try{if(id==='sd-feed'){renderFeed('feed-sd',S.feedSD,'swift');renderAgenda('agenda-sd',S.agendaSD);}}catch(e){}
+    try{if(id==='cr-feed'){renderFeed('feed-cr',S.feedCR,'cris');renderAgenda('agenda-cr',S.agendaCR);}}catch(e){}
+    try{if(id==='finance')renderFin();}catch(e){}
+    try{if(id==='emails')renderEmails();}catch(e){}
+    try{if(id==='sd-goals')updateSDGoals();}catch(e){}
+    try{if(id==='cr-goals')updateCRGoals();}catch(e){}
+    try{if(id==='cr-metrics')renderAudience();}catch(e){}
+  }catch(err){console.error('nav error:',err);}
 }
 
 function toggleBrand(b){
@@ -1536,6 +1539,9 @@ function prevMonth(){agendaMonth--;if(agendaMonth<0){agendaMonth=11;agendaYear--
 function nextMonth(){agendaMonth++;if(agendaMonth>11){agendaMonth=0;agendaYear++;}agendaSelectedDay=null;document.getElementById('agenda-day-tasks').innerHTML='';const f=document.getElementById('agenda-add-form');if(f)f.style.display='none';renderAgendaCalendar();}
 
 window.addEventListener('DOMContentLoaded',async()=>{
+  // Wrap everything in try/catch so one error doesn't break all
+  const safe = function(fn){ try{ fn(); }catch(e){ console.warn('init error:',e); } };
+  safe(function(){
   // Show data immediately
   const pairs = [['k-sd-ig','1.254'],['k-cr-ig','6.959'],['k-goal','13%'],['k-posts','4'],['k-deals','0'],['k-emails','0'],['sd-m-ig','1.254'],['cr-m-ig','6.959']];
   pairs.forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.textContent=val;});
