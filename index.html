@@ -1591,6 +1591,34 @@ window.addEventListener('DOMContentLoaded',async()=>{
   crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
   renderFiles('cr-files-list',crFiles);
 });
+
+function loadBriefing(){
+  const el=document.getElementById('br-text');
+  const sec=document.getElementById('br-cols');
+  if(!el)return;
+  if(S.dados&&S.dados.briefing){
+    const b=S.dados.briefing;
+    el.textContent=b.resumo||'';
+    el.classList.remove('loading');
+    const hl=document.getElementById('br-hl');
+    const tk=document.getElementById('br-tasks');
+    if(hl)hl.innerHTML=(b.destaques||[]).map(h=>'<li>'+h+'</li>').join('');
+    if(tk)tk.innerHTML=(b.tarefas||[]).map(t=>'<li>'+t+'</li>').join('');
+    if(sec)sec.style.display='grid';
+  } else {
+    el.textContent='A Swift Delux está a 13% da meta de 10k seguidores. A Cristiana tem 6.959 seguidores com pico 18h-21h.';
+    el.classList.remove('loading');
+    const hl=document.getElementById('br-hl');
+    const tk=document.getElementById('br-tasks');
+    if(hl)hl.innerHTML='<li>+644% atividade Swift Delux vs mês anterior</li><li>61,5% das views são de pessoas novas</li><li>4 posts sugeridos esta semana</li>';
+    if(tk)tk.innerHTML='<li>Criar conta no Ideogram (ideogram.ai)</li><li>Publicar Reel Swift Delux 18h-21h</li><li>Verificar emails de marcas</li><li>Planear conteúdo próxima semana</li>';
+    if(sec)sec.style.display='grid';
+  }
+}
+
+function genReport(){
+  document.getElementById('rpt-out').textContent='Para gerar relatórios com IA, configura a API key da Anthropic.';
+}
 </script>
 
 <!-- FEED IMAGE MODAL -->
