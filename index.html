@@ -236,7 +236,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div class="sb-item" onclick="nav('sd-feed',this)"><span class="si">▦</span> Feed Planner</div>
     <div class="sb-item" onclick="nav('sd-metrics',this)"><span class="si">◎</span> Métricas</div>
     <div class="sb-item" onclick="nav('sd-goals',this)"><span class="si">◈</span> Goals</div>
-    <div class="sb-item" onclick="nav('sd-crm',this)"><span class="si">◉</span> Brand Deals</div>
     <div class="sb-item" onclick="nav('sd-mediakit',this)"><span class="si">◪</span> Media Kit</div>
   </div>
 
@@ -915,7 +914,6 @@ function nav(id,el){
   closeMobileMenu();
   if(id==='analytics')initAnalytics();
   if(id==='content')renderCal();
-  if(id==='sd-crm')renderPipeline('pipeline',S.crm);
   if(id==='cr-deals')renderPipeline('pipeline-cr',S.crd);
   if(id==='sd-feed'){renderFeed('feed-sd',S.feedSD,'swift');renderAgenda('agenda-sd',S.agendaSD);}
   if(id==='cr-feed'){renderFeed('feed-cr',S.feedCR,'cris');renderAgenda('agenda-cr',S.agendaCR);}
@@ -1038,6 +1036,7 @@ function saveCrMetrics(){
   updateKPIs();
 }
 
+function updateGoals(){ updateSDGoals(); updateCRGoals(); }
 function updateSDGoals(){
   const ig=S.sdIG||0,tt=S.sdTT||0,d=S.crm.filter(c=>c.status==='Parceria fechada').length,r=S.revenue||0;
   st('gsd-ig-v',ig.toLocaleString('pt-PT'));bar('gsd-ig-b',ig/10000*100,'var(--swift)');
