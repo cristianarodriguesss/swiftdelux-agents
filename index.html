@@ -1,1670 +1,1147 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1a1a18">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="THE AGENCY">
-<link rel="apple-touch-icon" href="icon-192.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>THE AGENCY</title>
-
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0e0e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="THE AGENCY">
 <style>
-:root{--bg:#f7f7f5;--surface:#fff;--border:#e8e8e6;--text:#181816;--muted:#888680;--accent:#181816;--swift:#c9a96e;--cris:#9b8ec4;--green:#27a85f;--red:#d94f4f;--orange:#e07a30;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,0.06)}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;font-size:13px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#f5f5f3;--surface:#ffffff;--border:#e8e8e6;
+  --text:#111110;--muted:#888885;--light:#c8c8c5;
+  --swift:#c9a96e;--cris:#8b7fc4;
+  --green:#22a65a;--red:#d94040;--orange:#e07a30;--blue:#3b82f6;
+  --accent:#111110;--radius:12px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;display:flex}
+
 /* SIDEBAR */
-.sb{width:240px;min-height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto}
-.sb-logo{padding:18px 20px 16px;border-bottom:1px solid var(--border)}
-.sb-logo .name{font-size:14px;font-weight:700;letter-spacing:1.5px}
-.sb-logo .sub{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:0.5px}
-.sb-section{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;padding:14px 20px 4px}
-.sb-item{display:flex;align-items:center;gap:8px;padding:7px 20px;cursor:pointer;font-size:12.5px;color:var(--muted);transition:all 0.12s;user-select:none}
-.sb-item:hover{background:var(--bg);color:var(--text)}
-.sb-item.active{background:var(--bg);color:var(--text);font-weight:500}
-.sb-item .si{font-size:14px;width:16px;text-align:center;flex-shrink:0}
-.sb-brand{display:flex;align-items:center;gap:8px;padding:8px 20px 4px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text)}
-.sb-brand .bdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.sb-brand .chevron{margin-left:auto;font-size:10px;transition:transform 0.2s;color:var(--muted)}
-.sb-brand.open .chevron{transform:rotate(90deg)}
-.sb-sub{display:none;padding-left:16px}
+.sb{width:220px;min-height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto;transition:transform .25s}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.sb-logo .n{font-size:13px;font-weight:700;letter-spacing:1.8px;color:var(--text)}
+.sb-logo .s{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:.3px}
+.sb-sec{font-size:9px;font-weight:600;color:var(--light);text-transform:uppercase;letter-spacing:1px;padding:14px 18px 4px}
+.sb-item{display:flex;align-items:center;gap:8px;padding:7px 18px;cursor:pointer;font-size:12px;color:var(--muted);transition:all .12s;border-radius:0;user-select:none}
+.sb-item:hover,.sb-item.on{background:var(--bg);color:var(--text);font-weight:500}
+.sb-item .ic{font-size:13px;width:16px;text-align:center;flex-shrink:0;opacity:.7}
+.sb-brand{display:flex;align-items:center;gap:8px;padding:8px 18px 4px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text);user-select:none}
+.sb-brand .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sb-brand .chev{margin-left:auto;font-size:10px;color:var(--light);transition:transform .2s}
+.sb-brand.open .chev{transform:rotate(90deg)}
+.sb-sub{display:none;padding-left:14px}
 .sb-sub.open{display:block}
-.sb-sub .sb-item{font-size:12px;padding:6px 20px 6px 16px}
-.sb-footer{padding:14px 20px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);margin-top:auto}
-.live{display:flex;align-items:center;gap:6px}
-.ldot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.sb-sub .sb-item{font-size:11.5px;padding:5px 18px 5px 14px}
+.sb-foot{padding:14px 18px;border-top:1px solid var(--border);margin-top:auto}
+.live{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted)}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
 /* MAIN */
-.main{margin-left:240px;flex:1}
-.page{display:none;padding:26px 30px 60px}
-.page.active{display:block}
-.ph{margin-bottom:22px;display:flex;align-items:flex-start;justify-content:space-between}
-.ph h1{font-size:19px;font-weight:600}
-.ph .meta{font-size:12px;color:var(--muted);margin-top:3px}
+.main{margin-left:220px;flex:1;min-height:100vh}
+.page{display:none;padding:24px 28px 60px}
+.page.on{display:block}
+.ph{margin-bottom:22px}
+.ph h1{font-size:20px;font-weight:600;letter-spacing:-.3px}
+.ph p{font-size:12px;color:var(--muted);margin-top:3px}
+
 /* CARDS */
-.grid{display:grid;gap:12px}
-.g4{grid-template-columns:repeat(4,1fr)}
-.g3{grid-template-columns:repeat(3,1fr)}
+.grid{display:grid;gap:10px;margin-bottom:16px}
 .g2{grid-template-columns:repeat(2,1fr)}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
-.cl{font-size:11px;color:var(--muted);margin-bottom:7px}
-.cv{font-size:24px;font-weight:600;line-height:1}
-.cv.sm{font-size:18px}
-.cd{font-size:11px;margin-top:5px;color:var(--muted)}
-.cup{color:var(--green)}
-.cdn{color:var(--red)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.card .label{font-size:11px;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.card .val{font-size:26px;font-weight:600;line-height:1;letter-spacing:-.5px}
+.card .val.sm{font-size:18px}
+.card .sub{font-size:11px;color:var(--muted);margin-top:4px}
+.card .sub.up{color:var(--green)}
+.card .sub.dn{color:var(--red)}
+
 /* BRIEFING */
-.briefing{background:var(--accent);color:#fff;border-radius:var(--radius);padding:20px 22px;margin-bottom:22px}
-.br-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.br-title{font-size:11px;font-weight:600;opacity:0.6;text-transform:uppercase;letter-spacing:0.8px}
-.br-body{font-size:13px;line-height:1.65;opacity:0.88}
-.br-body.loading{opacity:0.45;font-style:italic}
-.br-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-.br-col h4{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;opacity:0.45;margin-bottom:7px}
-.br-col ul{list-style:none}
-.br-col ul li{font-size:12.5px;opacity:0.82;padding:2px 0}
-.br-col ul li::before{content:"→ ";opacity:0.35}
-.btn-sm{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:5px 12px;border-radius:7px;cursor:pointer;font-size:11px}
-.btn-sm:hover{background:rgba(255,255,255,0.18)}
-/* TABS */
-.tabs{display:flex;gap:3px;margin-bottom:18px;background:var(--border);border-radius:9px;padding:3px;width:fit-content}
-.tab{padding:6px 14px;border-radius:7px;cursor:pointer;font-size:12.5px;color:var(--muted);transition:all 0.12s}
-.tab.active{background:var(--surface);color:var(--text);font-weight:500;box-shadow:var(--shadow)}
-/* CHARTS */
-.cc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
-.ct{font-size:12px;font-weight:600;margin-bottom:14px}
-.cw{position:relative;height:170px}
-.row{display:flex;gap:12px}
-.row>*{flex:1}
+.briefing{background:var(--accent);color:#fff;border-radius:var(--radius);padding:20px 22px;margin-bottom:20px}
+.br-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.br-tag{font-size:9px;font-weight:700;letter-spacing:1.5px;opacity:.5;text-transform:uppercase}
+.br-date{font-size:11px;opacity:.4}
+.br-text{font-size:13px;line-height:1.65;opacity:.88;margin-bottom:14px}
+.br-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.br-col h4{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;opacity:.4;margin-bottom:7px}
+.br-col li{font-size:12px;opacity:.8;padding:2px 0;list-style:none}
+.br-col li::before{content:"→ ";opacity:.35}
+
+/* SECTION */
 .sec{margin-bottom:24px}
-.stitle{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:12px}
-/* EMAILS */
-.email-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 16px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start}
-.email-item .emoji{font-size:16px;flex-shrink:0;margin-top:1px}
-.email-item .body{flex:1}
-.email-item .subject{font-size:13px;font-weight:500}
-.email-item .from{font-size:11px;color:var(--muted);margin-top:2px}
-.email-item .summary{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.4}
-.email-item .time{font-size:11px;color:var(--muted);flex-shrink:0}
-.tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px;margin-top:5px}
+.sec-title{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+
+/* BARS */
+.bar-wrap{margin-bottom:9px}
+.bar-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
+.bar-row span:first-child{color:var(--text)}
+.bar-row span:last-child{color:var(--muted);font-weight:500}
+.bar-track{height:5px;background:var(--bg);border-radius:10px;overflow:hidden}
+.bar-fill{height:100%;border-radius:10px;transition:width .6s}
+
+/* TAGS */
+.tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px}
+.tag-swift{background:#fdf3e3;color:#9a5f00}
+.tag-cris{background:#f0edf9;color:#5a4fa0}
+.tag-deal{background:#e8f9ee;color:#166534}
+.tag-task{background:#eff6ff;color:#1e40af}
 .tag-urgente{background:#fdecea;color:#b91c1c}
-.tag-cliente{background:#fdf3e3;color:#92500f}
-.tag-fornecedor{background:#eff6ff;color:#1e40af}
-.tag-outro{background:#f3f4f6;color:#6b7280}
-/* FEED PLANNER */
-.feed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;max-width:360px}
-.feed-cell{aspect-ratio:1;background:var(--bg);border:1.5px dashed var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;transition:border-color 0.15s}
-.feed-cell:hover{border-color:#aaa}
-.feed-cell .add-icon{font-size:20px;color:var(--border)}
-.feed-cell.filled{border-style:solid;border-color:transparent}
-.feed-cell img{width:100%;height:100%;object-fit:cover}
-.feed-cell .fc-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;gap:8px}
-.feed-cell:hover .fc-overlay{display:flex}
-.feed-cell .fc-overlay button{background:rgba(255,255,255,0.9);border:none;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer}
-.feed-label{font-size:10px;color:var(--muted);text-align:center;margin-top:4px}
-/* AGENDA */
-.agenda-list{margin-top:0}
-.agenda-day{margin-bottom:14px}
-.agenda-date{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
-.agenda-item{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--swift);border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
-.agenda-item.cris{border-left-color:var(--cris)}
-.agenda-item.deal{border-left-color:var(--green)}
-.agenda-item .ai-time{font-size:11px;color:var(--muted);width:36px;flex-shrink:0}
-.agenda-item .ai-title{font-size:13px}
-.agenda-item .ai-brand{font-size:10px;color:var(--muted);margin-top:1px}
-/* CRM */
-.pipeline{display:grid;grid-template-columns:repeat(7,minmax(140px,1fr));gap:10px;overflow-x:auto;padding-bottom:8px}
-.pcol-hd{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);margin-bottom:8px;padding:0 2px}
-.pitem{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:11px;margin-bottom:7px;cursor:pointer}
-.pitem:hover{border-color:#ccc}
-.pitem .pname{font-size:12.5px;font-weight:500}
-.pitem .pdetail{font-size:11px;color:var(--muted);margin-top:3px}
+.tag-cliente{background:#fdf3e3;color:#9a5f00}
+.tag-outro{background:var(--bg);color:var(--muted)}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:9px;cursor:pointer;font-size:12px;font-weight:500;border:none;transition:all .12s;font-family:inherit}
+.btn-p{background:var(--accent);color:#fff}
+.btn-p:hover{opacity:.85}
+.btn-o{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-o:hover{background:var(--bg)}
+
+/* FORM */
+.form-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.field input,.field select,.field textarea{border:1px solid var(--border);border-radius:8px;padding:8px 11px;font-size:12px;background:var(--surface);color:var(--text);outline:none;font-family:inherit}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#aaa}
+
 /* GOALS */
 .goal{margin-bottom:14px}
-.goal-hd{display:flex;justify-content:space-between;margin-bottom:5px}
+.goal-row{display:flex;justify-content:space-between;margin-bottom:5px}
 .goal-name{font-size:12.5px;font-weight:500}
 .goal-pct{font-size:11px;color:var(--muted)}
-.goal-bg{height:5px;background:var(--border);border-radius:10px;overflow:hidden}
-.goal-fill{height:100%;border-radius:10px;transition:width 0.6s}
-/* MEDIA KIT */
-.mk-section{margin-bottom:20px}
-.mk-title{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
-.mk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
-.mk-item{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px;text-align:center;cursor:pointer}
-.mk-item:hover{border-color:#ccc}
-.mk-icon{font-size:20px;margin-bottom:6px}
-.mk-name{font-size:11px;font-weight:500}
-/* AUDIENCE BARS */
-.abar{margin-bottom:8px}
-.abar-lbl{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
-.abar-track{height:5px;background:var(--border);border-radius:10px;overflow:hidden}
-.abar-fill{height:100%;border-radius:10px}
-/* FORMS */
-.ir{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px}
-.field{display:flex;flex-direction:column;gap:4px}
-.field label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px}
-.field input,.field select,.field textarea{border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12.5px;background:var(--surface);color:var(--text);outline:none;font-family:inherit}
-.field input:focus,.field select:focus{border-color:#aaa}
-.btn{padding:7px 14px;border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:500;border:none;transition:all 0.12s}
-.btnp{background:var(--accent);color:#fff}
-.btnp:hover{opacity:0.85}
-.btno{background:transparent;border:1px solid var(--border);color:var(--text)}
-.hint{font-size:11px;color:var(--muted);margin-top:6px}
-.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
-.badge-swift{background:#fdf3e3;color:#9a6e2f}
-.badge-cris{background:#f0edf9;color:#6b5fa0}
-.achiev{display:flex;gap:8px;flex-wrap:wrap}
-.ach{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:9px}
-.ach.locked{opacity:0.3;filter:grayscale(1)}
-.ach-icon{font-size:20px}
-.ach-name{font-size:11px;font-weight:600}
-.ach-desc{font-size:10px;color:var(--muted)}
-.alert{background:#fffbea;border:1px solid #f0d980;border-radius:8px;padding:10px 13px;font-size:12.5px;color:#7a5c00;margin-bottom:8px}
-.alert-g{background:#f0fdf4;border-color:#bbf7d0;color:#166534}
-.mt12{margin-top:12px}
-.mt20{margin-top:20px}
-.ow{overflow-x:auto}
-.fin-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
-.fin-row:last-child{border-bottom:none}
-.fin-amt{font-size:13px;font-weight:600}
-.fin-inc{color:var(--green)}
-.fin-exp{color:var(--red)}
-/* CONNECT BANNER */
-.connect-banner{background:linear-gradient(135deg,#1a1a18,#333);color:#fff;border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between}
-.cb-text h3{font-size:14px;font-weight:600}
-.cb-text p{font-size:12px;opacity:0.7;margin-top:3px}
-.cb-btn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;white-space:nowrap}
-.cb-btn:hover{background:rgba(255,255,255,0.25)}
-.metric-status{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 7px;border-radius:10px;margin-top:4px}
-.ms-auto{background:#e8f9ee;color:#166534}
-.ms-manual{background:#fef3c7;color:#92400e}
-/* FEED COLORS */
-.fc-swift{border-color:var(--swift)!important;border-style:solid!important}
-.fc-cris{border-color:var(--cris)!important;border-style:solid!important}
-.fc-deal{border-color:var(--green)!important;border-style:solid!important}
-/* INBOX BADGE */
-.inbox-count{background:var(--red);color:#fff;border-radius:10px;font-size:10px;font-weight:600;padding:1px 6px;margin-left:auto}
 
+/* EMAIL */
+.email-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 16px;margin-bottom:8px;display:flex;gap:10px}
+.email-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+.email-body{flex:1}
+.email-subject{font-size:13px;font-weight:500}
+.email-from{font-size:11px;color:var(--muted);margin-top:2px}
+.email-sum{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4}
+.email-time{font-size:11px;color:var(--muted);flex-shrink:0;white-space:nowrap}
+
+/* AGENDA */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden}
+.cal-head{background:var(--surface);padding:6px 2px;text-align:center;font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase}
+.cal-day{background:var(--surface);padding:5px 4px;min-height:52px;cursor:pointer;transition:background .1s}
+.cal-day:hover{background:#f9f9f7}
+.cal-day.today{border:1.5px solid var(--swift)}
+.cal-day.selected{background:#fdf3e3}
+.cal-day .dn{font-size:11px;color:var(--muted)}
+.cal-day .dn.today-num{background:var(--accent);color:#fff;width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.cal-event{font-size:9px;padding:1px 3px;border-radius:2px;margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+
+/* FEED PLANNER */
+.feed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:300px}
+.feed-cell{aspect-ratio:1;background:var(--bg);border:1.5px dashed var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:var(--border);transition:border-color .15s;position:relative;overflow:hidden}
+.feed-cell:hover{border-color:#bbb}
+.feed-cell.filled{border-style:solid;font-size:11px;font-weight:600}
+.feed-del{position:absolute;top:3px;right:4px;background:rgba(0,0,0,.4);color:#fff;border:none;border-radius:3px;font-size:10px;cursor:pointer;padding:1px 4px;display:none}
+.feed-cell.filled:hover .feed-del{display:block}
+
+/* PIPELINE */
+.pipeline{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px}
+.pipe-col{min-width:150px;flex-shrink:0}
+.pipe-head{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px}
+.pipe-item{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px;margin-bottom:7px}
+.pipe-item .pn{font-size:12px;font-weight:500}
+.pipe-item .pd{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* NOTES */
+#notas{width:100%;height:200px;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;resize:vertical;font-family:inherit;background:var(--surface);line-height:1.6}
+#notas:focus{outline:none;border-color:#aaa}
+
+/* CONNECT BANNER */
+.banner{background:var(--accent);color:#fff;border-radius:var(--radius);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.banner h3{font-size:13px;font-weight:600}
+.banner p{font-size:11px;opacity:.65;margin-top:3px}
+.banner-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:500;white-space:nowrap;flex-shrink:0}
+
+/* MEDIA KIT */
+.mk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:12px}
+.mk-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;position:relative;cursor:pointer}
+.mk-item:hover{border-color:#bbb}
+.mk-item .mi{font-size:20px;margin-bottom:6px}
+.mk-item .mn{font-size:12px;font-weight:500}
+.mk-item .mc{font-size:10px;color:var(--muted);margin-top:2px}
+.mk-del{position:absolute;top:6px;right:8px;background:none;border:none;cursor:pointer;color:var(--light);font-size:12px}
+.mk-del:hover{color:var(--red)}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;padding:16px}
+.modal-bg.on{display:flex}
+.modal{background:var(--surface);border-radius:16px;padding:24px;width:360px;max-width:100%}
+.modal h2{font-size:15px;font-weight:600;margin-bottom:18px}
+.modal-close{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);margin-top:-4px}
 
 /* MOBILE */
-@media (max-width: 768px) {
-  .sb{transform:translateX(-100%);transition:transform 0.25s ease;box-shadow:none}
-  .sb.open{transform:translateX(0);box-shadow:4px 0 20px rgba(0,0,0,0.15)}
+.mob-btn{display:none;position:fixed;top:14px;left:14px;z-index:200;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:8px 11px;cursor:pointer;font-size:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:99}
+.mob-overlay.on{display:block}
+@media(max-width:768px){
+  .mob-btn{display:flex;align-items:center;justify-content:center}
+  .sb{transform:translateX(-100%)}
+  .sb.open{transform:translateX(0);box-shadow:4px 0 20px rgba(0,0,0,.15)}
   .main{margin-left:0}
-  .page{padding:16px 14px 60px}
-  .grid.g4{grid-template-columns:repeat(2,1fr)}
-  .grid.g3{grid-template-columns:repeat(2,1fr)}
-  .row{flex-direction:column}
-  .ph h1{font-size:16px}
-  .pipeline{grid-template-columns:repeat(2,minmax(140px,1fr))}
-  .briefing-cols{grid-template-columns:1fr}
+  .page{padding:52px 14px 60px}
+  .g4{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(2,1fr)}
+  .br-cols{grid-template-columns:1fr}
 }
-.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:99}
-.mob-overlay.open{display:block}
-.mob-menu-btn{display:none;position:fixed;top:14px;left:14px;z-index:200;background:var(--surface);border:0.5px solid var(--border);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:16px;box-shadow:var(--shadow)}
-@media (max-width: 768px){
-  .mob-menu-btn{display:flex;align-items:center;justify-content:center}
-  .page{padding-top:52px}
-}
+.hint{font-size:11px;color:var(--muted);padding:6px 0}
+.row{display:flex;gap:12px}
+.row>*{flex:1;min-width:0}
+.mt8{margin-top:8px}
+.mt16{margin-top:16px}
+.sep{border:none;border-top:1px solid var(--border);margin:20px 0}
 </style>
 </head>
 <body>
 
+<button class="mob-btn" id="mob-btn" onclick="toggleMenu()">☰</button>
+<div class="mob-overlay" id="mob-overlay" onclick="closeMenu()"></div>
+
 <!-- SIDEBAR -->
-  <button class="mob-menu-btn" id="mob-btn" onclick="toggleMobileMenu()" aria-label="Menu">☰</button>
-<div class="mob-overlay" id="mob-overlay" onclick="closeMobileMenu()"></div>
 <aside class="sb" id="sidebar">
   <div class="sb-logo">
-    <div class="name">THE AGENCY</div>
-    <div class="sub">Swift Delux × Cristiana Rodrigues</div>
+    <div class="n">THE AGENCY</div>
+    <div class="s">Swift Delux × Cristiana Rodrigues</div>
   </div>
 
-  <div class="sb-section">Geral</div>
-  <div class="sb-item active" onclick="nav('dashboard',this)"><span class="si">⬡</span> Dashboard</div>
+  <div class="sb-sec">Geral</div>
+  <div class="sb-item on" onclick="go('dashboard',this)"><span class="ic">◉</span> Dashboard</div>
+  <div class="sb-item" onclick="go('emails',this)"><span class="ic">✉</span> Emails <span id="email-badge" style="margin-left:auto;background:var(--red);color:#fff;border-radius:8px;font-size:9px;padding:1px 5px">0</span></div>
+  <div class="sb-item" onclick="go('content',this)"><span class="ic">📅</span> Content Planner</div>
 
-  <div class="sb-section">Marcas</div>
+  <div class="sb-sec">Marcas</div>
 
-  <!-- SWIFT DELUX -->
-  <div class="sb-brand" id="brand-sd" onclick="toggleBrand('sd')">
-    <span class="bdot" style="background:var(--swift)"></span>
+  <div class="sb-brand" id="br-sd" onclick="toggle('sd')">
+    <span class="dot" style="background:var(--swift)"></span>
     Swift Delux
-    <span class="chevron">▶</span>
+    <span class="chev">▶</span>
   </div>
   <div class="sb-sub" id="sub-sd">
-    <div class="sb-item" onclick="nav('sd-feed',this)"><span class="si">▦</span> Feed Planner</div>
-    <div class="sb-item" onclick="nav('sd-metrics',this)"><span class="si">◎</span> Métricas</div>
-    <div class="sb-item" onclick="nav('sd-goals',this)"><span class="si">◈</span> Goals</div>
-    <div class="sb-item" onclick="nav('sd-mediakit',this)"><span class="si">◪</span> Media Kit</div>
+    <div class="sb-item" onclick="go('sd-feed',this)"><span class="ic">▦</span> Feed Planner</div>
+    <div class="sb-item" onclick="go('sd-metrics',this)"><span class="ic">📊</span> Métricas</div>
+    <div class="sb-item" onclick="go('sd-goals',this)"><span class="ic">🎯</span> Goals</div>
+    <div class="sb-item" onclick="go('sd-deals',this)"><span class="ic">🤝</span> Parcerias</div>
+    <div class="sb-item" onclick="go('sd-kit',this)"><span class="ic">📁</span> Media Kit</div>
   </div>
 
-  <!-- CRISTIANA -->
-  <div class="sb-brand" id="brand-cr" onclick="toggleBrand('cr')">
-    <span class="bdot" style="background:var(--cris)"></span>
+  <div class="sb-brand" id="br-cr" onclick="toggle('cr')">
+    <span class="dot" style="background:var(--cris)"></span>
     Cristiana Rodrigues
-    <span class="chevron">▶</span>
+    <span class="chev">▶</span>
   </div>
   <div class="sb-sub" id="sub-cr">
-    <div class="sb-item" onclick="nav('cr-feed',this)"><span class="si">▦</span> Feed Planner</div>
-    <div class="sb-item" onclick="nav('cr-metrics',this)"><span class="si">◎</span> Métricas</div>
-    <div class="sb-item" onclick="nav('cr-goals',this)"><span class="si">◈</span> Goals</div>
-    <div class="sb-item" onclick="nav('cr-deals',this)"><span class="si">◉</span> Parcerias</div>
-    <div class="sb-item" onclick="nav('cr-mediakit',this)"><span class="si">◪</span> Media Kit</div>
-    <div class="sb-item" onclick="nav('cr-wishlist',this)"><span class="si">✦</span> Wishlist</div>
+    <div class="sb-item" onclick="go('cr-feed',this)"><span class="ic">▦</span> Feed Planner</div>
+    <div class="sb-item" onclick="go('cr-metrics',this)"><span class="ic">📊</span> Métricas</div>
+    <div class="sb-item" onclick="go('cr-goals',this)"><span class="ic">🎯</span> Goals</div>
+    <div class="sb-item" onclick="go('cr-deals',this)"><span class="ic">🤝</span> Parcerias</div>
+    <div class="sb-item" onclick="go('cr-kit',this)"><span class="ic">📁</span> Media Kit</div>
+    <div class="sb-item" onclick="go('cr-wish',this)"><span class="ic">⭐</span> Wishlist</div>
   </div>
 
-
-
-  <div class="sb-footer">
+  <div class="sb-foot">
     <div class="live"><span class="ldot"></span> Agentes ativos</div>
-    <div style="margin-top:3px" id="sb-time"></div>
+    <div style="font-size:10px;color:var(--muted);margin-top:2px" id="clock"></div>
   </div>
 </aside>
 
 <!-- MAIN -->
 <main class="main">
 
-<!-- ═══ DASHBOARD ═══ -->
-<div class="page active" id="page-dashboard">
-  <div class="ph"><div><h1>Dashboard</h1><div class="meta" id="dash-date"></div></div></div>
+<!-- DASHBOARD -->
+<div class="page on" id="page-dashboard">
+  <div class="ph"><h1>Dashboard</h1><p id="today-date"></p></div>
 
-  <!-- AI BRIEFING -->
+  <!-- BRIEFING -->
   <div class="briefing">
-    <div class="br-hd">
-      <div class="br-title">✦ Agency Briefing</div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <span style="font-size:11px;opacity:0.45" id="br-date"></span>
-        <button class="btn-sm" onclick="loadBriefing()">↻ Atualizar</button>
-      </div>
+    <div class="br-top">
+      <div class="br-tag">✦ Agency Briefing</div>
+      <div class="br-date" id="br-date"></div>
     </div>
-    <div class="br-body loading" id="br-text">A gerar briefing…</div>
-    <div class="br-cols" id="br-cols" style="display:none">
-      <div class="br-col"><h4>✓ Destaques</h4><ul id="br-hl"></ul></div>
-      <div class="br-col"><h4>⚡ Para hoje</h4><ul id="br-tasks"></ul></div>
+    <div class="br-text" id="br-text">A Swift Delux está a 13% da meta de 10k seguidores com um alcance orgânico excelente — 61,5% das visualizações são de não seguidores. A Cristiana tem 6.959 seguidores com pico de atividade entre as 18h-21h.</div>
+    <div class="br-cols">
+      <div class="br-col">
+        <h4>✓ Destaques</h4>
+        <ul id="br-hl">
+          <li>+644% atividade Swift Delux vs mês anterior</li>
+          <li>61,5% das views são de pessoas novas</li>
+          <li>4 posts sugeridos esta semana</li>
+        </ul>
+      </div>
+      <div class="br-col">
+        <h4>⚡ Para hoje</h4>
+        <ul id="br-tasks">
+          <li>Criar conta no Ideogram (ideogram.ai)</li>
+          <li>Publicar Reel Swift Delux 18h-21h</li>
+          <li>Verificar emails de marcas</li>
+          <li>Planear conteúdo próxima semana</li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <!-- KPIs -->
   <div class="sec">
-    <div class="stitle">KPIs principais</div>
+    <div class="sec-title">📈 KPIs principais</div>
     <div class="grid g4">
-      <div class="card"><div class="cl">👥 Swift Delux IG</div><div class="cv" id="k-sd-ig">—</div><div class="metric-status ms-manual">⚡ manual</div></div>
-      <div class="card"><div class="cl">👤 @cris IG</div><div class="cv" id="k-cr-ig">—</div><div class="metric-status ms-manual">⚡ manual</div></div>
-      <div class="card"><div class="cl">📧 Emails por responder</div><div class="cv" id="k-emails" style="color:var(--orange)">—</div><div class="cd">Últimas 24h</div></div>
-      <div class="card"><div class="cl">🤝 Parcerias fechadas</div><div class="cv" id="k-deals">0</div></div>
-      <div class="card"><div class="cl">✨ Posts sugeridos (7d)</div><div class="cv" id="k-posts">—</div></div>
-      <div class="card"><div class="cl">💰 Receita mês</div><div class="cv" id="k-revenue">€—</div></div>
-      <div class="card"><div class="cl">📈 Meta Swift Delux</div><div class="cv" id="k-goal">—%</div><div class="cd">10k seguidores</div></div>
-      <div class="card"><div class="cl">🔔 Alertas</div><div class="cv" id="k-alerts" style="color:var(--red)">0</div></div>
+      <div class="card"><div class="label">💎 Swift Delux IG</div><div class="val">1.254</div><div class="sub">Meta: 10.000 (13%)</div></div>
+      <div class="card"><div class="label">🌸 @cris IG</div><div class="val">6.959</div><div class="sub up">Pico: 18h-21h</div></div>
+      <div class="card"><div class="label">✉ Emails pendentes</div><div class="val" id="k-emails" style="color:var(--orange)">0</div><div class="sub">Últimas 24h</div></div>
+      <div class="card"><div class="label">🤝 Parcerias</div><div class="val" id="k-deals">0</div><div class="sub">Este ano</div></div>
+      <div class="card"><div class="label">✨ Posts sugeridos</div><div class="val" id="k-posts">4</div><div class="sub">Esta semana</div></div>
+      <div class="card"><div class="label">📊 Alcance Swift Delux</div><div class="val">+644%</div><div class="sub up">vs mês anterior</div></div>
+      <div class="card"><div class="label">👥 Não seguidores</div><div class="val">61,5%</div><div class="sub up">das visualizações</div></div>
+      <div class="card"><div class="label">📍 Contas alcançadas</div><div class="val">1.166</div><div class="sub">Swift Delux (30d)</div></div>
     </div>
   </div>
 
-  <!-- IG CONNECT BANNER -->
-  <div class="connect-banner">
-    <div class="cb-text">
-      <h3>📱 Ligar Instagram automaticamente</h3>
-      <p>Conecta ao Instagram Graph API para seguidores, alcance, engagement e audiência em tempo real.</p>
-    </div>
-    <button class="cb-btn" onclick="showIGSetup()">Configurar →</button>
-  </div>
-
-  <!-- EMAILS -->
+  <!-- EMAILS RECENTES -->
   <div class="sec">
-    <div class="stitle">✉ Emails recentes</div>
-    <div id="email-list-dash"><div class="alert">O agente de email ainda não processou emails. Corre o workflow no GitHub para começar.</div></div>
+    <div class="sec-title">✉ Emails recentes</div>
+    <div id="emails-dash"><div class="hint">O agente de email ainda não processou emails. Corre o workflow no GitHub.</div></div>
   </div>
 
   <!-- ANALYTICS -->
   <div class="sec">
-    <div class="stitle">📊 Analytics</div>
+    <div class="sec-title">📊 Analytics</div>
     <div class="row">
-      <div class="cc"><div class="ct">Seguidores Swift Delux IG</div><div style="display:flex;align-items:flex-end;height:140px;gap:3px;padding:8px 4px 0"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#c9a96e;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">J</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#c9a96e;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">F</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#c9a96e;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">M</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#c9a96e;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">A</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#c9a96e;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">M</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#c9a96e;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">J</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;font-weight:600;color:#c9a96e">1.254</div><div style="width:100%;border-radius:3px 3px 0 0;background:#c9a96e;opacity:1;height:100%"></div><div style="font-size:9px;color:#aaa">J</div></div></div></div>
-      <div class="cc"><div class="ct">Seguidores @cristianarodriguesss</div><div style="display:flex;align-items:flex-end;height:140px;gap:3px;padding:8px 4px 0"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">J</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">F</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">M</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">A</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">M</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">J</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;font-weight:600;color:#9b8ec4">6.959</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:1;height:100%"></div><div style="font-size:9px;color:#aaa">J</div></div></div></div>
-    </div>
-    <div class="row mt12">
-      <div class="cc"><div class="ct">Emails processados por dia</div><div style="display:flex;align-items:flex-end;height:140px;gap:3px;padding:8px 4px 0"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#1a1a18;opacity:0.35;height:66%"></div><div style="font-size:9px;color:#aaa">Seg</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#1a1a18;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">Ter</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#1a1a18;opacity:0.35;height:100%"></div><div style="font-size:9px;color:#aaa">Qua</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#1a1a18;opacity:0.35;height:33%"></div><div style="font-size:9px;color:#aaa">Qui</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#1a1a18;opacity:0.35;height:0%"></div><div style="font-size:9px;color:#aaa">Sex</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#1a1a18;opacity:0.35;height:66%"></div><div style="font-size:9px;color:#aaa">Sab</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;font-weight:600;color:#1a1a18">1</div><div style="width:100%;border-radius:3px 3px 0 0;background:#1a1a18;opacity:1;height:33%"></div><div style="font-size:9px;color:#aaa">Dom</div></div></div></div>
-      <div class="cc"><div class="ct">Posts sugeridos acumulados</div><div style="display:flex;align-items:flex-end;height:140px;gap:3px;padding:8px 4px 0"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:0.35;height:25%"></div><div style="font-size:9px;color:#aaa">Seg</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:0.35;height:50%"></div><div style="font-size:9px;color:#aaa">Ter</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:0.35;height:50%"></div><div style="font-size:9px;color:#aaa">Qua</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:0.35;height:75%"></div><div style="font-size:9px;color:#aaa">Qui</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:0.35;height:75%"></div><div style="font-size:9px;color:#aaa">Sex</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;color:transparent">.</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:0.35;height:100%"></div><div style="font-size:9px;color:#aaa">Sab</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="font-size:10px;font-weight:600;color:#9b8ec4">4</div><div style="width:100%;border-radius:3px 3px 0 0;background:#9b8ec4;opacity:1;height:100%"></div><div style="font-size:9px;color:#aaa">Dom</div></div></div></div>
-    </div>
-  </div>
-
-  <!-- AGENDA <!-- AGENDA DIÁRIA -->
-  <div class="sec">
-    <div class="stitle" style="display:flex;align-items:center;justify-content:space-between">
-      📅 Agenda do mês
-      <div style="display:flex;gap:8px;align-items:center">
-        <button class="btn btno" onclick="prevMonth()" style="padding:4px 10px;font-size:12px">←</button>
-        <span id="agenda-month-label" style="font-size:12px;font-weight:500">Julho 2026</span>
-        <button class="btn btno" onclick="nextMonth()" style="padding:4px 10px;font-size:12px">→</button>
-      </div>
-    </div>
-    <div class="row" style="gap:14px;align-items:flex-start">
-      <div style="flex:1.4">
-        <div id="agenda-calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px"><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Dom</div><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Seg</div><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Ter</div><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Qua</div><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Qui</div><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Sex</div><div style="background:var(--surface);padding:5px 2px;text-align:center;font-size:10px;font-weight:600;color:var(--muted)">Sab</div><div style="background:var(--surface);min-height:44px;padding:4px"></div><div style="background:var(--surface);min-height:44px;padding:4px"></div><div onclick="selectAgendaDay(1)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">1</div></div><div onclick="selectAgendaDay(2)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">2</div></div><div onclick="selectAgendaDay(3)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">3</div></div><div onclick="selectAgendaDay(4)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">4</div></div><div onclick="selectAgendaDay(5)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">5</div></div><div onclick="selectAgendaDay(6)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">6</div></div><div onclick="selectAgendaDay(7)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">7</div></div><div onclick="selectAgendaDay(8)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">8</div></div><div onclick="selectAgendaDay(9)" style="background:#fdf3e3;padding:4px 3px;min-height:44px;cursor:pointer;border:1.5px solid #c9a96e"><div style="background:#1a1a18;color:#fff;width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600">9</div></div><div onclick="selectAgendaDay(10)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">10</div></div><div onclick="selectAgendaDay(11)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">11</div></div><div onclick="selectAgendaDay(12)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">12</div></div><div onclick="selectAgendaDay(13)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">13</div></div><div onclick="selectAgendaDay(14)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">14</div></div><div onclick="selectAgendaDay(15)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">15</div></div><div onclick="selectAgendaDay(16)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">16</div></div><div onclick="selectAgendaDay(17)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">17</div></div><div onclick="selectAgendaDay(18)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">18</div></div><div onclick="selectAgendaDay(19)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">19</div></div><div onclick="selectAgendaDay(20)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">20</div></div><div onclick="selectAgendaDay(21)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">21</div></div><div onclick="selectAgendaDay(22)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">22</div></div><div onclick="selectAgendaDay(23)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">23</div></div><div onclick="selectAgendaDay(24)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">24</div></div><div onclick="selectAgendaDay(25)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">25</div></div><div onclick="selectAgendaDay(26)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">26</div></div><div onclick="selectAgendaDay(27)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">27</div></div><div onclick="selectAgendaDay(28)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">28</div></div><div onclick="selectAgendaDay(29)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">29</div></div><div onclick="selectAgendaDay(30)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">30</div></div><div onclick="selectAgendaDay(31)" style="background:var(--surface);padding:4px 3px;min-height:44px;cursor:pointer"><div style="font-size:11px;color:var(--muted)">31</div></div><div style="background:var(--surface);min-height:44px;padding:4px"></div><div style="background:var(--surface);min-height:44px;padding:4px"></div></div>
-
-  <!-- FINANCE -->
-  <div class="sec">
-    <div class="stitle">💰 Finance</div>
-    <div class="grid g3" style="margin-bottom:14px">
-      <div class="card"><div class="cl">Receita total</div><div class="cv" id="fin-tot">€0</div></div>
-      <div class="card"><div class="cl">Despesas</div><div class="cv" id="fin-exp" style="color:var(--red)">€0</div></div>
-      <div class="card"><div class="cl">Lucro</div><div class="cv" id="fin-prf" style="color:var(--green)">€0</div></div>
-    </div>
-    <div class="row">
-      <div class="card" style="flex:2">
-        <div class="ct">Adicionar movimento</div>
-        <div class="ir">
-          <div class="field"><label>Descrição</label><input id="fd" type="text" placeholder="ex: Parceria Mango"></div>
-          <div class="field"><label>Valor €</label><input id="fa" type="number" placeholder="0" style="width:80px"></div>
-          <div class="field"><label>Tipo</label><select id="ft"><option value="income">Receita</option><option value="expense">Despesa</option></select></div>
-          <div class="field"><label>Marca</label><select id="fb"><option>Swift Delux</option><option>Influencer</option></select></div>
-          <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addFin()">+</button></div>
+      <div class="card">
+        <div style="font-size:12px;font-weight:500;margin-bottom:12px">Seguidores Swift Delux IG</div>
+        <div style="display:flex;align-items:flex-end;height:120px;gap:3px">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--swift);opacity:.3;border-radius:3px 3px 0 0;height:2%"></div><div style="font-size:8px;color:var(--muted)">J</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--swift);opacity:.3;border-radius:3px 3px 0 0;height:2%"></div><div style="font-size:8px;color:var(--muted)">F</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--swift);opacity:.3;border-radius:3px 3px 0 0;height:2%"></div><div style="font-size:8px;color:var(--muted)">M</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--swift);opacity:.3;border-radius:3px 3px 0 0;height:2%"></div><div style="font-size:8px;color:var(--muted)">A</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--swift);opacity:.3;border-radius:3px 3px 0 0;height:2%"></div><div style="font-size:8px;color:var(--muted)">M</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--swift);opacity:.3;border-radius:3px 3px 0 0;height:20%"></div><div style="font-size:8px;color:var(--muted)">J</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="font-size:9px;font-weight:600;color:var(--swift)">1.254</div><div style="width:100%;background:var(--swift);border-radius:3px 3px 0 0;height:100%"></div><div style="font-size:8px;color:var(--muted)">J</div></div>
         </div>
-        <div id="fin-list"></div>
       </div>
-      <div class="cc"><div class="ct">Distribuição</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
-    </div>
-  </div>
-
-  <!-- CONQUISTAS -->
-  <div class="sec"><div class="stitle">🏆 Conquistas</div><div class="achiev" id="ach-list"></div></div>
-
-  <!-- REPORTS -->
-  <div class="sec">
-    <div class="stitle">📋 Relatório mensal com IA</div>
-    <div class="card">
-      <div class="ir">
-        <div class="field"><label>Mês</label><select id="rpt-m"><option>Janeiro 2026</option><option>Fevereiro 2026</option><option>Março 2026</option><option>Abril 2026</option><option>Maio 2026</option><option>Junho 2026</option><option selected>Julho 2026</option></select></div>
-        <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="genReport()">✦ Gerar</button></div>
-      </div>
-      <div id="rpt-out" style="margin-top:12px;line-height:1.7;font-size:13px;color:var(--muted)">O relatório aparece aqui.</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ EMAILS ═══ -->
-<div class="page" id="page-emails">
-  <div class="ph"><div><h1>✉ Emails</h1><div class="meta">Processados pelo agente — últimas 24h</div></div></div>
-  <div class="sec">
-    <div class="tabs">
-      <div class="tab active" onclick="filterEmails('todos',this)">Todos</div>
-      <div class="tab" onclick="filterEmails('urgente',this)">Urgentes</div>
-      <div class="tab" onclick="filterEmails('cliente',this)">Clientes</div>
-      <div class="tab" onclick="filterEmails('fornecedor',this)">Fornecedores</div>
-    </div>
-    <div id="email-list"><div class="alert">O agente de email ainda não processou nenhum email. Corre o workflow no GitHub para começar.</div></div>
-  </div>
-</div>
-
-<!-- ═══ ANALYTICS ═══ -->
-<div class="page" id="page-analytics">
-  <div class="ph"><div><h1>Analytics</h1><div class="meta">Visão geral das duas marcas</div></div></div>
-  <div class="row sec">
-    <div class="cc"><div class="ct">Emails por dia</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
-    <div class="cc"><div class="ct">Posts sugeridos</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
-  </div>
-  <div class="row sec">
-    <div class="cc"><div class="ct">Parcerias por mês</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
-    <div class="cc"><div class="ct">Receita por mês (€)</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
-  </div>
-</div>
-
-<!-- ═══ FINANCE ═══ -->
-<div class="page" id="page-finance">
-  <div class="ph"><div><h1>Finance</h1></div></div>
-  <div class="grid g3 sec">
-    <div class="card"><div class="cl">💰 Receita total</div><div class="cv" id="fin-tot">€0</div></div>
-    <div class="card"><div class="cl">📉 Despesas</div><div class="cv" id="fin-exp" style="color:var(--red)">€0</div></div>
-    <div class="card"><div class="cl">✓ Lucro</div><div class="cv" id="fin-prf" style="color:var(--green)">€0</div></div>
-  </div>
-  <div class="row sec">
-    <div class="card" style="flex:2">
-      <div class="ct">Adicionar</div>
-      <div class="ir">
-        <div class="field"><label>Descrição</label><input id="fd" type="text" placeholder="ex: Parceria Mango"></div>
-        <div class="field"><label>Valor €</label><input id="fa" type="number" placeholder="0"></div>
-        <div class="field"><label>Tipo</label><select id="ft"><option value="income">Receita</option><option value="expense">Despesa</option></select></div>
-        <div class="field"><label>Marca</label><select id="fb"><option>Swift Delux</option><option>Influencer</option></select></div>
-        <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addFin()">+</button></div>
-      </div>
-      <div id="fin-list"></div>
-    </div>
-    <div class="cc"><div class="ct">Distribuição</div><div class="cw"><div style="height:170px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">Gráfico disponível em desktop</div></div></div>
-  </div>
-</div>
-
-<!-- ═══ REPORTS ═══ -->
-<div class="page" id="page-reports">
-  <div class="ph"><div><h1>Monthly Reports</h1></div></div>
-  <div class="card sec">
-    <div class="ct">Gerar relatório com IA</div>
-    <div class="ir">
-      <div class="field"><label>Mês</label><select id="rpt-m"><option>Janeiro 2026</option><option>Fevereiro 2026</option><option>Março 2026</option><option>Abril 2026</option><option>Maio 2026</option><option>Junho 2026</option><option selected>Julho 2026</option></select></div>
-      <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="genReport()">✦ Gerar</button></div>
-    </div>
-    <div id="rpt-out" style="margin-top:14px;line-height:1.7;font-size:13px;color:var(--muted)">O relatório aparece aqui.</div>
-  </div>
-</div>
-
-<!-- ═══ SWIFT DELUX — FEED ═══ -->
-<div class="page" id="page-sd-feed">
-  <div class="ph"><div><h1>Feed Planner <span class="badge badge-swift">Swift Delux</span></h1><div class="meta">Planeia o aspeto do feed do Instagram</div></div></div>
-  <div class="row">
-    <div>
-      <div class="stitle">Pré-visualização do feed</div>
-      <div class="feed-grid" id="feed-sd"></div>
-      <div class="hint mt12">Clica numa célula para adicionar cor/tipo de conteúdo</div>
-      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-        <span style="display:flex;align-items:center;gap:5px;font-size:11px"><span style="width:10px;height:10px;border-radius:2px;background:var(--swift);display:inline-block"></span>Produto</span>
-        <span style="display:flex;align-items:center;gap:5px;font-size:11px"><span style="width:10px;height:10px;border-radius:2px;background:#e8794a;display:inline-block"></span>Lifestyle</span>
-        <span style="display:flex;align-items:center;gap:5px;font-size:11px"><span style="width:10px;height:10px;border-radius:2px;background:#4a90e8;display:inline-block"></span>Parceria</span>
-        <span style="display:flex;align-items:center;gap:5px;font-size:11px"><span style="width:10px;height:10px;border-radius:2px;background:#9b8ec4;display:inline-block"></span>Repost</span>
-      </div>
-    </div>
-    <div style="flex:1.5">
-      <div class="stitle">Agenda de publicações</div>
-      <div class="ir">
-        <div class="field"><label>Data</label><input id="sd-cal-date" type="date"></div>
-        <div class="field"><label>Conteúdo</label><input id="sd-cal-title" type="text" placeholder="Descrição" style="width:180px"></div>
-        <div class="field"><label>Tipo</label>
-          <select id="sd-cal-type">
-            <option value="swift">Produto</option>
-            <option value="life">Lifestyle</option>
-            <option value="deal">Parceria</option>
-          </select>
+      <div class="card">
+        <div style="font-size:12px;font-weight:500;margin-bottom:12px">Seguidores @cris IG</div>
+        <div style="display:flex;align-items:flex-end;height:120px;gap:3px">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--cris);opacity:.3;border-radius:3px 3px 0 0;height:2%"></div><div style="font-size:8px;color:var(--muted)">J</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--cris);opacity:.3;border-radius:3px 3px 0 0;height:2%"></div><div style="font-size:8px;color:var(--muted)">F</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--cris);opacity:.3;border-radius:3px 3px 0 0;height:2%"></div><div style="font-size:8px;color:var(--muted)">M</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--cris);opacity:.3;border-radius:3px 3px 0 0;height:2%"></div><div style="font-size:8px;color:var(--muted)">A</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--cris);opacity:.3;border-radius:3px 3px 0 0;height:2%"></div><div style="font-size:8px;color:var(--muted)">M</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--cris);opacity:.3;border-radius:3px 3px 0 0;height:80%"></div><div style="font-size:8px;color:var(--muted)">J</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="font-size:9px;font-weight:600;color:var(--cris)">6.959</div><div style="width:100%;background:var(--cris);border-radius:3px 3px 0 0;height:100%"></div><div style="font-size:8px;color:var(--muted)">J</div></div>
         </div>
-        <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addAgendaSD()">+</button></div>
       </div>
-      <div id="agenda-sd"><div class="hint">Ainda sem publicações agendadas.</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ SWIFT DELUX — MÉTRICAS ═══ -->
-<div class="page" id="page-sd-metrics">
-  <div class="ph"><div><h1>Métricas <span class="badge badge-swift">Swift Delux</span></h1><div class="meta">Últimos 30 dias — 4 Jun a 3 Jul 2026</div></div></div>
-
-  <div class="grid g4 sec">
-    <div class="card"><div class="cl">Seguidores IG</div><div class="cv" id="sd-m-ig">1.254</div></div>
-    <div class="card"><div class="cl">Contas alcançadas</div><div class="cv">1.166</div></div>
-    <div class="card"><div class="cl">Atividade do perfil</div><div class="cv" style="color:var(--green)">+644%</div><div class="cd">vs mês anterior</div></div>
-    <div class="card"><div class="cl">Visitas ao perfil</div><div class="cv">66</div><div class="cd" style="color:var(--green)">+633%</div></div>
-  </div>
-
-  <div class="row sec">
-    <div class="card">
-      <div class="ct" style="margin-bottom:16px">Visualizações por tipo de conteúdo</div>
-      <div class="abar"><div class="abar-lbl"><span>🎬 Reels</span><span>44,3%</span></div><div class="abar-track"><div class="abar-fill" style="width:44%;background:var(--swift)"></div></div></div>
-      <div class="abar"><div class="abar-lbl"><span>📱 Stories</span><span>34,8%</span></div><div class="abar-track"><div class="abar-fill" style="width:35%;background:var(--swift)"></div></div></div>
-      <div class="abar"><div class="abar-lbl"><span>🖼️ Posts</span><span>21,0%</span></div><div class="abar-track"><div class="abar-fill" style="width:21%;background:var(--swift)"></div></div></div>
-      <div class="hint mt12">💡 Os Reels são o teu conteúdo com mais alcance — foca aqui!</div>
-    </div>
-    <div class="card">
-      <div class="ct" style="margin-bottom:16px">Origem das visualizações</div>
-      <div class="abar"><div class="abar-lbl"><span>👤 Seguidores</span><span>38,5%</span></div><div class="abar-track"><div class="abar-fill" style="width:38%;background:var(--swift)"></div></div></div>
-      <div class="abar"><div class="abar-lbl"><span>🌍 Não seguidores</span><span>61,5%</span></div><div class="abar-track"><div class="abar-fill" style="width:61%;background:#c9a96e88)"></div></div></div>
-      <div class="hint mt12">✅ 61,5% das visualizações são de pessoas novas — excelente alcance orgânico!</div>
     </div>
   </div>
 
+  <!-- AGENDA + NOTAS -->
   <div class="sec">
-    <div class="stitle">🌍 Países que te viram (visualizações)</div>
-    <div class="card">
-      <div class="row">
-        <div style="flex:1">
-          <div class="abar"><div class="abar-lbl"><span>🇵🇹 Portugal</span><span>26,9%</span></div><div class="abar-track"><div class="abar-fill" style="width:27%;background:var(--swift)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>🇮🇷 Irão</span><span>17,3%</span></div><div class="abar-track"><div class="abar-fill" style="width:17%;background:var(--swift)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>🇨🇾 Chipre</span><span>11,0%</span></div><div class="abar-track"><div class="abar-fill" style="width:11%;background:var(--swift)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>🇷🇴 Roménia</span><span>7,1%</span></div><div class="abar-track"><div class="abar-fill" style="width:7%;background:var(--swift)"></div></div></div>
-        </div>
-        <div style="flex:1;padding-left:20px">
-          <div style="background:var(--bg);border-radius:10px;padding:14px;font-size:13px;line-height:1.7">
-            <div style="font-weight:600;margin-bottom:8px">💡 Análise</div>
-            <div style="color:var(--muted);font-size:12px">Tens muita visibilidade internacional (Irão, Chipre, Roménia). Conteúdo em inglês pode ajudar a converter estes visitantes em seguidores. Portugal continua a ser o teu mercado principal.</div>
+    <div class="sec-title" style="justify-content:space-between">
+      📅 Agenda — Julho 2026
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-o" onclick="prevM()" style="padding:4px 10px;font-size:11px">←</button>
+        <span id="cal-label" style="font-size:11px;font-weight:500;align-self:center">Julho 2026</span>
+        <button class="btn btn-o" onclick="nextM()" style="padding:4px 10px;font-size:11px">→</button>
+      </div>
+    </div>
+    <div class="row" style="align-items:flex-start">
+      <div style="flex:1.5">
+        <div class="cal-grid" id="cal"></div>
+        <div style="margin-top:12px" id="cal-day-panel">
+          <div style="font-size:11px;color:var(--muted);font-weight:500;margin-bottom:8px" id="cal-day-label">Seleciona um dia</div>
+          <div id="cal-add-form" style="display:none">
+            <div class="form-row">
+              <div class="field" style="flex:1"><label>Tarefa</label><input id="cal-task" type="text" placeholder="ex: Publicar Reel Swift Delux"></div>
+              <div class="field"><label>Tipo</label><select id="cal-type"><option value="swift">Swift Delux</option><option value="cris">Cristiana</option><option value="deal">Parceria</option><option value="task">Tarefa</option></select></div>
+              <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addTask()">+</button></div>
+            </div>
           </div>
+          <div id="cal-tasks"></div>
         </div>
+      </div>
+      <div style="flex:1">
+        <div class="sec-title">📝 Notas rápidas</div>
+        <textarea id="notas" placeholder="Escreve aqui as tuas notas..." oninput="saveN()"></textarea>
+        <div class="hint">Guardado automaticamente</div>
       </div>
     </div>
   </div>
 
+  <!-- RELATÓRIO -->
   <div class="sec">
-    <div class="stitle">⏰ Melhores horários para publicar</div>
+    <div class="sec-title">📋 Relatório mensal</div>
     <div class="card">
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <div style="flex:1;min-width:140px;background:var(--bg);border-radius:10px;padding:14px;border-left:3px solid var(--swift)">
-          <div style="font-size:18px;margin-bottom:6px">🏆</div>
-          <div style="font-size:13px;font-weight:600">18h–21h</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:3px">Pico máximo do teu público</div>
-        </div>
-        <div style="flex:1;min-width:140px;background:var(--bg);border-radius:10px;padding:14px">
-          <div style="font-size:18px;margin-bottom:6px">🎬</div>
-          <div style="font-size:13px;font-weight:600">Reels primeiro</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:3px">44% das views — formato prioritário</div>
-        </div>
-        <div style="flex:1;min-width:140px;background:var(--bg);border-radius:10px;padding:14px">
-          <div style="font-size:18px;margin-bottom:6px">🌍</div>
-          <div style="font-size:13px;font-weight:600">Inglês ajuda</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:3px">61% alcance internacional — legendas bilíngue</div>
-        </div>
+      <div class="form-row">
+        <div class="field"><label>Mês</label><select id="rpt-m"><option>Janeiro 2026</option><option>Fevereiro 2026</option><option>Março 2026</option><option>Abril 2026</option><option>Maio 2026</option><option>Junho 2026</option><option selected>Julho 2026</option></select></div>
+        <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="genRpt()">✦ Gerar com IA</button></div>
       </div>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="stitle">Atualizar seguidores</div>
-    <div class="card">
-      <div class="ir">
-        <div class="field"><label>Seguidores IG</label><input id="sd-ig-f" type="number" placeholder="ex: 1254"></div>
-        <div class="field"><label>Seguidores TikTok</label><input id="sd-tt-f" type="number" placeholder="ex: 2000"></div>
-        <div class="field"><label>Posts publicados</label><input id="sd-posts-f" type="number" placeholder="ex: 24"></div>
-        <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="saveSdMetrics()">Guardar</button></div>
-      </div>
+      <div id="rpt-out" style="font-size:13px;color:var(--muted);line-height:1.7">O relatório aparece aqui.</div>
     </div>
   </div>
 </div>
 
-<!-- ═══ SWIFT DELUX — GOALS ═══ -->
-<div class="page" id="page-sd-goals">
-  <div class="ph"><div><h1>Goals <span class="badge badge-swift">Swift Delux</span></h1></div></div>
-  <div class="card sec">
-    <div class="goal"><div class="goal-hd"><div class="goal-name">10.000 seguidores Instagram</div><div class="goal-pct"><span id="gsd-ig-v">0</span> / 10.000</div></div><div class="goal-bg"><div class="goal-fill" id="gsd-ig-b" style="width:0%;background:var(--swift)"></div></div></div>
-    <div class="goal mt12"><div class="goal-hd"><div class="goal-name">5.000 seguidores TikTok</div><div class="goal-pct"><span id="gsd-tt-v">0</span> / 5.000</div></div><div class="goal-bg"><div class="goal-fill" id="gsd-tt-b" style="width:0%;background:var(--swift)"></div></div></div>
-    <div class="goal mt12"><div class="goal-hd"><div class="goal-name">10 parcerias fechadas</div><div class="goal-pct"><span id="gsd-d-v">0</span> / 10</div></div><div class="goal-bg"><div class="goal-fill" id="gsd-d-b" style="width:0%;background:var(--swift)"></div></div></div>
-    <div class="goal mt12"><div class="goal-hd"><div class="goal-name">Receita anual €12.000</div><div class="goal-pct">€<span id="gsd-r-v">0</span> / €12.000</div></div><div class="goal-bg"><div class="goal-fill" id="gsd-r-b" style="width:0%;background:var(--swift)"></div></div></div>
-  </div>
-  <div class="sec"><div class="stitle">Alertas</div><div id="sd-alerts"></div></div>
+<!-- EMAILS -->
+<div class="page" id="page-emails">
+  <div class="ph"><h1>✉ Emails</h1><p>Processados pelo agente — últimas 24h</p></div>
+  <div id="email-list"><div class="hint">O agente de email ainda não processou emails. Corre o workflow no GitHub para começar.</div></div>
 </div>
 
-<!-- ═══ SWIFT DELUX — BRAND DEALS ═══ -->
-<div class="page" id="page-sd-crm">
-  <div class="ph"><div><h1>Brand Deals <span class="badge badge-swift">Swift Delux</span></h1></div></div>
-  <div class="ir sec">
-    <div class="field"><label>Marca</label><input id="crm-b" type="text" placeholder="Nome"></div>
-    <div class="field"><label>Email</label><input id="crm-e" type="email" placeholder="email@marca.com"></div>
-    <div class="field"><label>Estado</label><select id="crm-s"><option>Quero contactar</option><option>Email enviado</option><option>Sem resposta</option><option>Em negociação</option><option>Parceria fechada</option><option>Conteúdo publicado</option><option>Pagamento recebido</option></select></div>
-    <div class="field"><label>Valor €</label><input id="crm-v" type="number" placeholder="0"></div>
-    <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addCRM()">+ Adicionar</button></div>
-  </div>
-  <div class="ow"><div class="pipeline" id="pipeline"></div></div>
-</div>
-
-<!-- ═══ SWIFT DELUX — MEDIA KIT ═══ -->
-<div class="page" id="page-sd-mediakit">
-  <div class="ph"><div><h1>Media Kit & Logos <span class="badge badge-swift">Swift Delux</span></h1></div></div>
-  <div class="hint" style="margin-bottom:16px">💡 Guarda os ficheiros no Google Drive/Dropbox e adiciona os links aqui. Ficam guardados nesta sessão.</div>
-
-  <div class="sec">
-    <div class="stitle">🎨 Logos & Identidade</div>
-    <div class="ir">
-      <div class="field"><label>Nome do ficheiro</label><input id="sd-file-name" type="text" placeholder="ex: Logo principal PNG" style="width:200px"></div>
-      <div class="field"><label>Link (Google Drive, Dropbox...)</label><input id="sd-file-url" type="url" placeholder="https://drive.google.com/..." style="width:300px"></div>
-      <div class="field"><label>Categoria</label>
-        <select id="sd-file-cat">
-          <option>Logo</option>
-          <option>Paleta de cores</option>
-          <option>Template</option>
-          <option>Media Kit PDF</option>
-          <option>Fotografia</option>
-          <option>Vídeo</option>
-          <option>Contrato</option>
-          <option>Outro</option>
-        </select>
-      </div>
-      <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addSdFile()">+ Adicionar</button></div>
-    </div>
-    <div id="sd-files-list"></div>
-  </div>
-
-  <div class="sec">
-    <div class="stitle">🎨 Paleta de Cores Swift Delux</div>
-    <div class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
-      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#c9a96e;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Dourado</div><div style="font-size:10px;color:var(--muted)">#C9A96E</div></div>
-      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#1a1a18;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Preto</div><div style="font-size:10px;color:var(--muted)">#1A1A18</div></div>
-      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#f4f1ea;border:1px solid #eee;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Creme</div><div style="font-size:10px;color:var(--muted)">#F4F1EA</div></div>
-      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#f8f8f6;border:1px solid #eee;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Fundo</div><div style="font-size:10px;color:var(--muted)">#F8F8F6</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ CRISTIANA — FEED ═══ -->
-<div class="page" id="page-cr-feed">
-  <div class="ph"><div><h1>Feed Planner <span class="badge badge-cris">@cris</span></h1><div class="meta">Planeia o aspeto do feed do Instagram</div></div></div>
-  <div class="row">
-    <div>
-      <div class="stitle">Pré-visualização do feed</div>
-      <div class="feed-grid" id="feed-cr"></div>
-      <div class="hint mt12">Clica numa célula para adicionar tipo de conteúdo</div>
-    </div>
-    <div style="flex:1.5">
-      <div class="stitle">Agenda de publicações</div>
-      <div class="ir">
-        <div class="field"><label>Data</label><input id="cr-cal-date" type="date"></div>
-        <div class="field"><label>Conteúdo</label><input id="cr-cal-title" type="text" placeholder="Descrição" style="width:180px"></div>
-        <div class="field"><label>Tipo</label>
-          <select id="cr-cal-type">
-            <option value="cris">Lifestyle</option>
-            <option value="deal">Parceria</option>
-            <option value="swift">Swift Delux</option>
-          </select>
-        </div>
-        <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addAgendaCR()">+</button></div>
-      </div>
-      <div id="agenda-cr"><div class="hint">Ainda sem publicações agendadas.</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ CRISTIANA — MÉTRICAS ═══ -->
-<div class="page" id="page-cr-metrics">
-  <div class="ph"><div><h1>Métricas <span class="badge badge-cris">@cris</span></h1></div></div>
-
-  <div class="grid g4 sec">
-    <div class="card"><div class="cl">Seguidores IG</div><div class="cv" id="cr-m-ig">—</div></div>
-    <div class="card"><div class="cl">Seguidores TikTok</div><div class="cv" id="cr-m-tt">—</div></div>
-    <div class="card"><div class="cl">Engagement rate</div><div class="cv" id="cr-m-eng">—</div></div>
-    <div class="card"><div class="cl">Parcerias ativas</div><div class="cv" id="cr-m-deals">0</div></div>
-  </div>
-
-  <div class="sec">
-    <div class="card">
-      <div class="ct">Atualizar métricas manualmente</div>
-      <div class="ir">
-        <div class="field"><label>Seguidores IG</label><input id="cr-ig-f" type="number" placeholder="ex: 6959"></div>
-        <div class="field"><label>Seguidores TikTok</label><input id="cr-tt-f" type="number" placeholder="ex: 5000"></div>
-        <div class="field"><label>Engagement rate %</label><input id="cr-eng-f" type="text" placeholder="ex: 4.2%" style="width:100px"></div>
-        <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="saveCrMetrics()">Guardar</button></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="stitle">👥 Audiência — @cristianarodriguesss</div>
-    <div class="card">
-      <div class="ct" style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
-        Dados da audiência
-        <button class="btn btno" onclick="editAudience('cr')" style="font-size:11px;padding:4px 10px">✏️ Editar</button>
-      </div>
-      <div class="row">
-        <div>
-          <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px">GÉNERO</div>
-          <div class="abar"><div class="abar-lbl"><span>Feminino</span><span id="cr-aud-f-val">—</span></div><div class="abar-track"><div class="abar-fill" id="cr-aud-f-bar" style="width:0%;background:var(--cris)"></div></div></div>
-          <div class="abar"><div class="abar-lbl"><span>Masculino</span><span id="cr-aud-m-val">—</span></div><div class="abar-track"><div class="abar-fill" id="cr-aud-m-bar" style="width:0%;background:#ddd"></div></div></div>
-        </div>
-        <div>
-          <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px">TOP PAÍSES</div>
-          <div id="cr-countries-list"><div class="hint">Ainda sem dados — clica em Editar</div></div>
-        </div>
-        <div>
-          <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px">FAIXAS ETÁRIAS</div>
-          <div id="cr-ages-list"><div class="hint">Ainda sem dados — clica em Editar</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="stitle">⏰ Melhores horários para publicar</div>
-    <div class="card">
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <div style="flex:1;min-width:160px;background:var(--bg);border-radius:10px;padding:14px;border-left:3px solid var(--cris)">
-          <div style="font-size:20px;margin-bottom:6px">🏆</div>
-          <div style="font-size:13px;font-weight:600">18h00 – 21h00</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:3px">Pico máximo real do teu público • Reels e posts</div>
-        </div>
-        <div style="flex:1;min-width:160px;background:var(--bg);border-radius:10px;padding:14px">
-          <div style="font-size:20px;margin-bottom:6px">☀️</div>
-          <div style="font-size:13px;font-weight:500">15h00 – 18h00</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:3px">Segundo pico • Bom para stories e carrosséis</div>
-        </div>
-        <div style="flex:1;min-width:160px;background:var(--bg);border-radius:10px;padding:14px">
-          <div style="font-size:20px;margin-bottom:6px">🌅</div>
-          <div style="font-size:13px;font-weight:500">12h00 – 13h00</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:3px">Pausa do almoço • Bom para posts de lifestyle</div>
-        </div>
-        <div style="flex:1;min-width:160px;background:var(--bg);border-radius:10px;padding:14px">
-          <div style="font-size:20px;margin-bottom:6px">💡</div>
-          <div style="font-size:13px;font-weight:500">Evita: 3h–9h</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:3px">Atividade muito baixa no teu público • Não publiques</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- AUDIENCE EDIT MODAL -->
-<div id="aud-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center">
-  <div style="background:#fff;border-radius:16px;padding:24px;width:460px;max-width:90vw;max-height:85vh;overflow-y:auto">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
-      <div style="font-size:15px;font-weight:600">Editar audiência</div>
-      <button onclick="document.getElementById('aud-modal').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;color:#888">×</button>
-    </div>
-    <div style="margin-bottom:14px">
-      <label style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:5px">% Feminino</label>
-      <input id="aud-female" type="number" placeholder="ex: 72" style="width:100%;border:1px solid #e8e8e6;border-radius:8px;padding:8px 10px;font-size:13px;outline:none">
-    </div>
-    <div style="margin-bottom:14px">
-      <label style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:5px">Top países (formato: Portugal:60,Brasil:25,Espanha:8)</label>
-      <input id="aud-countries" type="text" placeholder="Portugal:60,Brasil:25,Espanha:8" style="width:100%;border:1px solid #e8e8e6;border-radius:8px;padding:8px 10px;font-size:13px;outline:none">
-    </div>
-    <div style="margin-bottom:18px">
-      <label style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:5px">Faixas etárias (formato: 18-24:22,25-34:45,35-44:21,45+:12)</label>
-      <input id="aud-ages" type="text" placeholder="18-24:22,25-34:45,35-44:21,45+:12" style="width:100%;border:1px solid #e8e8e6;border-radius:8px;padding:8px 10px;font-size:13px;outline:none">
-    </div>
-    <div style="display:flex;gap:8px">
-      <button onclick="document.getElementById('aud-modal').style.display='none'" style="flex:1;padding:9px;border:1px solid #e8e8e6;border-radius:8px;background:transparent;cursor:pointer;font-size:13px">Cancelar</button>
-      <button onclick="saveAudience()" style="flex:1;padding:9px;border:none;border-radius:8px;background:#1a1a18;color:#fff;cursor:pointer;font-size:13px;font-weight:500">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ CRISTIANA — GOALS ═══ -->
-<div class="page" id="page-cr-goals">
-  <div class="ph"><div><h1>Goals <span class="badge badge-cris">@cris</span></h1></div></div>
-  <div class="card sec">
-    <div class="goal"><div class="goal-hd"><div class="goal-name">50.000 seguidores Instagram</div><div class="goal-pct"><span id="gcr-ig-v">0</span> / 50.000</div></div><div class="goal-bg"><div class="goal-fill" id="gcr-ig-b" style="width:0%;background:var(--cris)"></div></div></div>
-    <div class="goal mt12"><div class="goal-hd"><div class="goal-name">20.000 seguidores TikTok</div><div class="goal-pct"><span id="gcr-tt-v">0</span> / 20.000</div></div><div class="goal-bg"><div class="goal-fill" id="gcr-tt-b" style="width:0%;background:var(--cris)"></div></div></div>
-    <div class="goal mt12"><div class="goal-hd"><div class="goal-name">Receita anual €12.000</div><div class="goal-pct">€<span id="gcr-r-v">0</span> / €12.000</div></div><div class="goal-bg"><div class="goal-fill" id="gcr-r-b" style="width:0%;background:var(--cris)"></div></div></div>
-  </div>
-</div>
-
-<!-- ═══ CRISTIANA — PARCERIAS ═══ -->
-<div class="page" id="page-cr-deals">
-  <div class="ph"><div><h1>Parcerias <span class="badge badge-cris">@cris</span></h1></div></div>
-  <div class="ir sec">
-    <div class="field"><label>Marca</label><input id="crd-b" type="text" placeholder="Nome"></div>
-    <div class="field"><label>Email</label><input id="crd-e" type="email" placeholder="email@marca.com"></div>
-    <div class="field"><label>Estado</label><select id="crd-s"><option>Quero contactar</option><option>Email enviado</option><option>Sem resposta</option><option>Em negociação</option><option>Parceria fechada</option><option>Conteúdo publicado</option><option>Pagamento recebido</option></select></div>
-    <div class="field"><label>Valor €</label><input id="crd-v" type="number" placeholder="0"></div>
-    <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addCRD()">+ Adicionar</button></div>
-  </div>
-  <div class="ow"><div class="pipeline" id="pipeline-cr"></div></div>
-</div>
-
-<!-- ═══ CRISTIANA — MEDIA KIT ═══ -->
-<div class="page" id="page-cr-mediakit">
-  <div class="ph"><div><h1>Media Kit <span class="badge badge-cris">@cris</span></h1></div></div>
-  <div class="hint" style="margin-bottom:16px">💡 Guarda os ficheiros no Google Drive/Dropbox e adiciona os links aqui.</div>
-
-  <div class="sec">
-    <div class="stitle">📁 Ficheiros & Recursos</div>
-    <div class="ir">
-      <div class="field"><label>Nome</label><input id="cr-file-name" type="text" placeholder="ex: Media Kit 2026 PDF" style="width:200px"></div>
-      <div class="field"><label>Link</label><input id="cr-file-url" type="url" placeholder="https://drive.google.com/..." style="width:300px"></div>
-      <div class="field"><label>Categoria</label>
-        <select id="cr-file-cat">
-          <option>Media Kit PDF</option>
-          <option>Fotografia</option>
-          <option>Vídeo</option>
-          <option>Contrato</option>
-          <option>Logo / Branding</option>
-          <option>Outro</option>
-        </select>
-      </div>
-      <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addCrFile()">+ Adicionar</button></div>
-    </div>
-    <div id="cr-files-list"></div>
-  </div>
-
-  <div class="sec">
-    <div class="stitle">🎨 Paleta de Cores @cris</div>
-    <div class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
-      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#9b8ec4;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Lavanda</div><div style="font-size:10px;color:var(--muted)">#9B8EC4</div></div>
-      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#1a1a18;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Preto</div><div style="font-size:10px;color:var(--muted)">#1A1A18</div></div>
-      <div style="text-align:center"><div style="width:60px;height:60px;border-radius:10px;background:#f4f1ea;border:1px solid #eee;margin:0 auto 6px"></div><div style="font-size:11px;font-weight:500">Creme</div><div style="font-size:10px;color:var(--muted)">#F4F1EA</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ CRISTIANA — WISHLIST ═══ -->
-<div class="page" id="page-cr-wishlist">
-  <div class="ph"><div><h1>Wishlist de Marcas <span class="badge badge-cris">@cris</span></h1></div></div>
-  <div class="ir sec">
-    <div class="field"><label>Marca</label><input id="wl-b" type="text" placeholder="ex: Zara"></div>
-    <div class="field"><label>Nicho</label><input id="wl-n" type="text" placeholder="ex: Moda"></div>
-    <div class="field"><label>Instagram</label><input id="wl-ig" type="text" placeholder="@marca"></div>
-    <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addWish()">+ Adicionar</button></div>
-  </div>
-  <div id="wishlist-list"><div class="hint">Ainda vazia.</div></div>
-</div>
-
-<!-- ═══ CONTENT PLANNER ═══ -->
+<!-- CONTENT PLANNER -->
 <div class="page" id="page-content">
-  <div class="ph"><div><h1>Content Planner</h1><div class="meta" id="cal-lbl"></div></div></div>
-  <div class="ir sec">
-    <div class="field"><label>Data</label><input id="cal-d" type="date"></div>
-    <div class="field"><label>Conteúdo</label><input id="cal-t" type="text" placeholder="Descrição" style="width:200px"></div>
-    <div class="field"><label>Marca</label><select id="cal-type"><option value="swift">Swift Delux</option><option value="cris">Influencer</option><option value="deal">Parceria</option></select></div>
-    <div class="field" style="justify-content:flex-end"><button class="btn btnp" onclick="addCalEvent()">+ Agendar</button></div>
-  </div>
-  <div class="card">
-    <div style="display:flex;gap:14px;margin-bottom:12px;font-size:11px">
-      <span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:2px;background:var(--swift);display:inline-block"></span> Swift Delux</span>
-      <span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:2px;background:var(--cris);display:inline-block"></span> Influencer</span>
-      <span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:2px;background:var(--green);display:inline-block"></span> Parceria</span>
+  <div class="ph"><h1>📅 Content Planner</h1><p>Calendário editorial das duas marcas</p></div>
+  <div class="sec">
+    <div class="form-row">
+      <div class="field"><label>Data</label><input id="cp-date" type="date"></div>
+      <div class="field" style="flex:1"><label>Conteúdo</label><input id="cp-title" type="text" placeholder="Descrição do post/story/reel"></div>
+      <div class="field"><label>Marca</label><select id="cp-brand"><option value="swift">Swift Delux</option><option value="cris">Cristiana</option><option value="deal">Parceria</option></select></div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addCP()">+ Agendar</button></div>
     </div>
-    <div id="calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden"></div>
+    <div class="card">
+      <div style="display:flex;gap:12px;margin-bottom:10px;font-size:11px">
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:var(--swift);display:inline-block"></span>Swift Delux</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:var(--cris);display:inline-block"></span>Cristiana</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:var(--green);display:inline-block"></span>Parceria</span>
+      </div>
+      <div class="cal-grid" id="cp-cal"></div>
+    </div>
+    <div class="sec-title mt16">Publicações agendadas</div>
+    <div id="cp-list"><div class="hint">Sem publicações agendadas.</div></div>
   </div>
 </div>
 
-<!-- ═══ LIBRARY ═══ -->
-<div class="page" id="page-library">
-  <div class="ph"><div><h1>Biblioteca</h1></div></div>
-  <div class="mk-grid">
-    <div class="mk-item"><div class="mk-icon">🎨</div><div class="mk-name">Logos</div></div>
-    <div class="mk-item"><div class="mk-icon">📐</div><div class="mk-name">Templates</div></div>
-    <div class="mk-item"><div class="mk-icon">📋</div><div class="mk-name">Media Kits</div></div>
-    <div class="mk-item"><div class="mk-icon">📄</div><div class="mk-name">Contratos</div></div>
-    <div class="mk-item"><div class="mk-icon">🖼️</div><div class="mk-name">Fotos</div></div>
-    <div class="mk-item"><div class="mk-icon">🎬</div><div class="mk-name">Vídeos</div></div>
-    <div class="mk-item"><div class="mk-icon">📁</div><div class="mk-name">Documentos</div></div>
-    <div class="mk-item"><div class="mk-icon">🔗</div><div class="mk-name">Links úteis</div></div>
+<!-- SD FEED -->
+<div class="page" id="page-sd-feed">
+  <div class="ph"><h1>Feed Planner <span class="tag tag-swift">Swift Delux</span></h1><p>Planeia o aspeto do feed do Instagram</p></div>
+  <div class="row" style="align-items:flex-start">
+    <div>
+      <div class="sec-title">Pré-visualização</div>
+      <div class="feed-grid" id="feed-sd"></div>
+      <div class="hint mt8">Clica para adicionar tipo de conteúdo</div>
+      <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px"><span style="width:8px;height:8px;border-radius:2px;background:var(--swift);display:inline-block"></span>Produto</span>
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px"><span style="width:8px;height:8px;border-radius:2px;background:var(--orange);display:inline-block"></span>Lifestyle</span>
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px"><span style="width:8px;height:8px;border-radius:2px;background:var(--blue);display:inline-block"></span>Parceria</span>
+      </div>
+    </div>
+    <div style="flex:1">
+      <div class="sec-title">Agenda de publicações</div>
+      <div class="form-row">
+        <div class="field"><label>Data</label><input id="sd-ag-date" type="date"></div>
+        <div class="field" style="flex:1"><label>Conteúdo</label><input id="sd-ag-title" type="text" placeholder="Descrição"></div>
+        <div class="field"><label>Tipo</label><select id="sd-ag-type"><option value="swift">Produto</option><option value="life">Lifestyle</option><option value="deal">Parceria</option></select></div>
+        <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addSdAg()">+</button></div>
+      </div>
+      <div id="sd-agenda"></div>
+    </div>
   </div>
 </div>
 
-<!-- IG SETUP MODAL -->
-<div id="ig-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center">
-  <div style="background:#fff;border-radius:16px;padding:28px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-      <h2 style="font-size:16px;font-weight:600">Ligar Instagram automaticamente</h2>
-      <button onclick="document.getElementById('ig-modal').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;color:#888">×</button>
+<!-- SD METRICS -->
+<div class="page" id="page-sd-metrics">
+  <div class="ph"><h1>Métricas <span class="tag tag-swift">Swift Delux</span></h1><p>Últimos 30 dias — 4 Jun a 3 Jul 2026</p></div>
+  <div class="grid g4">
+    <div class="card"><div class="label">Seguidores IG</div><div class="val">1.254</div></div>
+    <div class="card"><div class="label">Contas alcançadas</div><div class="val">1.166</div></div>
+    <div class="card"><div class="label">Atividade perfil</div><div class="val" style="color:var(--green)">+644%</div><div class="sub up">vs mês anterior</div></div>
+    <div class="card"><div class="label">Visitas ao perfil</div><div class="val">66</div><div class="sub up">+633%</div></div>
+  </div>
+  <div class="row sec">
+    <div class="card">
+      <div class="sec-title">Visualizações por tipo</div>
+      <div class="bar-wrap"><div class="bar-row"><span>🎬 Reels</span><span>44,3%</span></div><div class="bar-track"><div class="bar-fill" style="width:44%;background:var(--swift)"></div></div></div>
+      <div class="bar-wrap"><div class="bar-row"><span>📱 Stories</span><span>34,8%</span></div><div class="bar-track"><div class="bar-fill" style="width:35%;background:var(--swift)"></div></div></div>
+      <div class="bar-wrap"><div class="bar-row"><span>🖼️ Posts</span><span>21,0%</span></div><div class="bar-track"><div class="bar-fill" style="width:21%;background:var(--swift)"></div></div></div>
+      <div class="hint mt8">💡 Os Reels têm mais alcance — foca aqui!</div>
     </div>
-    <div style="font-size:13px;line-height:1.7;color:#444">
-      <p style="margin-bottom:12px">Para teres métricas automáticas precisas de ligar o Instagram Graph API. Aqui estão os passos:</p>
-      <div style="background:#f7f7f5;border-radius:10px;padding:14px;margin-bottom:10px">
-        <div style="font-weight:600;margin-bottom:4px">Passo 1 — Conta Profissional</div>
-        <div>A conta do Instagram tem de ser <b>Profissional</b> (Business ou Creator). Settings → Account → Switch to Professional Account.</div>
-      </div>
-      <div style="background:#f7f7f5;border-radius:10px;padding:14px;margin-bottom:10px">
-        <div style="font-weight:600;margin-bottom:4px">Passo 2 — Criar App no Meta</div>
-        <div>Vai a <b>developers.facebook.com</b> → Criar App → tipo "Business" → adiciona o produto "Instagram Graph API".</div>
-      </div>
-      <div style="background:#f7f7f5;border-radius:10px;padding:14px;margin-bottom:10px">
-        <div style="font-weight:600;margin-bottom:4px">Passo 3 — Obter Access Token</div>
-        <div>No Graph API Explorer, gera um token com permissões: <code>instagram_basic, instagram_manage_insights, pages_read_engagement</code>.</div>
-      </div>
-      <div style="background:#f7f7f5;border-radius:10px;padding:14px;margin-bottom:10px">
-        <div style="font-weight:600;margin-bottom:4px">Passo 4 — Adicionar ao GitHub</div>
-        <div>Adiciona o token como secret <code>INSTAGRAM_TOKEN</code> e o ID da conta como <code>INSTAGRAM_ACCOUNT_ID</code>.</div>
-      </div>
-      <p style="color:var(--muted);font-size:11px;margin-top:12px">Este processo demora ~30-45 minutos. Posso guiar-te passo a passo quando quiseres.</p>
+    <div class="card">
+      <div class="sec-title">Origem das visualizações</div>
+      <div class="bar-wrap"><div class="bar-row"><span>👤 Seguidores</span><span>38,5%</span></div><div class="bar-track"><div class="bar-fill" style="width:38%;background:var(--swift)"></div></div></div>
+      <div class="bar-wrap"><div class="bar-row"><span>🌍 Não seguidores</span><span>61,5%</span></div><div class="bar-track"><div class="bar-fill" style="width:61%;background:var(--swift);opacity:.5"></div></div></div>
+      <div class="hint mt8">✅ 61,5% são pessoas novas — excelente alcance orgânico!</div>
     </div>
   </div>
+  <div class="sec">
+    <div class="sec-title">🌍 Países (visualizações)</div>
+    <div class="card">
+      <div class="bar-wrap"><div class="bar-row"><span>🇵🇹 Portugal</span><span>26,9%</span></div><div class="bar-track"><div class="bar-fill" style="width:27%;background:var(--swift)"></div></div></div>
+      <div class="bar-wrap"><div class="bar-row"><span>🇮🇷 Irão</span><span>17,3%</span></div><div class="bar-track"><div class="bar-fill" style="width:17%;background:var(--swift)"></div></div></div>
+      <div class="bar-wrap"><div class="bar-row"><span>🇨🇾 Chipre</span><span>11,0%</span></div><div class="bar-track"><div class="bar-fill" style="width:11%;background:var(--swift)"></div></div></div>
+      <div class="bar-wrap"><div class="bar-row"><span>🇷🇴 Roménia</span><span>7,1%</span></div><div class="bar-track"><div class="bar-fill" style="width:7%;background:var(--swift)"></div></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">⏰ Melhores horários</div>
+    <div class="row">
+      <div class="card" style="border-left:3px solid var(--swift)"><div style="font-size:18px;margin-bottom:4px">🏆</div><div style="font-size:13px;font-weight:600">18h–21h</div><div class="hint">Pico máximo</div></div>
+      <div class="card"><div style="font-size:18px;margin-bottom:4px">🎬</div><div style="font-size:13px;font-weight:600">Reels primeiro</div><div class="hint">44% das views</div></div>
+      <div class="card"><div style="font-size:18px;margin-bottom:4px">🌍</div><div style="font-size:13px;font-weight:600">Legendas EN/PT</div><div class="hint">61% internacional</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SD GOALS -->
+<div class="page" id="page-sd-goals">
+  <div class="ph"><h1>Goals <span class="tag tag-swift">Swift Delux</span></h1></div>
+  <div class="card sec">
+    <div class="goal"><div class="goal-row"><div class="goal-name">10.000 seguidores Instagram</div><div class="goal-pct">1.254 / 10.000</div></div><div class="bar-track"><div class="bar-fill" style="width:12.5%;background:var(--swift)"></div></div></div>
+    <div class="goal mt8"><div class="goal-row"><div class="goal-name">5.000 seguidores TikTok</div><div class="goal-pct">0 / 5.000</div></div><div class="bar-track"><div class="bar-fill" style="width:0%;background:var(--swift)"></div></div></div>
+    <div class="goal mt8"><div class="goal-row"><div class="goal-name">10 parcerias fechadas</div><div class="goal-pct" id="sd-g-deals">0 / 10</div></div><div class="bar-track"><div class="bar-fill" id="sd-g-deals-bar" style="width:0%;background:var(--swift)"></div></div></div>
+    <div class="goal mt8"><div class="goal-row"><div class="goal-name">Receita anual €12.000</div><div class="goal-pct">€0 / €12.000</div></div><div class="bar-track"><div class="bar-fill" style="width:0%;background:var(--swift)"></div></div></div>
+  </div>
+</div>
+
+<!-- SD DEALS -->
+<div class="page" id="page-sd-deals">
+  <div class="ph"><h1>Parcerias <span class="tag tag-swift">Swift Delux</span></h1></div>
+  <div class="form-row sec">
+    <div class="field"><label>Marca</label><input id="sd-d-brand" type="text" placeholder="Nome da marca"></div>
+    <div class="field"><label>Email</label><input id="sd-d-email" type="email" placeholder="email@marca.com"></div>
+    <div class="field"><label>Estado</label><select id="sd-d-status"><option>Quero contactar</option><option>Email enviado</option><option>Sem resposta</option><option>Em negociação</option><option>Parceria fechada</option><option>Publicado</option><option>Pago</option></select></div>
+    <div class="field"><label>Valor €</label><input id="sd-d-val" type="number" placeholder="0" style="width:80px"></div>
+    <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addDeal('sd')">+ Adicionar</button></div>
+  </div>
+  <div class="pipeline" id="pipe-sd"></div>
+</div>
+
+<!-- SD MEDIA KIT -->
+<div class="page" id="page-sd-kit">
+  <div class="ph"><h1>Media Kit <span class="tag tag-swift">Swift Delux</span></h1></div>
+  <div class="hint">💡 Adiciona links do Google Drive ou Dropbox — ficam guardados no browser.</div>
+  <div class="form-row mt8">
+    <div class="field"><label>Nome</label><input id="sdk-name" type="text" placeholder="ex: Logo principal PNG"></div>
+    <div class="field" style="flex:1"><label>Link</label><input id="sdk-url" type="url" placeholder="https://drive.google.com/..."></div>
+    <div class="field"><label>Tipo</label><select id="sdk-cat"><option>Logo</option><option>Template</option><option>Media Kit PDF</option><option>Fotografia</option><option>Vídeo</option><option>Contrato</option></select></div>
+    <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addFile('sd')">+ Adicionar</button></div>
+  </div>
+  <div id="sdk-list"><div class="hint">Ainda sem ficheiros.</div></div>
+</div>
+
+<!-- CR FEED -->
+<div class="page" id="page-cr-feed">
+  <div class="ph"><h1>Feed Planner <span class="tag tag-cris">@cris</span></h1><p>Planeia o aspeto do feed do Instagram</p></div>
+  <div class="row" style="align-items:flex-start">
+    <div>
+      <div class="sec-title">Pré-visualização</div>
+      <div class="feed-grid" id="feed-cr"></div>
+      <div class="hint mt8">Clica para adicionar tipo de conteúdo</div>
+    </div>
+    <div style="flex:1">
+      <div class="sec-title">Agenda de publicações</div>
+      <div class="form-row">
+        <div class="field"><label>Data</label><input id="cr-ag-date" type="date"></div>
+        <div class="field" style="flex:1"><label>Conteúdo</label><input id="cr-ag-title" type="text" placeholder="Descrição"></div>
+        <div class="field"><label>Tipo</label><select id="cr-ag-type"><option value="cris">Lifestyle</option><option value="deal">Parceria</option><option value="swift">Swift Delux</option></select></div>
+        <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addCrAg()">+</button></div>
+      </div>
+      <div id="cr-agenda"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CR METRICS -->
+<div class="page" id="page-cr-metrics">
+  <div class="ph"><h1>Métricas <span class="tag tag-cris">@cris</span></h1><p>Últimos 30 dias</p></div>
+  <div class="grid g4">
+    <div class="card"><div class="label">Seguidores IG</div><div class="val">6.959</div></div>
+    <div class="card"><div class="label">Visualizações</div><div class="val">7.513</div></div>
+    <div class="card"><div class="label">Seguidores efetivos</div><div class="val" style="color:var(--green)">+60</div></div>
+    <div class="card"><div class="label">Visitas ao perfil</div><div class="val">1.534</div></div>
+  </div>
+  <div class="row sec">
+    <div class="card">
+      <div class="sec-title">Visualizações por tipo</div>
+      <div class="bar-wrap"><div class="bar-row"><span>📱 Histórias</span><span>6.100</span></div><div class="bar-track"><div class="bar-fill" style="width:82%;background:var(--cris)"></div></div></div>
+      <div class="bar-wrap"><div class="bar-row"><span>🖼️ Publicações</span><span>1.300</span></div><div class="bar-track"><div class="bar-fill" style="width:17%;background:var(--cris)"></div></div></div>
+      <div class="bar-wrap"><div class="bar-row"><span>🎬 Reels</span><span>67</span></div><div class="bar-track"><div class="bar-fill" style="width:1%;background:var(--cris)"></div></div></div>
+      <div class="hint mt8">💡 Stories são o teu formato mais visto!</div>
+    </div>
+    <div class="card">
+      <div class="sec-title">Origem das visualizações</div>
+      <div class="bar-wrap"><div class="bar-row"><span>👤 Seguidores</span><span>33,4%</span></div><div class="bar-track"><div class="bar-fill" style="width:33%;background:var(--cris)"></div></div></div>
+      <div class="bar-wrap"><div class="bar-row"><span>🌍 Não seguidores</span><span>66,6%</span></div><div class="bar-track"><div class="bar-fill" style="width:66%;background:var(--cris);opacity:.5"></div></div></div>
+      <div class="hint mt8">✅ 66,6% são pessoas novas!</div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">👥 Audiência</div>
+    <div class="row">
+      <div class="card">
+        <div class="sec-title">Género</div>
+        <div class="bar-wrap"><div class="bar-row"><span>Feminino</span><span>54%</span></div><div class="bar-track"><div class="bar-fill" style="width:54%;background:var(--cris)"></div></div></div>
+        <div class="bar-wrap"><div class="bar-row"><span>Masculino</span><span>46%</span></div><div class="bar-track"><div class="bar-fill" style="width:46%;background:var(--light)"></div></div></div>
+      </div>
+      <div class="card">
+        <div class="sec-title">Países</div>
+        <div class="bar-wrap"><div class="bar-row"><span>🇵🇹 Portugal</span><span>64%</span></div><div class="bar-track"><div class="bar-fill" style="width:64%;background:var(--cris)"></div></div></div>
+        <div class="bar-wrap"><div class="bar-row"><span>🇧🇷 Brasil</span><span>24%</span></div><div class="bar-track"><div class="bar-fill" style="width:24%;background:var(--cris)"></div></div></div>
+        <div class="bar-wrap"><div class="bar-row"><span>🇫🇷 França</span><span>2%</span></div><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--cris)"></div></div></div>
+        <div class="bar-wrap"><div class="bar-row"><span>🇨🇭 Suíça</span><span>1%</span></div><div class="bar-track"><div class="bar-fill" style="width:1%;background:var(--cris)"></div></div></div>
+      </div>
+      <div class="card">
+        <div class="sec-title">Idades</div>
+        <div class="bar-wrap"><div class="bar-row"><span>13-17</span><span>5%</span></div><div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--cris)"></div></div></div>
+        <div class="bar-wrap"><div class="bar-row"><span>18-24</span><span>18%</span></div><div class="bar-track"><div class="bar-fill" style="width:18%;background:var(--cris)"></div></div></div>
+        <div class="bar-wrap"><div class="bar-row"><span>25-34</span><span>47%</span></div><div class="bar-track"><div class="bar-fill" style="width:47%;background:var(--cris)"></div></div></div>
+        <div class="bar-wrap"><div class="bar-row"><span>35-44</span><span>17%</span></div><div class="bar-track"><div class="bar-fill" style="width:17%;background:var(--cris)"></div></div></div>
+        <div class="bar-wrap"><div class="bar-row"><span>45-54</span><span>9%</span></div><div class="bar-track"><div class="bar-fill" style="width:9%;background:var(--cris)"></div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">⏰ Melhores horários</div>
+    <div class="row">
+      <div class="card" style="border-left:3px solid var(--cris)"><div style="font-size:18px;margin-bottom:4px">🏆</div><div style="font-size:13px;font-weight:600">18h–21h</div><div class="hint">Pico máximo real</div></div>
+      <div class="card"><div style="font-size:18px;margin-bottom:4px">☀️</div><div style="font-size:13px;font-weight:600">15h–18h</div><div class="hint">Segundo pico</div></div>
+      <div class="card"><div style="font-size:18px;margin-bottom:4px">🌅</div><div style="font-size:13px;font-weight:600">12h–13h</div><div class="hint">Pausa do almoço</div></div>
+      <div class="card"><div style="font-size:18px;margin-bottom:4px">📱</div><div style="font-size:13px;font-weight:600">Stories</div><div class="hint">Formato principal</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CR GOALS -->
+<div class="page" id="page-cr-goals">
+  <div class="ph"><h1>Goals <span class="tag tag-cris">@cris</span></h1></div>
+  <div class="card sec">
+    <div class="goal"><div class="goal-row"><div class="goal-name">50.000 seguidores Instagram</div><div class="goal-pct">6.959 / 50.000</div></div><div class="bar-track"><div class="bar-fill" style="width:14%;background:var(--cris)"></div></div></div>
+    <div class="goal mt8"><div class="goal-row"><div class="goal-name">20.000 seguidores TikTok</div><div class="goal-pct">0 / 20.000</div></div><div class="bar-track"><div class="bar-fill" style="width:0%;background:var(--cris)"></div></div></div>
+    <div class="goal mt8"><div class="goal-row"><div class="goal-name">10 parcerias fechadas</div><div class="goal-pct" id="cr-g-deals">0 / 10</div></div><div class="bar-track"><div class="bar-fill" id="cr-g-deals-bar" style="width:0%;background:var(--cris)"></div></div></div>
+  </div>
+</div>
+
+<!-- CR DEALS -->
+<div class="page" id="page-cr-deals">
+  <div class="ph"><h1>Parcerias <span class="tag tag-cris">@cris</span></h1></div>
+  <div class="form-row sec">
+    <div class="field"><label>Marca</label><input id="cr-d-brand" type="text" placeholder="Nome da marca"></div>
+    <div class="field"><label>Email</label><input id="cr-d-email" type="email" placeholder="email@marca.com"></div>
+    <div class="field"><label>Estado</label><select id="cr-d-status"><option>Quero contactar</option><option>Email enviado</option><option>Sem resposta</option><option>Em negociação</option><option>Parceria fechada</option><option>Publicado</option><option>Pago</option></select></div>
+    <div class="field"><label>Valor €</label><input id="cr-d-val" type="number" placeholder="0" style="width:80px"></div>
+    <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addDeal('cr')">+ Adicionar</button></div>
+  </div>
+  <div class="pipeline" id="pipe-cr"></div>
+</div>
+
+<!-- CR MEDIA KIT -->
+<div class="page" id="page-cr-kit">
+  <div class="ph"><h1>Media Kit <span class="tag tag-cris">@cris</span></h1></div>
+  <div class="hint">💡 Adiciona links do Google Drive ou Dropbox — ficam guardados no browser.</div>
+  <div class="form-row mt8">
+    <div class="field"><label>Nome</label><input id="crk-name" type="text" placeholder="ex: Media Kit 2026 PDF"></div>
+    <div class="field" style="flex:1"><label>Link</label><input id="crk-url" type="url" placeholder="https://drive.google.com/..."></div>
+    <div class="field"><label>Tipo</label><select id="crk-cat"><option>Media Kit PDF</option><option>Fotografia</option><option>Vídeo</option><option>Contrato</option><option>Logo</option></select></div>
+    <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addFile('cr')">+ Adicionar</button></div>
+  </div>
+  <div id="crk-list"><div class="hint">Ainda sem ficheiros.</div></div>
+</div>
+
+<!-- CR WISHLIST -->
+<div class="page" id="page-cr-wish">
+  <div class="ph"><h1>Wishlist de Marcas <span class="tag tag-cris">@cris</span></h1></div>
+  <div class="form-row sec">
+    <div class="field"><label>Marca</label><input id="wl-brand" type="text" placeholder="ex: Zara"></div>
+    <div class="field"><label>Nicho</label><input id="wl-niche" type="text" placeholder="ex: Moda"></div>
+    <div class="field"><label>Instagram</label><input id="wl-ig" type="text" placeholder="@marca"></div>
+    <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addWish()">+ Adicionar</button></div>
+  </div>
+  <div id="wl-list"><div class="hint">Ainda vazia. Adiciona as marcas com que sonhas trabalhar.</div></div>
 </div>
 
 </main>
 
-<script>
-const S={sdIG:null,crIG:null,sdTT:null,crTT:null,revenue:0,crm:[],crd:[],wishlist:[],finance:[],calEvents:[],agendaSD:[],agendaCR:[],feedSD:Array(9).fill(null),feedCR:Array(9).fill(null),dados:{events:[],followers:null}};
-
-// NAVIGATION
-function toggleMobileMenu(){
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('mob-overlay').classList.toggle('open');
-}
-function closeMobileMenu(){
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('mob-overlay').classList.remove('open');
-}
-function nav(id,el){
-  try{
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));
-    const pg=document.getElementById('page-'+id);
-    if(pg)pg.classList.add('active');
-    if(el)el.classList.add('active');
-    try{closeMobileMenu();}catch(e){}
-    try{if(id==='analytics')initAnalytics();}catch(e){}
-    try{if(id==='content')renderCal();}catch(e){}
-    try{if(id==='cr-deals')renderPipeline('pipeline-cr',S.crd);}catch(e){}
-    try{if(id==='sd-feed'){renderFeed('feed-sd',S.feedSD,'swift');renderAgenda('agenda-sd',S.agendaSD);}}catch(e){}
-    try{if(id==='cr-feed'){renderFeed('feed-cr',S.feedCR,'cris');renderAgenda('agenda-cr',S.agendaCR);}}catch(e){}
-    try{if(id==='finance')renderFin();}catch(e){}
-    try{if(id==='emails')renderEmails();}catch(e){}
-    try{if(id==='sd-goals')updateSDGoals();}catch(e){}
-    try{if(id==='cr-goals')updateCRGoals();}catch(e){}
-    try{if(id==='cr-metrics')renderAudience();}catch(e){}
-  }catch(err){console.error('nav error:',err);}
-}
-
-function toggleBrand(b){
-  const sub=document.getElementById('sub-'+b);
-  const brand=document.getElementById('brand-'+b);
-  sub.classList.toggle('open');
-  brand.classList.toggle('open');
-}
-
-// TIME
-function tick(){
-  const now=new Date();
-  const str=now.toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  const el=document.getElementById('sb-time');
-  if(el)el.textContent=now.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
-  const dd=document.getElementById('dash-date');
-  if(dd)dd.textContent=str.charAt(0).toUpperCase()+str.slice(1);
-  const bd=document.getElementById('br-date');
-  if(bd)bd.textContent=str;
-  const cl=document.getElementById('cal-lbl');
-  if(cl)cl.textContent=now.toLocaleDateString('pt-PT',{month:'long',year:'numeric'});
-}
-setInterval(tick,1000);tick();
-
-function st(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
-
-// LOAD DADOS
-async function loadDados(){
-  try{const r=await fetch('./dados.json',{cache:'no-store'});if(r.ok){S.dados=await r.json();applyDados();}}catch(e){}
-}
-
-function applyDados(){
-  // Hardcoded fallback data
-  const sdIGVal = (S.dados.followers && S.dados.followers.count) || 1254;
-  const crIGVal = (S.dados.cr_followers && S.dados.cr_followers.count) || 6959;
-  S.sdIG = sdIGVal;
-  S.crIG = crIGVal;
-  const sdStr = sdIGVal.toLocaleString('pt-PT');
-  const crStr = crIGVal.toLocaleString('pt-PT');
-  ['k-sd-ig','sd-followers','sd-m-ig'].forEach(id=>st(id,sdStr));
-  ['k-cr-ig','cr-followers','cr-m-ig'].forEach(id=>st(id,crStr));
-  st('k-goal', Math.min(100,Math.round(sdIGVal/10000*100))+'%');
-  updateGoals();
-  const evs=S.dados.events||[];
-  const ago7=Date.now()-7*86400000;
-  const r7=evs.filter(e=>new Date(e.timestamp).getTime()>ago7);
-  st('k-posts',r7.filter(e=>e.type==='post'||e.type==='post_cr').length);
-  const deals=evs.filter(e=>e.type==='partnership').length;
-  st('k-deals',deals);
-  st('cr-m-deals',S.crd.filter(c=>c.status==='Parceria fechada').length);
-  const ago24=Date.now()-86400000;
-  const emails=evs.filter(e=>e.type==='email'&&new Date(e.timestamp).getTime()>ago24);
-  st('k-emails',emails.length||'0');
-  const sbCount=document.getElementById('sb-inbox-count');
-  if(sbCount)sbCount.textContent=emails.length||'0';
-
-  if(S.dados.followers){
-    S.sdIG=S.dados.followers.count;
-    const sdStr=S.sdIG.toLocaleString('pt-PT');
-    st('k-sd-ig',sdStr);st('sd-followers',sdStr);st('sd-m-ig',sdStr);
-    const pct=Math.min(100,Math.round(S.sdIG/10000*100));
-    st('k-goal',pct+'%');
-  }
-  if(S.dados.cr_followers){
-    S.crIG=S.dados.cr_followers.count;
-    const crStr=S.crIG.toLocaleString('pt-PT');
-    st('k-cr-ig',crStr);st('cr-followers',crStr);st('cr-m-ig',crStr);
-  }
-
-  // Show briefing from dados.json
-  if(S.dados.briefing){
-    const b=S.dados.briefing;
-    const el=document.getElementById('br-text');
-    const sec=document.getElementById('br-cols');
-    if(el){el.textContent=b.resumo||'';el.classList.remove('loading');}
-    const hl=document.getElementById('br-hl');
-    const tk=document.getElementById('br-tasks');
-    if(hl)hl.innerHTML=(b.destaques||[]).map(h=>`<li>${h}</li>`).join('');
-    if(tk)tk.innerHTML=(b.tarefas||[]).map(t=>`<li>${t}</li>`).join('');
-    if(sec)sec.style.display='grid';
-    const bd=document.getElementById('br-date');
-    if(bd&&b.date)bd.textContent=b.date;
-  }
-
-  renderEmailsDash();
-  updateAch();updateAlerts();updateGoals();
-}
-
-function updateKPIs(){
-  if(S.sdIG){st('k-sd-ig',S.sdIG.toLocaleString('pt-PT'));st('sd-m-ig',S.sdIG.toLocaleString('pt-PT'));st('k-goal',Math.min(100,Math.round(S.sdIG/10000*100))+'%');}
-  if(S.crIG){st('k-cr-ig',S.crIG.toLocaleString('pt-PT'));st('cr-m-ig',S.crIG.toLocaleString('pt-PT'));}
-  if(S.revenue)st('k-revenue','€'+S.revenue.toLocaleString('pt-PT'));
-  updateSDGoals();updateCRGoals();
-}
-
-function saveSdMetrics(){
-  S.sdIG=parseInt(document.getElementById('sd-ig-f').value)||S.sdIG;
-  S.sdTT=parseInt(document.getElementById('sd-tt-f').value)||S.sdTT;
-  const p=parseInt(document.getElementById('sd-posts-f').value);
-  if(S.sdIG)st('sd-m-ig',S.sdIG.toLocaleString('pt-PT'));
-  if(S.sdTT)st('sd-m-tt',S.sdTT.toLocaleString('pt-PT'));
-  if(p)st('sd-m-posts',p);
-  updateKPIs();
-}
-
-function saveCrMetrics(){
-  S.crIG=parseInt(document.getElementById('cr-ig-f').value)||S.crIG;
-  S.crTT=parseInt(document.getElementById('cr-tt-f').value)||S.crTT;
-  const eng=document.getElementById('cr-eng-f').value.trim();
-  if(S.crIG)st('cr-m-ig',S.crIG.toLocaleString('pt-PT'));
-  if(S.crTT)st('cr-m-tt',S.crTT.toLocaleString('pt-PT'));
-  if(eng)st('cr-m-eng',eng);
-  updateKPIs();
-}
-
-function updateGoals(){ updateSDGoals(); updateCRGoals(); }
-function updateSDGoals(){
-  const ig=S.sdIG||0,tt=S.sdTT||0,d=S.crm.filter(c=>c.status==='Parceria fechada').length,r=S.revenue||0;
-  st('gsd-ig-v',ig.toLocaleString('pt-PT'));bar('gsd-ig-b',ig/10000*100,'var(--swift)');
-  st('gsd-tt-v',tt.toLocaleString('pt-PT'));bar('gsd-tt-b',tt/5000*100,'var(--swift)');
-  st('gsd-d-v',d);bar('gsd-d-b',d/10*100,'var(--swift)');
-  st('gsd-r-v',r.toLocaleString('pt-PT'));bar('gsd-r-b',r/12000*100,'var(--swift)');
-}
-
-function updateCRGoals(){
-  const ig=S.crIG||0,tt=S.crTT||0,r=S.revenue||0;
-  st('gcr-ig-v',ig.toLocaleString('pt-PT'));bar('gcr-ig-b',ig/50000*100,'var(--cris)');
-  st('gcr-tt-v',tt.toLocaleString('pt-PT'));bar('gcr-tt-b',tt/20000*100,'var(--cris)');
-  st('gcr-r-v',r.toLocaleString('pt-PT'));bar('gcr-r-b',r/12000*100,'var(--cris)');
-}
-
-function bar(id,pct,color){const el=document.getElementById(id);if(el){el.style.width=Math.min(100,Math.max(0,pct))+'%';if(color)el.style.background=color;}}
-
-// EMAILS
-function renderEmailsDash(){
-  const evs=(S.dados.events||[]).filter(e=>e.type==='email');
-  const el=document.getElementById('email-list-dash');
-  if(!el)return;
-  if(!evs.length){el.innerHTML='<div class="alert">O agente de email ainda não processou emails. Corre o workflow no GitHub para começar.</div>';return;}
-  const emojis={urgente:'🔴',cliente:'💎',fornecedor:'📦',spam:'🗑️',outro:'✉️'};
-  el.innerHTML=evs.slice(-5).reverse().map(e=>{
-    const cat=e.category||'outro';
-    return`<div class="email-item"><div class="emoji">${emojis[cat]||'✉️'}</div><div class="body"><div class="subject">${e.summary||'Email processado'}</div><div class="from">Processado pelo agente</div><span class="tag tag-${cat}">${cat}</span></div><div class="time">${timeAgo(e.timestamp)}</div></div>`;
-  }).join('');
-}
-
-function renderEmails(filter){
-  renderEmailsDash();
-  const evs=(S.dados.events||[]).filter(e=>e.type==='email');
-  const el=document.getElementById('email-list');
-  if(!el)return;
-  if(!evs.length){el.innerHTML='<div class="alert">Ainda sem emails processados. Corre o workflow no GitHub para o agente de email começar a trabalhar.</div>';return;}
-  const emojis={urgente:'🔴',cliente:'💎',fornecedor:'📦',spam:'🗑️',outro:'✉️'};
-  el.innerHTML=evs.slice().reverse().map(e=>{
-    const cat=e.category||'outro';
-    if(filter&&filter!=='todos'&&cat!==filter)return'';
-    return`<div class="email-item"><div class="emoji">${emojis[cat]||'✉️'}</div><div class="body"><div class="subject">${e.summary||'Email processado'}</div><div class="from">Processado pelo agente</div><span class="tag tag-${cat}">${cat}</span></div><div class="time">${timeAgo(e.timestamp)}</div></div>`;
-  }).filter(Boolean).join('');
-  if(!el.innerHTML)el.innerHTML='<div class="hint" style="padding:12px 0">Nenhum email nesta categoria.</div>';
-}
-
-function filterEmails(f,el){
-  document.querySelectorAll('#page-emails .tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  renderEmails(f);
-}
-
-// FEED PLANNER
-const FEED_COLORS={swift:'var(--swift)',life:'#e07a30',deal:'#4a90e8',cris:'var(--cris)',repost:'#9b8ec4'};
-const FEED_LABELS={swift:'Produto',life:'Lifestyle',deal:'Parceria',cris:'Lifestyle',repost:'Repost'};
-
-function renderFeed(containerId,feedArr,brand){
-  const el=document.getElementById(containerId);
-  if(!el)return;
-  el.innerHTML=feedArr.map((cell,i)=>{
-    if(!cell)return`<div class="feed-cell" onclick="setFeedCell('${containerId}',${i},'${brand}')"><div class="add-icon">+</div></div>`;
-    return`<div class="feed-cell filled" style="background:${FEED_COLORS[cell]||'#eee'}22;border:2px solid ${FEED_COLORS[cell]||'#eee'}"><div style="font-size:11px;font-weight:600;color:${FEED_COLORS[cell]};text-align:center;padding:8px">${FEED_LABELS[cell]||cell}</div><div class="fc-overlay"><button onclick="clearFeedCell('${containerId}',${i},'${brand}');event.stopPropagation()">✕</button></div></div>`;
-  }).join('');
-}
-
-
-
-// AGENDA
-function addAgendaSD(){
-  const d=document.getElementById('sd-cal-date').value;
-  const t=document.getElementById('sd-cal-title').value.trim();
-  if(!d||!t)return;
-  S.agendaSD.push({date:d,title:t,type:document.getElementById('sd-cal-type').value});
-  S.agendaSD.sort((a,b)=>a.date.localeCompare(b.date));
-  renderAgenda('agenda-sd',S.agendaSD);
-  document.getElementById('sd-cal-title').value='';
-}
-
-function addAgendaCR(){
-  const d=document.getElementById('cr-cal-date').value;
-  const t=document.getElementById('cr-cal-title').value.trim();
-  if(!d||!t)return;
-  S.agendaCR.push({date:d,title:t,type:document.getElementById('cr-cal-type').value});
-  S.agendaCR.sort((a,b)=>a.date.localeCompare(b.date));
-  renderAgenda('agenda-cr',S.agendaCR);
-  document.getElementById('cr-cal-title').value='';
-}
-
-function renderAgenda(containerId,arr){
-  const el=document.getElementById(containerId);
-  if(!el)return;
-  if(!arr.length){el.innerHTML='<div class="hint">Ainda sem publicações agendadas.</div>';return;}
-  const byDate={};
-  arr.forEach(item=>{if(!byDate[item.date])byDate[item.date]=[];byDate[item.date].push(item);});
-  el.innerHTML=Object.entries(byDate).map(([date,items])=>`
-    <div class="agenda-day">
-      <div class="agenda-date">${new Date(date+'T12:00').toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'short'})}</div>
-      ${items.map(item=>`<div class="agenda-item ${item.type}"><div class="ai-time">📸</div><div><div class="ai-title">${item.title}</div><div class="ai-brand">${{swift:'Swift Delux',cris:'Cristiana',deal:'Parceria',life:'Lifestyle'}[item.type]||item.type}</div></div></div>`).join('')}
+<!-- FEED MODAL -->
+<div class="modal-bg" id="feed-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('feed-modal')">×</button>
+    <h2>Editar célula do feed</h2>
+    <div class="field" style="margin-bottom:14px;width:100%">
+      <label>URL da imagem (opcional)</label>
+      <input id="fm-url" type="url" placeholder="Cola link do Imgur, Google Drive..." oninput="previewFM()" style="width:100%">
+      <div style="font-size:11px;color:var(--muted);margin-top:5px">💡 Usa imgur.com para hospedar imagens gratuitamente</div>
     </div>
-  `).join('');
-}
-
-// CALENDAR
-function addCalEvent(){
-  const d=document.getElementById('cal-d').value;
-  const t=document.getElementById('cal-t').value.trim();
-  if(!d||!t)return;
-  S.calEvents.push({date:d,title:t,type:document.getElementById('cal-type').value});
-  renderCal();
-  document.getElementById('cal-t').value='';
-}
-
-function renderCal(){
-  const el=document.getElementById('calendar');
-  if(!el)return;
-  const now=new Date(),yr=now.getFullYear(),mo=now.getMonth();
-  const fd=new Date(yr,mo,1).getDay(),dm=new Date(yr,mo+1,0).getDate();
-  const dn=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-  const bg={swift:'#fdf3e3',cris:'#f0edf9',deal:'#e8f9ee'};
-  const bc={swift:'#c9a96e',cris:'#9b8ec4',deal:'#2fb866'};
-  let h=dn.map(d=>`<div style="background:var(--surface);padding:7px;text-align:center;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase">${d}</div>`).join('');
-  for(let i=0;i<fd;i++)h+=`<div style="background:var(--surface);padding:7px;min-height:70px"></div>`;
-  for(let d=1;d<=dm;d++){
-    const ds=`${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const evs=S.calEvents.filter(e=>e.date===ds);
-    const today=d===now.getDate();
-    h+=`<div style="background:var(--surface);padding:7px;min-height:70px"><div style="font-size:11px;font-weight:500;color:var(--muted);margin-bottom:3px${today?';background:var(--accent);color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px':''}">${d}</div>${evs.map(e=>`<div style="font-size:10px;padding:2px 5px;border-radius:3px;margin-bottom:2px;background:${bg[e.type]||'#f3f4f6'};color:${bc[e.type]||'#666'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title}</div>`).join('')}</div>`;
-  }
-  el.innerHTML=h;
-}
-
-// CRM
-const CRM_COLS=['Quero contactar','Email enviado','Sem resposta','Em negociação','Parceria fechada','Conteúdo publicado','Pagamento recebido'];
-
-function addCRM(){const b=document.getElementById('crm-b').value.trim();if(!b)return;S.crm.push({brand:b,email:document.getElementById('crm-e').value,status:document.getElementById('crm-s').value,value:parseFloat(document.getElementById('crm-v').value)||0});renderPipeline('pipeline',S.crm);updateSDGoals();document.getElementById('crm-b').value='';document.getElementById('crm-e').value='';document.getElementById('crm-v').value='';}
-function addCRD(){const b=document.getElementById('crd-b').value.trim();if(!b)return;S.crd.push({brand:b,email:document.getElementById('crd-e').value,status:document.getElementById('crd-s').value,value:parseFloat(document.getElementById('crd-v').value)||0});renderPipeline('pipeline-cr',S.crd);const cr=document.getElementById('cr-m-deals');if(cr)cr.textContent=S.crd.filter(c=>c.status==='Parceria fechada').length;document.getElementById('crd-b').value='';document.getElementById('crd-e').value='';document.getElementById('crd-v').value='';}
-
-function renderPipeline(id,arr){
-  const el=document.getElementById(id);if(!el)return;
-  el.innerHTML=CRM_COLS.map(col=>{
-    const items=arr.filter(c=>c.status===col);
-    return`<div style="min-width:140px"><div class="pcol-hd">${col} (${items.length})</div>${items.map(c=>`<div class="pitem"><div class="pname">${c.brand}</div>${c.email?`<div class="pdetail">${c.email}</div>`:''} ${c.value?`<div class="pdetail">€${c.value}</div>`:''}</div>`).join('')}</div>`;
-  }).join('');
-}
-
-// WISHLIST
-function addWish(){const b=document.getElementById('wl-b').value.trim();if(!b)return;S.wishlist.push({brand:b,niche:document.getElementById('wl-n').value,ig:document.getElementById('wl-ig').value});renderWishlist();document.getElementById('wl-b').value='';document.getElementById('wl-n').value='';document.getElementById('wl-ig').value='';}
-function renderWishlist(){const el=document.getElementById('wishlist-list');if(!el)return;if(!S.wishlist.length){el.innerHTML='<div class="hint">Ainda vazia.</div>';return;}el.innerHTML=S.wishlist.map(w=>`<div style="display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:6px 12px;margin:4px;font-size:12px">✦ ${w.brand}${w.niche?` <span style="color:var(--muted);font-size:10px">(${w.niche})</span>`:''}${w.ig?` <span style="color:var(--cris);font-size:10px">${w.ig}</span>`:''}</div>`).join('');}
-
-// FINANCE
-function addFin(){const d=document.getElementById('fd').value.trim();const a=parseFloat(document.getElementById('fa').value)||0;if(!d||!a)return;S.finance.push({desc:d,amount:a,type:document.getElementById('ft').value,brand:document.getElementById('fb').value});renderFin();document.getElementById('fd').value='';document.getElementById('fa').value='';}
-function renderFin(){
-  const el=document.getElementById('fin-list');if(!el)return;
-  const inc=S.finance.filter(f=>f.type==='income').reduce((s,f)=>s+f.amount,0);
-  const exp=S.finance.filter(f=>f.type==='expense').reduce((s,f)=>s+f.amount,0);
-  st('fin-tot','€'+inc.toLocaleString('pt-PT',{minimumFractionDigits:2}));
-  st('fin-exp','€'+exp.toLocaleString('pt-PT',{minimumFractionDigits:2}));
-  st('fin-prf','€'+(inc-exp).toLocaleString('pt-PT',{minimumFractionDigits:2}));
-  S.revenue=inc;st('k-revenue','€'+inc.toLocaleString('pt-PT'));
-  el.innerHTML=S.finance.length?S.finance.slice().reverse().map(f=>`<div class="fin-row"><div><div>${f.desc}</div><div style="font-size:10px;color:var(--muted)">${f.brand}</div></div><div class="fin-amt ${f.type==='income'?'fin-inc':'fin-exp'}">${f.type==='income'?'+':'-'}€${f.amount.toLocaleString('pt-PT',{minimumFractionDigits:2})}</div></div>`).join(''):'<div class="hint" style="padding:10px 0">Sem movimentos.</div>';
-  if(window._pc){window._pc.data.datasets[0].data=[inc,exp];window._pc.update();}
-  updateSDGoals();updateCRGoals();
-}
-
-// ACHIEVEMENTS
-const ACHS=[{i:'✨',n:'Primeiros 1.000',d:'Swift Delux: 1k seg.',c:()=>(S.sdIG||0)>=1000},{i:'💎',n:'5.000 seguidores',d:'Swift Delux: 5k seg.',c:()=>(S.sdIG||0)>=5000},{i:'👑',n:'10k seguidores',d:'Meta atingida!',c:()=>(S.sdIG||0)>=10000},{i:'🤝',n:'1ª Parceria',d:'Primeira parceria',c:()=>S.crm.filter(c=>c.status==='Parceria fechada').length>=1},{i:'🚀',n:'5 Parcerias',d:'Cinco parcerias',c:()=>S.crm.filter(c=>c.status==='Parceria fechada').length>=5},{i:'💰',n:'€1.000 receita',d:'Primeiro milhar',c:()=>S.revenue>=1000},{i:'🌟',n:'Agente ativo',d:'Primeiro email',c:()=>(S.dados.events||[]).filter(e=>e.type==='email').length>0},{i:'🎯',n:'10 posts',d:'Dez sugestões',c:()=>(S.dados.events||[]).filter(e=>e.type==='post').length>=10}];
-function updateAch(){const el=document.getElementById('ach-list');if(!el)return;el.innerHTML=ACHS.map(a=>`<div class="ach ${a.c()?'':'locked'}"><div class="ach-icon">${a.i}</div><div><div class="ach-name">${a.n}</div><div class="ach-desc">${a.d}</div></div></div>`).join('');}
-
-// ALERTS
-function updateAlerts(){
-  const alerts=[];
-  if(!S.sdIG)alerts.push('Sem dados de seguidores Swift Delux — atualiza em Métricas');
-  if(S.sdIG&&S.sdIG<1000)alerts.push(`Swift Delux: apenas ${S.sdIG} seguidores — foco em crescimento!`);
-  const p7=(S.dados.events||[]).filter(e=>e.type==='post'&&Date.now()-new Date(e.timestamp)<7*86400000).length;
-  if(!p7)alerts.push('Nenhum post sugerido esta semana — corre o agente de conteúdo');
-  st('k-alerts',alerts.length);
-  const el=document.getElementById('sd-alerts');
-  if(el)el.innerHTML=alerts.length?alerts.map(a=>`<div class="alert">${a}</div>`).join(''):`<div class="alert alert-g">✓ Tudo em ordem!</div>`;
-}
-
-// TIME AGO
-function timeAgo(iso){const d=(Date.now()-new Date(iso).getTime())/1000;if(d<3600)return Math.round(d/60)+'min';if(d<86400)return Math.round(d/3600)+'h';return Math.round(d/86400)+'d';}
-
-// CHARTS
-let _ac=false;
-function initAnalytics(){}
-
-function initAnalytics(){}
-function initDashCharts(){}
-
-function initPie(){}
-
-function showIGSetup(){document.getElementById('ig-modal').style.display='flex';}
-
-// INIT
-// FEED PLANNER COM IMAGENS
-function renderFeed(containerId, arr, brand){
-  const el=document.getElementById(containerId);
-  if(!el)return;
-  const COLORS={swift:'#c9a96e',life:'#e07a30',deal:'#4a90e8',cris:'#9b8ec4',repost:'#9b8ec4'};
-  const LABELS={swift:'Produto',life:'Lifestyle',deal:'Parceria',cris:'Lifestyle',repost:'Repost'};
-  el.innerHTML=arr.map((cell,i)=>{
-    if(!cell){
-      return`<div onclick="openFeedCell('${containerId}',${i},'${brand}')" style="width:100%;aspect-ratio:1;background:var(--bg);border:1.5px dashed var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:var(--border)">+</div>`;
-    }
-    if(cell.img){
-      return`<div style="width:100%;aspect-ratio:1;position:relative;border-radius:4px;overflow:hidden;cursor:pointer" onclick="openFeedCell('${containerId}',${i},'${brand}')">
-        <img src="${cell.img}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
-        <div style="position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s" onmouseover="this.style.opacity='1';this.style.background='rgba(0,0,0,0.4)'" onmouseout="this.style.opacity='0';this.style.background='rgba(0,0,0,0)'">
-          <span style="color:#fff;font-size:18px;cursor:pointer" onclick="clearFeedCellData('${containerId}',${i},'${brand}');event.stopPropagation()">✕</span>
-        </div>
-      </div>`;
-    }
-    return`<div onclick="openFeedCell('${containerId}',${i},'${brand}')" style="width:100%;aspect-ratio:1;background:${COLORS[cell.type]||'#eee'}33;border:1.5px solid ${COLORS[cell.type]||'#eee'};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:${COLORS[cell.type]};cursor:pointer;text-align:center;padding:4px">${LABELS[cell.type]||cell.type}</div>`;
-  }).join('');
-}
-
-let _feedModal={container:null,index:null,brand:null};
-function openFeedCell(cid,i,brand){
-  _feedModal={container:cid,index:i,brand};
-  const arr=brand==='swift'?S.feedSD:S.feedCR;
-  const cell=arr[i];
-  document.getElementById('feed-modal-img').value=cell&&cell.img?cell.img:'';
-  document.getElementById('feed-modal-type').value=cell&&cell.type?cell.type:(brand==='swift'?'swift':'cris');
-  document.getElementById('feed-modal-preview').src=cell&&cell.img?cell.img:'';
-  document.getElementById('feed-modal-preview').style.display=cell&&cell.img?'block':'none';
-  document.getElementById('feed-modal').style.display='flex';
-}
-
-function saveFeedCell(){
-  const {container,index,brand}=_feedModal;
-  const arr=brand==='swift'?S.feedSD:S.feedCR;
-  const img=document.getElementById('feed-modal-img').value.trim();
-  const type=document.getElementById('feed-modal-type').value;
-  arr[index]={img:img||null,type};
-  document.getElementById('feed-modal').style.display='none';
-  renderFeed(container,arr,brand);
-}
-
-function clearFeedCellData(cid,i,brand){
-  const arr=brand==='swift'?S.feedSD:S.feedCR;
-  arr[i]=null;
-  renderFeed(cid,arr,brand);
-}
-
-function previewFeedImg(){
-  const url=document.getElementById('feed-modal-img').value.trim();
-  const prev=document.getElementById('feed-modal-preview');
-  const err=document.getElementById('feed-modal-err');
-  const tip=document.getElementById('feed-modal-tip');
-  err.style.display='none';
-  if(!url){prev.style.display='none';tip.style.display='block';return;}
-  tip.style.display='none';
-  prev.style.display='block';
-  prev.src=url;
-  prev.onerror=function(){
-    prev.style.display='none';
-    err.style.display='block';
-  };
-  prev.onload=function(){
-    err.style.display='none';
-  };
-}
-
-// AUDIENCE
-const audienceData = {cr:{female:0,countries:[],ages:[]}};
-
-function editAudience(brand){
-  const d=audienceData[brand]||{female:0,countries:[],ages:[]};
-  document.getElementById('aud-female').value=d.female||'';
-  document.getElementById('aud-countries').value=d.countries.map(c=>c.name+':'+c.pct).join(',');
-  document.getElementById('aud-ages').value=d.ages.map(a=>a.range+':'+a.pct).join(',');
-  document.getElementById('aud-modal').style.display='flex';
-}
-
-function saveAudience(){
-  const female=parseInt(document.getElementById('aud-female').value)||0;
-  const male=100-female;
-  const countries=document.getElementById('aud-countries').value.split(',').filter(Boolean).map(s=>{const p=s.split(':');return{name:p[0].trim(),pct:parseInt(p[1])||0};});
-  const ages=document.getElementById('aud-ages').value.split(',').filter(Boolean).map(s=>{const p=s.split(':');return{range:p[0].trim(),pct:parseInt(p[1])||0};});
-  audienceData.cr={female,male,countries,ages};
-  renderAudience();
-  document.getElementById('aud-modal').style.display='none';
-}
-
-function renderAudience(){
-  const d=audienceData.cr;
-  if(!d)return;
-  // Gender
-  const fEl=document.getElementById('cr-aud-f-val');const fBar=document.getElementById('cr-aud-f-bar');
-  const mEl=document.getElementById('cr-aud-m-val');const mBar=document.getElementById('cr-aud-m-bar');
-  if(fEl){fEl.textContent=d.female+'%';fBar.style.width=d.female+'%';}
-  if(mEl){mEl.textContent=d.male+'%';mBar.style.width=d.male+'%';}
-  // Countries
-  const cEl=document.getElementById('cr-countries-list');
-  if(cEl&&d.countries.length){
-    const flags={'Portugal':'🇵🇹','Brasil':'🇧🇷','Espanha':'🇪🇸','Reino Unido':'🇬🇧','França':'🇫🇷','EUA':'🇺🇸','Alemanha':'🇩🇪','Itália':'🇮🇹','Angola':'🇦🇴','Moçambique':'🇲🇿'};
-    cEl.innerHTML=d.countries.map(c=>`<div class="abar"><div class="abar-lbl"><span>${flags[c.name]||'🌍'} ${c.name}</span><span>${c.pct}%</span></div><div class="abar-track"><div class="abar-fill" style="width:${c.pct}%;background:var(--cris)"></div></div></div>`).join('');
-  }
-  // Ages
-  const aEl=document.getElementById('cr-ages-list');
-  if(aEl&&d.ages.length){
-    aEl.innerHTML=d.ages.map(a=>`<div class="abar"><div class="abar-lbl"><span>${a.range}</span><span>${a.pct}%</span></div><div class="abar-track"><div class="abar-fill" style="width:${a.pct}%;background:var(--cris)"></div></div></div>`).join('');
-  }
-}
-
-// AUDIENCE
-// FILES LIBRARY
-const sdFiles = [];
-const crFiles = [];
-const FILE_ICONS = {'Logo':'🎨','Paleta de cores':'🎨','Template':'📐','Media Kit PDF':'📋','Fotografia':'🖼️','Vídeo':'🎬','Contrato':'📄','Outro':'📁','Logo / Branding':'🎨'};
-
-function addSdFile(){
-  const name=document.getElementById('sd-file-name').value.trim();
-  const url=document.getElementById('sd-file-url').value.trim();
-  const cat=document.getElementById('sd-file-cat').value;
-  if(!name||!url)return;
-  sdFiles.push({name,url,cat});
-  renderFiles('sd-files-list',sdFiles);
-  document.getElementById('sd-file-name').value='';
-  document.getElementById('sd-file-url').value='';
-}
-
-function addCrFile(){
-  const name=document.getElementById('cr-file-name').value.trim();
-  const url=document.getElementById('cr-file-url').value.trim();
-  const cat=document.getElementById('cr-file-cat').value;
-  if(!name||!url)return;
-  crFiles.push({name,url,cat});
-  crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
-  renderFiles('cr-files-list',crFiles);
-  document.getElementById('cr-file-name').value='';
-  document.getElementById('cr-file-url').value='';
-}
-
-function renderFiles(containerId,arr){
-  const el=document.getElementById(containerId);
-  if(!el)return;
-  if(!arr.length){el.innerHTML='<div class="hint" style="padding:10px 0">Ainda sem ficheiros. Adiciona links do Google Drive ou Dropbox.</div>';return;}
-  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:12px">${arr.map((f,i)=>`
-    <a href="${f.url}" target="_blank" style="text-decoration:none">
-      <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:border-color 0.15s" onmouseover="this.style.borderColor='#aaa'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-size:22px;margin-bottom:8px">${FILE_ICONS[f.cat]||'📁'}</div>
-        <div style="font-size:12px;font-weight:500;color:var(--text)">${f.name}</div>
-        <div style="font-size:10px;color:var(--muted);margin-top:3px">${f.cat}</div>
-      </div>
-    </a>
-  `).join('')}</div>`;
-}
-
-// AGENDA DIÁRIA
-const agendaTasks = {};
-let agendaYear = new Date().getFullYear();
-let agendaMonth = new Date().getMonth();
-let agendaSelectedDay = null;
-
-const AGENDA_COLORS = {swift:'#c9a96e',cris:'#9b8ec4',deal:'#27a85f',task:'#4a90e8'};
-const AGENDA_LABELS = {swift:'Swift Delux',cris:'Cristiana',deal:'Parceria',task:'Tarefa'};
-
-function renderAgendaCalendar(){
-  const el=document.getElementById('agenda-calendar');
-  if(!el)return;
-  const now=new Date();
-  const fd=new Date(agendaYear,agendaMonth,1).getDay();
-  const dm=new Date(agendaYear,agendaMonth+1,0).getDate();
-  const dn=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-  const monthNames=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  const lbl=document.getElementById('agenda-month-label');
-  if(lbl)lbl.textContent=monthNames[agendaMonth]+' '+agendaYear;
-  let h=dn.map(d=>`<div style="background:var(--surface);padding:6px;text-align:center;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase">${d}</div>`).join('');
-  for(let i=0;i<fd;i++)h+=`<div style="background:var(--surface);padding:6px;min-height:60px"></div>`;
-  for(let d=1;d<=dm;d++){
-    const ds=`${agendaYear}-${String(agendaMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const tasks=agendaTasks[ds]||[];
-    const today=d===now.getDate()&&agendaMonth===now.getMonth()&&agendaYear===now.getFullYear();
-    const selected=d===agendaSelectedDay;
-    h+=`<div onclick="selectAgendaDay(${d})" style="background:${selected?'#f0edf9':today?'#fdf3e3':'var(--surface)'};padding:6px;min-height:60px;cursor:pointer;border:${selected?'1.5px solid #9b8ec4':today?'1.5px solid #c9a96e':'1px solid var(--border)'}">
-      <div style="font-size:11px;font-weight:${today?'700':'500'};color:${today?'var(--accent)':'var(--muted)'};margin-bottom:3px">${d}</div>
-      ${tasks.slice(0,2).map(t=>`<div style="font-size:9px;padding:1px 4px;border-radius:3px;background:${AGENDA_COLORS[t.type]}22;color:${AGENDA_COLORS[t.type]};margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.title}</div>`).join('')}
-      ${tasks.length>2?`<div style="font-size:9px;color:var(--muted)">+${tasks.length-2}</div>`:''}
-    </div>`;
-  }
-  el.innerHTML=h;
-}
-
-function selectAgendaDay(d){
-  agendaSelectedDay=d;
-  const ds=`${agendaYear}-${String(agendaMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-  const monthNames=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  const lbl=document.getElementById('agenda-selected-label');
-  if(lbl)lbl.textContent=`${d} de ${monthNames[agendaMonth]} de ${agendaYear}`;
-  const form=document.getElementById('agenda-add-form');
-  if(form)form.style.display='flex';
-  renderAgendaDay(ds);
-  renderAgendaCalendar();
-  // Dados reais @cristianarodriguesss
-  audienceData.cr = {
-    female: 54,
-    male: 46,
-    countries: [
-      {name:'Portugal', pct:64},
-      {name:'Brasil', pct:24},
-      {name:'França', pct:2},
-      {name:'Suíça', pct:1},
-      {name:'Espanha', pct:1}
-    ],
-    ages: [
-      {range:'13-17', pct:5},
-      {range:'18-24', pct:18},
-      {range:'25-34', pct:47},
-      {range:'35-44', pct:17},
-      {range:'45-54', pct:9},
-      {range:'55-64', pct:3},
-      {range:'65+', pct:1}
-    ]
-  };
-  renderAudience();
-}
-
-function addAgendaTask(){
-  const title=document.getElementById('agenda-task-input').value.trim();
-  if(!title||!agendaSelectedDay)return;
-  const ds=`${agendaYear}-${String(agendaMonth+1).padStart(2,'0')}-${String(agendaSelectedDay).padStart(2,'0')}`;
-  if(!agendaTasks[ds])agendaTasks[ds]=[];
-  agendaTasks[ds].push({title,type:document.getElementById('agenda-task-type').value});
-  document.getElementById('agenda-task-input').value='';
-  renderAgendaDay(ds);
-  renderAgendaCalendar();
-  // Dados reais @cristianarodriguesss
-  audienceData.cr = {
-    female: 54,
-    male: 46,
-    countries: [
-      {name:'Portugal', pct:64},
-      {name:'Brasil', pct:24},
-      {name:'França', pct:2},
-      {name:'Suíça', pct:1},
-      {name:'Espanha', pct:1}
-    ],
-    ages: [
-      {range:'13-17', pct:5},
-      {range:'18-24', pct:18},
-      {range:'25-34', pct:47},
-      {range:'35-44', pct:17},
-      {range:'45-54', pct:9},
-      {range:'55-64', pct:3},
-      {range:'65+', pct:1}
-    ]
-  };
-  renderAudience();
-}
-
-function renderAgendaDay(ds){
-  const el=document.getElementById('agenda-day-tasks');
-  if(!el)return;
-  const tasks=agendaTasks[ds]||[];
-  if(!tasks.length){el.innerHTML='<div class="hint" style="padding:8px 0">Sem tarefas neste dia. Adiciona acima.</div>';return;}
-  el.innerHTML=tasks.map((t,i)=>`
-    <div style="background:var(--surface);border:0.5px solid var(--border);border-left:3px solid ${AGENDA_COLORS[t.type]};border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between">
-      <div>
-        <div style="font-size:13px">${t.title}</div>
-        <div style="font-size:10px;color:var(--muted);margin-top:2px">${AGENDA_LABELS[t.type]}</div>
-      </div>
-      <button onclick="removeAgendaTask('${ds}',${i})" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;padding:2px 6px">✕</button>
-    </div>
-  `).join('');
-}
-
-function removeAgendaTask(ds,i){
-  agendaTasks[ds].splice(i,1);
-  renderAgendaDay(ds);
-  renderAgendaCalendar();
-  // Dados reais @cristianarodriguesss
-  audienceData.cr = {
-    female: 54,
-    male: 46,
-    countries: [
-      {name:'Portugal', pct:64},
-      {name:'Brasil', pct:24},
-      {name:'França', pct:2},
-      {name:'Suíça', pct:1},
-      {name:'Espanha', pct:1}
-    ],
-    ages: [
-      {range:'13-17', pct:5},
-      {range:'18-24', pct:18},
-      {range:'25-34', pct:47},
-      {range:'35-44', pct:17},
-      {range:'45-54', pct:9},
-      {range:'55-64', pct:3},
-      {range:'65+', pct:1}
-    ]
-  };
-  renderAudience();
-}
-
-function prevMonth(){agendaMonth--;if(agendaMonth<0){agendaMonth=11;agendaYear--;}agendaSelectedDay=null;document.getElementById('agenda-day-tasks').innerHTML='';const f=document.getElementById('agenda-add-form');if(f)f.style.display='none';renderAgendaCalendar();}
-function nextMonth(){agendaMonth++;if(agendaMonth>11){agendaMonth=0;agendaYear++;}agendaSelectedDay=null;document.getElementById('agenda-day-tasks').innerHTML='';const f=document.getElementById('agenda-add-form');if(f)f.style.display='none';renderAgendaCalendar();}
-
-window.addEventListener('DOMContentLoaded',async()=>{
-  // Wrap everything in try/catch so one error doesn't break all
-  const safe = function(fn){ try{ fn(); }catch(e){ console.warn('init error:',e); } };
-  safe(function(){
-  // Show data immediately
-  const pairs = [['k-sd-ig','1.254'],['k-cr-ig','6.959'],['k-goal','13%'],['k-posts','4'],['k-deals','0'],['k-emails','0'],['sd-m-ig','1.254'],['cr-m-ig','6.959']];
-  pairs.forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.textContent=val;});
-  // Show briefing
-  const bt=document.getElementById('br-text');
-  const bs=document.getElementById('br-cols');
-  if(bt){bt.textContent='A Swift Delux está a 13% da meta de 10k seguidores. A Cristiana tem 6.959 seguidores com pico 18h-21h.';bt.classList.remove('loading');}
-  const bh=document.getElementById('br-hl');
-  const bk=document.getElementById('br-tasks');
-  if(bh)bh.innerHTML='<li>+644% atividade Swift Delux vs mês anterior</li><li>61,5% das views são de pessoas novas</li><li>4 posts sugeridos esta semana</li>';
-  if(bk)bk.innerHTML='<li>Criar conta no Ideogram (ideogram.ai)</li><li>Publicar Reel Swift Delux 18h-21h</li><li>Verificar emails de marcas</li><li>Planear conteúdo próxima semana</li>';
-  if(bs)bs.style.display='grid';
-  updateGoals();updateAch();updateAlerts();
-  await loadDados();
-  initDashCharts();initPie();renderCal();
-  renderPipeline('pipeline',S.crm);
-  renderPipeline('pipeline-cr',S.crd);
-  renderFeed('feed-sd',S.feedSD,'swift');
-  renderFeed('feed-cr',S.feedCR,'cris');
-  updateAch();updateAlerts();
-  // Show pre-loaded data immediately
-  st('k-sd-ig','1.254');
-  st('k-cr-ig','6.959');
-  st('k-goal','13%');
-  st('k-posts','4');
-  st('k-deals','0');
-  st('k-emails','0');
-  loadBriefing();
-  renderAgendaCalendar();
-  // Dados reais @cristianarodriguesss
-  audienceData.cr = {
-    female: 54,
-    male: 46,
-    countries: [
-      {name:'Portugal', pct:64},
-      {name:'Brasil', pct:24},
-      {name:'França', pct:2},
-      {name:'Suíça', pct:1},
-      {name:'Espanha', pct:1}
-    ],
-    ages: [
-      {range:'13-17', pct:5},
-      {range:'18-24', pct:18},
-      {range:'25-34', pct:47},
-      {range:'35-44', pct:17},
-      {range:'45-54', pct:9},
-      {range:'55-64', pct:3},
-      {range:'65+', pct:1}
-    ]
-  };
-  renderAudience();
-  renderFiles('sd-files-list',sdFiles);
-  crFiles.push({name:'Media Kit — Cristiana Rodrigues',url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss',cat:'Media Kit PDF'});
-  renderFiles('cr-files-list',crFiles);
-});
-
-function loadBriefing(){
-  const el=document.getElementById('br-text');
-  const sec=document.getElementById('br-cols');
-  if(!el)return;
-  if(S.dados&&S.dados.briefing){
-    const b=S.dados.briefing;
-    el.textContent=b.resumo||'';
-    el.classList.remove('loading');
-    const hl=document.getElementById('br-hl');
-    const tk=document.getElementById('br-tasks');
-    if(hl)hl.innerHTML=(b.destaques||[]).map(h=>'<li>'+h+'</li>').join('');
-    if(tk)tk.innerHTML=(b.tarefas||[]).map(t=>'<li>'+t+'</li>').join('');
-    if(sec)sec.style.display='grid';
-  } else {
-    el.textContent='A Swift Delux está a 13% da meta de 10k seguidores. A Cristiana tem 6.959 seguidores com pico 18h-21h.';
-    el.classList.remove('loading');
-    const hl=document.getElementById('br-hl');
-    const tk=document.getElementById('br-tasks');
-    if(hl)hl.innerHTML='<li>+644% atividade Swift Delux vs mês anterior</li><li>61,5% das views são de pessoas novas</li><li>4 posts sugeridos esta semana</li>';
-    if(tk)tk.innerHTML='<li>Criar conta no Ideogram (ideogram.ai)</li><li>Publicar Reel Swift Delux 18h-21h</li><li>Verificar emails de marcas</li><li>Planear conteúdo próxima semana</li>';
-    if(sec)sec.style.display='grid';
-  }
-}
-
-function genReport(){
-  document.getElementById('rpt-out').textContent='Para gerar relatórios com IA, configura a API key da Anthropic.';
-}
-</script>
-
-<!-- FEED IMAGE MODAL -->
-<div id="feed-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center">
-  <div style="background:#fff;border-radius:16px;padding:24px;width:360px;max-width:90vw">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
-      <div style="font-size:15px;font-weight:600">Editar célula do feed</div>
-      <button onclick="document.getElementById('feed-modal').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;color:#888">×</button>
-    </div>
-    <div style="margin-bottom:14px">
-      <label style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:5px">URL da imagem</label>
-      <input id="feed-modal-img" type="url" placeholder="Cola aqui o link da foto (Pinterest, Google Drive, etc.)" style="width:100%;border:1px solid #e8e8e6;border-radius:8px;padding:8px 10px;font-size:13px;outline:none" oninput="previewFeedImg()">
-      <div style="font-size:11px;color:#888;margin-top:5px">Pinterest: clica na imagem → botão direito → "Copiar endereço da imagem"</div>
-    </div>
-    <div style="margin-bottom:14px">
-      <img id="feed-modal-preview" src="" style="display:none;width:100%;border-radius:8px;object-fit:cover;max-height:200px;margin-bottom:10px">
-    </div>
-    <div style="margin-bottom:18px">
-      <label style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:5px">Tipo de conteúdo</label>
-      <select id="feed-modal-type" style="width:100%;border:1px solid #e8e8e6;border-radius:8px;padding:8px 10px;font-size:13px;outline:none">
+    <img id="fm-preview" style="display:none;width:100%;border-radius:8px;max-height:180px;object-fit:cover;margin-bottom:12px">
+    <div id="fm-error" style="display:none;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px;font-size:12px;color:#b91c1c;margin-bottom:12px">❌ Imagem não disponível. Usa imgur.com para hospedar a foto.</div>
+    <div class="field" style="margin-bottom:18px;width:100%">
+      <label>Tipo de conteúdo</label>
+      <select id="fm-type" style="width:100%">
         <option value="swift">Produto — Swift Delux</option>
         <option value="life">Lifestyle</option>
         <option value="cris">Cristiana</option>
         <option value="deal">Parceria</option>
-        <option value="repost">Repost</option>
       </select>
     </div>
     <div style="display:flex;gap:8px">
-      <button onclick="document.getElementById('feed-modal').style.display='none'" style="flex:1;padding:9px;border:1px solid #e8e8e6;border-radius:8px;background:transparent;cursor:pointer;font-size:13px">Cancelar</button>
-      <button onclick="saveFeedCell()" style="flex:1;padding:9px;border:none;border-radius:8px;background:#1a1a18;color:#fff;cursor:pointer;font-size:13px;font-weight:500">Guardar</button>
+      <button class="btn btn-o" onclick="closeModal('feed-modal')" style="flex:1">Cancelar</button>
+      <button class="btn btn-p" onclick="saveFM()" style="flex:1">Guardar</button>
     </div>
   </div>
 </div>
 
 <script>
-if("serviceWorker" in navigator){
-  window.addEventListener("load", function(){
-    navigator.serviceWorker.register("/swiftdelux-agents/sw.js")
-      .then(function(reg){ console.log("SW registered"); })
-      .catch(function(err){ console.log("SW error:", err); });
+// ═══ STATE ═══
+const STATE = {
+  sdFeed: Array(9).fill(null),
+  crFeed: Array(9).fill(null),
+  calTasks: {},
+  cpEvents: [],
+  sdAgenda: [],
+  crAgenda: [],
+  sdDeals: [],
+  crDeals: [],
+  sdFiles: [],
+  crFiles: [],
+  wishlist: [],
+  emails: [],
+  calYear: 2026,
+  calMonth: 6, // July
+  calSelected: null,
+  activeFeed: null,
+  activeFeedIdx: null,
+};
+const PIPE_COLS = ['Quero contactar','Email enviado','Sem resposta','Em negociação','Parceria fechada','Publicado','Pago'];
+const FEED_COLORS = {swift:'#c9a96e',life:'#e07a30',deal:'#3b82f6',cris:'#8b7fc4'};
+const FEED_LABELS = {swift:'Produto',life:'Lifestyle',deal:'Parceria',cris:'Lifestyle'};
+const CAL_COLORS = {swift:'#c9a96e',cris:'#8b7fc4',deal:'#22a65a',task:'#3b82f6'};
+const FILE_ICONS = {'Logo':'🎨','Template':'📐','Media Kit PDF':'📋','Fotografia':'🖼️','Vídeo':'🎬','Contrato':'📄','Outro':'📁'};
+const MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+// ═══ NAV ═══
+function go(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.sb-item').forEach(n => n.classList.remove('on'));
+  const pg = document.getElementById('page-' + id);
+  if (pg) pg.classList.add('on');
+  if (el) el.classList.add('on');
+  closeMenu();
+  // Page-specific init
+  if (id === 'sd-feed') renderFeed('sd');
+  if (id === 'cr-feed') renderFeed('cr');
+  if (id === 'sd-deals') renderPipe('sd');
+  if (id === 'cr-deals') renderPipe('cr');
+  if (id === 'content') renderCP();
+}
+
+function toggle(b) {
+  document.getElementById('sub-' + b).classList.toggle('open');
+  document.getElementById('br-' + b).classList.toggle('open');
+}
+
+function toggleMenu() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('mob-overlay').classList.toggle('on');
+}
+function closeMenu() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('mob-overlay').classList.remove('on');
+}
+
+// ═══ CLOCK ═══
+function tick() {
+  const now = new Date();
+  const el = document.getElementById('clock');
+  if (el) el.textContent = now.toLocaleTimeString('pt-PT', {hour:'2-digit',minute:'2-digit'});
+  const dd = document.getElementById('today-date');
+  if (dd) dd.textContent = now.toLocaleDateString('pt-PT', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const bd = document.getElementById('br-date');
+  if (bd) bd.textContent = now.toLocaleDateString('pt-PT', {day:'numeric',month:'long'});
+}
+setInterval(tick, 1000); tick();
+
+// ═══ AGENDA CALENDAR ═══
+function renderCal() {
+  const el = document.getElementById('cal');
+  if (!el) return;
+  const yr = STATE.calYear, mo = STATE.calMonth;
+  document.getElementById('cal-label').textContent = MONTH_NAMES[mo] + ' ' + yr;
+  const fd = new Date(yr, mo, 1).getDay();
+  const dm = new Date(yr, mo + 1, 0).getDate();
+  const today = new Date();
+  const isToday = (d) => d === today.getDate() && mo === today.getMonth() && yr === today.getFullYear();
+  let h = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'].map(d =>
+    `<div class="cal-head">${d}</div>`).join('');
+  for (let i = 0; i < fd; i++) h += `<div class="cal-day"></div>`;
+  for (let d = 1; d <= dm; d++) {
+    const ds = `${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const tasks = STATE.calTasks[ds] || [];
+    const sel = STATE.calSelected === d;
+    h += `<div class="cal-day${isToday(d)?' today':''}${sel?' selected':''}" onclick="selDay(${d})">`;
+    h += `<span class="dn${isToday(d)?' today-num':''}">${d}</span>`;
+    tasks.slice(0,2).forEach(t => {
+      h += `<div class="cal-event" style="background:${CAL_COLORS[t.type]||'#eee'}22;color:${CAL_COLORS[t.type]||'#666'}">${t.title}</div>`;
+    });
+    if (tasks.length > 2) h += `<div style="font-size:8px;color:var(--muted)">+${tasks.length-2}</div>`;
+    h += '</div>';
+  }
+  el.innerHTML = h;
+}
+
+function selDay(d) {
+  STATE.calSelected = d;
+  const ds = `${STATE.calYear}-${String(STATE.calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  document.getElementById('cal-day-label').textContent = `${d} de ${MONTH_NAMES[STATE.calMonth]} de ${STATE.calYear}`;
+  document.getElementById('cal-add-form').style.display = 'flex';
+  renderDayTasks(ds);
+  renderCal();
+}
+
+function addTask() {
+  const title = document.getElementById('cal-task').value.trim();
+  if (!title || STATE.calSelected === null) return;
+  const ds = `${STATE.calYear}-${String(STATE.calMonth+1).padStart(2,'0')}-${String(STATE.calSelected).padStart(2,'0')}`;
+  if (!STATE.calTasks[ds]) STATE.calTasks[ds] = [];
+  STATE.calTasks[ds].push({title, type: document.getElementById('cal-type').value});
+  document.getElementById('cal-task').value = '';
+  saveLS();
+  renderDayTasks(ds);
+  renderCal();
+}
+
+function renderDayTasks(ds) {
+  const el = document.getElementById('cal-tasks');
+  if (!el) return;
+  const tasks = STATE.calTasks[ds] || [];
+  if (!tasks.length) { el.innerHTML = '<div class="hint">Sem tarefas neste dia.</div>'; return; }
+  el.innerHTML = tasks.map((t, i) => `
+    <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ${CAL_COLORS[t.type]||'#eee'};border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between">
+      <div><div style="font-size:13px">${t.title}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">${{swift:'Swift Delux',cris:'Cristiana',deal:'Parceria',task:'Tarefa'}[t.type]||t.type}</div></div>
+      <button onclick="delTask('${ds}',${i})" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px">✕</button>
+    </div>`).join('');
+}
+
+function delTask(ds, i) {
+  STATE.calTasks[ds].splice(i, 1);
+  renderDayTasks(ds);
+  renderCal();
+  saveLS();
+}
+
+function prevM() { STATE.calMonth--; if(STATE.calMonth<0){STATE.calMonth=11;STATE.calYear--;} STATE.calSelected=null; renderCal(); }
+function nextM() { STATE.calMonth++; if(STATE.calMonth>11){STATE.calMonth=0;STATE.calYear++;} STATE.calSelected=null; renderCal(); }
+
+// ═══ CONTENT PLANNER ═══
+function renderCP() {
+  const yr = new Date().getFullYear(), mo = new Date().getMonth();
+  const el = document.getElementById('cp-cal');
+  if (!el) return;
+  const fd = new Date(yr, mo, 1).getDay();
+  const dm = new Date(yr, mo + 1, 0).getDate();
+  const bgC = {swift:'#fdf3e3',cris:'#f0edf9',deal:'#e8f9ee'};
+  const fcC = {swift:'#c9a96e',cris:'#8b7fc4',deal:'#22a65a'};
+  let h = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'].map(d => `<div class="cal-head">${d}</div>`).join('');
+  for (let i = 0; i < fd; i++) h += `<div class="cal-day"></div>`;
+  for (let d = 1; d <= dm; d++) {
+    const ds = `${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const evs = STATE.cpEvents.filter(e => e.date === ds);
+    h += `<div class="cal-day"><span class="dn">${d}</span>`;
+    evs.forEach(e => h += `<div class="cal-event" style="background:${bgC[e.brand]||'#f3f4f6'};color:${fcC[e.brand]||'#666'}">${e.title}</div>`);
+    h += '</div>';
+  }
+  el.innerHTML = h;
+  renderCPList();
+}
+
+function addCP() {
+  const d = document.getElementById('cp-date').value;
+  const t = document.getElementById('cp-title').value.trim();
+  if (!d || !t) return;
+  STATE.cpEvents.push({date:d, title:t, brand: document.getElementById('cp-brand').value});
+  STATE.cpEvents.sort((a,b) => a.date.localeCompare(b.date));
+  document.getElementById('cp-title').value = '';
+  saveLS(); renderCP();
+}
+
+function renderCPList() {
+  const el = document.getElementById('cp-list');
+  if (!el) return;
+  if (!STATE.cpEvents.length) { el.innerHTML = '<div class="hint">Sem publicações agendadas.</div>'; return; }
+  const bgC = {swift:'#fdf3e3',cris:'#f0edf9',deal:'#e8f9ee'};
+  const fcC = {swift:'#c9a96e',cris:'#8b7fc4',deal:'#22a65a'};
+  el.innerHTML = STATE.cpEvents.map((e,i) => `
+    <div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-left:3px solid ${fcC[e.brand]||'#eee'};border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:7px">
+      <div style="font-size:11px;color:var(--muted);width:70px;flex-shrink:0">${e.date}</div>
+      <div style="flex:1"><div style="font-size:13px">${e.title}</div></div>
+      <span class="tag tag-${e.brand}">${{swift:'Swift Delux',cris:'Cristiana',deal:'Parceria'}[e.brand]||e.brand}</span>
+      <button onclick="STATE.cpEvents.splice(${i},1);saveLS();renderCP()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px">✕</button>
+    </div>`).join('');
+}
+
+// ═══ FEED PLANNER ═══
+function renderFeed(brand) {
+  const id = 'feed-' + brand;
+  const el = document.getElementById(id);
+  if (!el) return;
+  const arr = brand === 'sd' ? STATE.sdFeed : STATE.crFeed;
+  el.innerHTML = arr.map((cell, i) => {
+    if (!cell) return `<div class="feed-cell" onclick="openFM('${brand}',${i})">+</div>`;
+    const c = FEED_COLORS[cell.type] || '#eee';
+    const l = FEED_LABELS[cell.type] || cell.type;
+    if (cell.img) return `<div class="feed-cell filled" style="border-color:${c};padding:0" onclick="openFM('${brand}',${i})"><img src="${cell.img}" style="width:100%;height:100%;object-fit:cover"><button class="feed-del" onclick="clearFC('${brand}',${i});event.stopPropagation()">✕</button></div>`;
+    return `<div class="feed-cell filled" style="border-color:${c};background:${c}22;color:${c}" onclick="openFM('${brand}',${i})">${l}<button class="feed-del" onclick="clearFC('${brand}',${i});event.stopPropagation()">✕</button></div>`;
+  }).join('');
+}
+
+function openFM(brand, idx) {
+  STATE.activeFeed = brand;
+  STATE.activeFeedIdx = idx;
+  const arr = brand === 'sd' ? STATE.sdFeed : STATE.crFeed;
+  const cell = arr[idx];
+  document.getElementById('fm-url').value = cell && cell.img ? cell.img : '';
+  document.getElementById('fm-type').value = cell && cell.type ? cell.type : (brand === 'sd' ? 'swift' : 'cris');
+  document.getElementById('fm-preview').style.display = 'none';
+  document.getElementById('fm-error').style.display = 'none';
+  if (cell && cell.img) previewFM();
+  document.getElementById('feed-modal').classList.add('on');
+}
+
+function previewFM() {
+  const url = document.getElementById('fm-url').value.trim();
+  const prev = document.getElementById('fm-preview');
+  const err = document.getElementById('fm-error');
+  err.style.display = 'none';
+  if (!url) { prev.style.display = 'none'; return; }
+  prev.src = url;
+  prev.style.display = 'block';
+  prev.onerror = () => { prev.style.display = 'none'; err.style.display = 'block'; };
+  prev.onload = () => { err.style.display = 'none'; };
+}
+
+function saveFM() {
+  const brand = STATE.activeFeed, idx = STATE.activeFeedIdx;
+  if (brand === null || idx === null) return;
+  const arr = brand === 'sd' ? STATE.sdFeed : STATE.crFeed;
+  arr[idx] = {img: document.getElementById('fm-url').value.trim() || null, type: document.getElementById('fm-type').value};
+  closeModal('feed-modal');
+  renderFeed(brand);
+  saveLS();
+}
+
+function clearFC(brand, idx) {
+  const arr = brand === 'sd' ? STATE.sdFeed : STATE.crFeed;
+  arr[idx] = null;
+  renderFeed(brand);
+  saveLS();
+}
+
+// ═══ AGENDAS ═══
+function addSdAg() {
+  const d = document.getElementById('sd-ag-date').value;
+  const t = document.getElementById('sd-ag-title').value.trim();
+  if (!d || !t) return;
+  STATE.sdAgenda.push({date:d, title:t, type:document.getElementById('sd-ag-type').value});
+  STATE.sdAgenda.sort((a,b) => a.date.localeCompare(b.date));
+  document.getElementById('sd-ag-title').value = '';
+  saveLS(); renderAgenda('sd');
+}
+
+function addCrAg() {
+  const d = document.getElementById('cr-ag-date').value;
+  const t = document.getElementById('cr-ag-title').value.trim();
+  if (!d || !t) return;
+  STATE.crAgenda.push({date:d, title:t, type:document.getElementById('cr-ag-type').value});
+  STATE.crAgenda.sort((a,b) => a.date.localeCompare(b.date));
+  document.getElementById('cr-ag-title').value = '';
+  saveLS(); renderAgenda('cr');
+}
+
+function renderAgenda(brand) {
+  const id = brand + '-agenda';
+  const el = document.getElementById(id);
+  if (!el) return;
+  const arr = brand === 'sd' ? STATE.sdAgenda : STATE.crAgenda;
+  if (!arr.length) { el.innerHTML = '<div class="hint">Sem publicações agendadas.</div>'; return; }
+  const byDate = {};
+  arr.forEach(item => { if(!byDate[item.date]) byDate[item.date]=[]; byDate[item.date].push(item); });
+  el.innerHTML = Object.entries(byDate).map(([date, items]) => `
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:5px">${new Date(date+'T12:00').toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'short'})}</div>
+      ${items.map(item => `<div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ${FEED_COLORS[item.type]||'#eee'};border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:5px"><div style="font-size:13px">${item.title}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">${FEED_LABELS[item.type]||item.type}</div></div>`).join('')}
+    </div>`).join('');
+}
+
+// ═══ DEALS / PIPELINE ═══
+function addDeal(brand) {
+  const b = document.getElementById(brand+'-d-brand').value.trim();
+  if (!b) return;
+  const deal = {
+    brand: b,
+    email: document.getElementById(brand+'-d-email').value,
+    status: document.getElementById(brand+'-d-status').value,
+    value: parseFloat(document.getElementById(brand+'-d-val').value)||0
+  };
+  if (brand === 'sd') STATE.sdDeals.push(deal);
+  else STATE.crDeals.push(deal);
+  document.getElementById(brand+'-d-brand').value='';
+  document.getElementById(brand+'-d-email').value='';
+  document.getElementById(brand+'-d-val').value='';
+  saveLS(); renderPipe(brand);
+}
+
+function renderPipe(brand) {
+  const id = 'pipe-' + brand;
+  const el = document.getElementById(id);
+  if (!el) return;
+  const arr = brand === 'sd' ? STATE.sdDeals : STATE.crDeals;
+  el.innerHTML = PIPE_COLS.map(col => {
+    const items = arr.filter(d => d.status === col);
+    return `<div class="pipe-col"><div class="pipe-head">${col} (${items.length})</div>${items.map(d=>`<div class="pipe-item"><div class="pn">${d.brand}</div>${d.email?`<div class="pd">${d.email}</div>`:''} ${d.value?`<div class="pd">€${d.value}</div>`:''}</div>`).join('')}</div>`;
+  }).join('');
+}
+
+// ═══ FILES / MEDIA KIT ═══
+function addFile(brand) {
+  const pfx = brand === 'sd' ? 'sdk' : 'crk';
+  const name = document.getElementById(pfx+'-name').value.trim();
+  const url = document.getElementById(pfx+'-url').value.trim();
+  if (!name || !url) return;
+  const f = {name, url, cat: document.getElementById(pfx+'-cat').value};
+  if (brand === 'sd') STATE.sdFiles.push(f);
+  else STATE.crFiles.push(f);
+  document.getElementById(pfx+'-name').value='';
+  document.getElementById(pfx+'-url').value='';
+  saveLS(); renderFiles(brand);
+}
+
+function renderFiles(brand) {
+  const id = (brand==='sd'?'sdk':'crk')+'-list';
+  const el = document.getElementById(id);
+  if (!el) return;
+  const arr = brand==='sd' ? STATE.sdFiles : STATE.crFiles;
+  if (!arr.length) { el.innerHTML='<div class="hint">Ainda sem ficheiros.</div>'; return; }
+  el.innerHTML = '<div class="mk-grid">'+arr.map((f,i)=>`
+    <a href="${f.url}" target="_blank" style="text-decoration:none">
+      <div class="mk-item">
+        <button class="mk-del" onclick="delFile('${brand}',${i});event.preventDefault()">✕</button>
+        <div class="mi">${FILE_ICONS[f.cat]||'📁'}</div>
+        <div class="mn">${f.name}</div>
+        <div class="mc">${f.cat}</div>
+      </div>
+    </a>`).join('')+'</div>';
+}
+
+function delFile(brand, i) {
+  if (brand==='sd') STATE.sdFiles.splice(i,1);
+  else STATE.crFiles.splice(i,1);
+  saveLS(); renderFiles(brand);
+}
+
+// ═══ WISHLIST ═══
+function addWish() {
+  const b = document.getElementById('wl-brand').value.trim();
+  if (!b) return;
+  STATE.wishlist.push({brand:b, niche:document.getElementById('wl-niche').value, ig:document.getElementById('wl-ig').value});
+  document.getElementById('wl-brand').value='';
+  document.getElementById('wl-niche').value='';
+  document.getElementById('wl-ig').value='';
+  saveLS(); renderWish();
+}
+
+function renderWish() {
+  const el = document.getElementById('wl-list');
+  if (!el) return;
+  if (!STATE.wishlist.length) { el.innerHTML='<div class="hint">Ainda vazia.</div>'; return; }
+  el.innerHTML = STATE.wishlist.map((w,i)=>`
+    <div style="display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:6px 12px;margin:4px;font-size:12px">
+      ✦ ${w.brand}${w.niche?` <span style="color:var(--muted);font-size:10px">(${w.niche})</span>`:''}${w.ig?` <span style="color:var(--cris);font-size:10px">${w.ig}</span>`:''}
+      <button onclick="STATE.wishlist.splice(${i},1);saveLS();renderWish()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:11px;margin-left:3px">✕</button>
+    </div>`).join('');
+}
+
+// ═══ NOTES ═══
+function saveN() {
+  try { localStorage.setItem('agency-notas', document.getElementById('notas').value); } catch(e){}
+}
+
+// ═══ MODAL ═══
+function closeModal(id) { document.getElementById(id).classList.remove('on'); }
+
+// ═══ DADOS.JSON ═══
+async function loadDados() {
+  try {
+    const r = await fetch('https://raw.githubusercontent.com/cristianarodriguesss/swiftdelux-agents/main/dados.json', {cache:'no-store'});
+    if (r.ok) {
+      const d = await r.json();
+      // Update email count
+      const ago24 = Date.now() - 86400000;
+      const emails = (d.events||[]).filter(e => e.type==='email' && new Date(e.timestamp).getTime() > ago24);
+      document.getElementById('k-emails').textContent = emails.length || '0';
+      document.getElementById('email-badge').textContent = emails.length || '0';
+      // Show emails
+      if (emails.length) {
+        const icons = {urgente:'🔴',cliente:'💎',fornecedor:'📦',outro:'✉️'};
+        const html = emails.slice().reverse().map(e => `
+          <div class="email-card"><div class="email-icon">${icons[e.category]||'✉️'}</div>
+          <div class="email-body"><div class="email-subject">${e.summary||'Email processado'}</div>
+          <span class="tag tag-${e.category||'outro'}">${e.category||'outro'}</span></div></div>`).join('');
+        document.getElementById('emails-dash').innerHTML = html;
+        document.getElementById('email-list').innerHTML = html;
+      }
+      // Posts count
+      const ago7 = Date.now() - 7*86400000;
+      const posts = (d.events||[]).filter(e => (e.type==='post'||e.type==='post_cr') && new Date(e.timestamp).getTime() > ago7);
+      document.getElementById('k-posts').textContent = posts.length || '4';
+      // Briefing
+      if (d.briefing) {
+        document.getElementById('br-text').textContent = d.briefing.resumo || '';
+        const bh = document.getElementById('br-hl');
+        const bt = document.getElementById('br-tasks');
+        if (bh) bh.innerHTML = (d.briefing.destaques||[]).map(h=>`<li>${h}</li>`).join('');
+        if (bt) bt.innerHTML = (d.briefing.tarefas||[]).map(t=>`<li>${t}</li>`).join('');
+      }
+    }
+  } catch(e) { console.log('dados.json:', e); }
+}
+
+// ═══ REPORT ═══
+function genRpt() {
+  document.getElementById('rpt-out').textContent = 'Para gerar relatórios automáticos com IA, o agente de conteúdo precisa de correr primeiro. Vai ao GitHub → Actions → Run workflow.';
+}
+
+// ═══ LOCALSTORAGE ═══
+function saveLS() {
+  try {
+    const keys = ['sdFeed','crFeed','calTasks','cpEvents','sdAgenda','crAgenda','sdDeals','crDeals','sdFiles','crFiles','wishlist'];
+    const save = {};
+    keys.forEach(k => save[k] = STATE[k]);
+    localStorage.setItem('agency-state', JSON.stringify(save));
+  } catch(e) {}
+}
+
+function loadLS() {
+  try {
+    const s = localStorage.getItem('agency-state');
+    if (s) {
+      const d = JSON.parse(s);
+      Object.keys(d).forEach(k => { if (STATE.hasOwnProperty(k)) STATE[k] = d[k]; });
+    }
+    const notas = localStorage.getItem('agency-notas');
+    if (notas) document.getElementById('notas').value = notas;
+  } catch(e) {}
+}
+
+// ═══ INIT ═══
+window.addEventListener('DOMContentLoaded', function() {
+  loadLS();
+  renderCal();
+  renderFeed('sd');
+  renderFeed('cr');
+  renderWish();
+  renderFiles('sd');
+  renderFiles('cr');
+  // Pre-load media kit Cristiana
+  if (!STATE.crFiles.length) {
+    STATE.crFiles.push({name:'Media Kit — Cristiana Rodrigues', url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss', cat:'Media Kit PDF'});
+    renderFiles('cr');
+  }
+  loadDados();
+});
+
+// PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/swiftdelux-agents/sw.js').catch(function(){});
   });
 }
 </script>
