@@ -214,7 +214,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
   <div class="sb-sec">Geral</div>
   <div class="sb-item on" onclick="go('dashboard',this)"><span class="ic">◉</span> Dashboard</div>
   <div class="sb-item" onclick="go('emails',this)"><span class="ic">✉</span> Emails <span id="email-badge" style="margin-left:auto;background:var(--red);color:#fff;border-radius:8px;font-size:9px;padding:1px 5px">0</span></div>
-  <div class="sb-item" onclick="go('content',this)"><span class="ic">📅</span> Content Planner</div>
 
   <div class="sb-sec">Marcas</div>
 
@@ -228,7 +227,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div class="sb-item" onclick="go('sd-metrics',this)"><span class="ic">📊</span> Métricas</div>
     <div class="sb-item" onclick="go('sd-goals',this)"><span class="ic">🎯</span> Goals</div>
     <div class="sb-item" onclick="go('sd-deals',this)"><span class="ic">🤝</span> Parcerias</div>
-    <div class="sb-item" onclick="go('sd-kit',this)"><span class="ic">📁</span> Media Kit</div>
+    <div class="sb-item" onclick="go('sd-content',this)"><span class="ic">📅</span> Content Planner</div>
+    <div class="sb-item" onclick="go('sd-emails',this)"><span class="ic">✉</span> Emails</div>
+    <div class="sb-item" onclick="go('sd-ads',this)"><span class="ic">📢</span> Anúncios Online</div>
   </div>
 
   <div class="sb-brand" id="br-cr" onclick="toggle('cr')">
@@ -243,6 +244,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div class="sb-item" onclick="go('cr-deals',this)"><span class="ic">🤝</span> Parcerias</div>
     <div class="sb-item" onclick="go('cr-kit',this)"><span class="ic">📁</span> Media Kit</div>
     <div class="sb-item" onclick="go('cr-wish',this)"><span class="ic">⭐</span> Wishlist</div>
+    <div class="sb-item" onclick="go('cr-content',this)"><span class="ic">📅</span> Content Planner</div>
+    <div class="sb-item" onclick="go('cr-emails',this)"><span class="ic">✉</span> Emails</div>
+    <div class="sb-item" onclick="go('cr-rubricas',this)"><span class="ic">💡</span> Rubricas</div>
   </div>
 
   <div class="sb-foot">
@@ -606,8 +610,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 <div class="page" id="page-cr-goals">
   <div class="ph"><h1>Goals <span class="tag tag-cris">@cris</span></h1></div>
   <div class="card sec">
-    <div class="goal"><div class="goal-row"><div class="goal-name">50.000 seguidores Instagram</div><div class="goal-pct">6.959 / 50.000</div></div><div class="bar-track"><div class="bar-fill" style="width:14%;background:var(--cris)"></div></div></div>
-    <div class="goal mt8"><div class="goal-row"><div class="goal-name">20.000 seguidores TikTok</div><div class="goal-pct">0 / 20.000</div></div><div class="bar-track"><div class="bar-fill" style="width:0%;background:var(--cris)"></div></div></div>
+    <div class="goal"><div class="goal-row"><div class="goal-name">10.000 seguidores Instagram</div><div class="goal-pct">6.959 / 10.000</div></div><div class="bar-track"><div class="bar-fill" style="width:70%;background:var(--cris)"></div></div></div>
+    <div class="goal mt8"><div class="goal-row"><div class="goal-name">10.000 seguidores TikTok</div><div class="goal-pct">0 / 10.000</div></div><div class="bar-track"><div class="bar-fill" style="width:0%;background:var(--cris)"></div></div></div>
     <div class="goal mt8"><div class="goal-row"><div class="goal-name">10 parcerias fechadas</div><div class="goal-pct" id="cr-g-deals">0 / 10</div></div><div class="bar-track"><div class="bar-fill" id="cr-g-deals-bar" style="width:0%;background:var(--cris)"></div></div></div>
   </div>
 </div>
@@ -648,6 +652,126 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addWish()">+ Adicionar</button></div>
   </div>
   <div id="wl-list"><div class="hint">Ainda vazia. Adiciona as marcas com que sonhas trabalhar.</div></div>
+</div>
+
+
+<!-- SD CONTENT PLANNER -->
+<div class="page" id="page-sd-content">
+  <div class="ph"><h1>📅 Content Planner <span class="tag tag-swift">Swift Delux</span></h1><p>Calendário editorial da Swift Delux</p></div>
+  <div class="sec">
+    <div class="form-row">
+      <div class="field"><label>Data</label><input id="sdc-date" type="date"></div>
+      <div class="field" style="flex:1"><label>Conteúdo</label><input id="sdc-title" type="text" placeholder="ex: Reel produto — pulseira dourada"></div>
+      <div class="field"><label>Tipo</label><select id="sdc-brand"><option value="swift">Produto</option><option value="life">Lifestyle</option><option value="deal">Parceria</option></select></div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addCPSD()">+ Agendar</button></div>
+    </div>
+    <div class="card">
+      <div class="cal-grid" id="cp-sd-cal"></div>
+    </div>
+    <div class="sec-title mt16">Publicações agendadas</div>
+    <div id="cp-sd-list"><div class="hint">Sem publicações agendadas.</div></div>
+  </div>
+</div>
+
+<!-- SD EMAILS -->
+<div class="page" id="page-sd-emails">
+  <div class="ph"><h1>✉ Emails <span class="tag tag-swift">Swift Delux</span></h1><p>swiftdeluxredesociais@gmail.com — processados pelo agente</p></div>
+  <div class="card" style="margin-bottom:16px;display:flex;align-items:center;gap:12px;background:#f0fdf4;border-color:#bbf7d0">
+    <span style="font-size:20px">📧</span>
+    <div>
+      <div style="font-size:13px;font-weight:500">Email da Swift Delux</div>
+      <div style="font-size:12px;color:var(--muted)">swiftdeluxredesociais@gmail.com</div>
+    </div>
+  </div>
+  <div id="sd-email-list"><div class="hint">O agente de email ainda não processou emails da Swift Delux. Corre o workflow no GitHub para começar.</div></div>
+</div>
+
+<!-- SD ADS -->
+<div class="page" id="page-sd-ads">
+  <div class="ph"><h1>📢 Anúncios Online <span class="tag tag-swift">Swift Delux</span></h1><p>Gestão de campanhas pagas</p></div>
+  <div class="sec">
+    <div class="form-row">
+      <div class="field"><label>Campanha</label><input id="ad-name" type="text" placeholder="ex: Campanha Verão 2026"></div>
+      <div class="field"><label>Plataforma</label><select id="ad-platform"><option>Meta Ads (Facebook/Instagram)</option><option>TikTok Ads</option><option>Google Ads</option><option>Pinterest Ads</option></select></div>
+      <div class="field"><label>Orçamento €</label><input id="ad-budget" type="number" placeholder="0" style="width:90px"></div>
+      <div class="field"><label>Estado</label><select id="ad-status"><option>A planear</option><option>Ativa</option><option>Pausada</option><option>Concluída</option></select></div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addAd()">+ Adicionar</button></div>
+    </div>
+    <div id="ad-list"><div class="hint">Sem campanhas. Adiciona a tua primeira campanha de anúncios.</div></div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">💡 Dicas de anúncios para joias</div>
+    <div class="card">
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.6">
+        <div>🎯 <strong>Público alvo:</strong> Mulheres 20-40 anos, Portugal e Brasil, interessadas em moda e joias minimalistas</div>
+        <div>📸 <strong>Melhor formato:</strong> Carrossel com detalhes do produto + vídeo curto (15-30s) a mostrar a peça</div>
+        <div>⏰ <strong>Melhor horário:</strong> Anúncios com mais conversão entre as 18h-21h (mesmo horário do público orgânico)</div>
+        <div>💰 <strong>Orçamento sugerido:</strong> Começa com €5-10/dia para testar, depois escala o que funciona</div>
+        <div>🔁 <strong>Retargeting:</strong> Mostra anúncios a quem visitou o site ou interagiu com posts</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CR CONTENT PLANNER -->
+<div class="page" id="page-cr-content">
+  <div class="ph"><h1>📅 Content Planner <span class="tag tag-cris">@cris</span></h1><p>Calendário editorial da Cristiana Rodrigues</p></div>
+  <div class="sec">
+    <div class="form-row">
+      <div class="field"><label>Data</label><input id="crc-date" type="date"></div>
+      <div class="field" style="flex:1"><label>Conteúdo</label><input id="crc-title" type="text" placeholder="ex: Story — rotina matinal"></div>
+      <div class="field"><label>Tipo</label><select id="crc-brand"><option value="cris">Lifestyle</option><option value="deal">Parceria</option><option value="swift">Swift Delux</option></select></div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addCPCR()">+ Agendar</button></div>
+    </div>
+    <div class="card">
+      <div class="cal-grid" id="cp-cr-cal"></div>
+    </div>
+    <div class="sec-title mt16">Publicações agendadas</div>
+    <div id="cp-cr-list"><div class="hint">Sem publicações agendadas.</div></div>
+  </div>
+</div>
+
+<!-- CR EMAILS -->
+<div class="page" id="page-cr-emails">
+  <div class="ph"><h1>✉ Emails <span class="tag tag-cris">@cris</span></h1><p>cristianarodriguesss.pr@gmail.com — processados pelo agente</p></div>
+  <div class="card" style="margin-bottom:16px;display:flex;align-items:center;gap:12px;background:#f0edf9;border-color:#c4b5fd">
+    <span style="font-size:20px">📧</span>
+    <div>
+      <div style="font-size:13px;font-weight:500">Email da Cristiana</div>
+      <div style="font-size:12px;color:var(--muted)">cristianarodriguesss.pr@gmail.com</div>
+    </div>
+  </div>
+  <div id="cr-email-list"><div class="hint">O agente de email ainda não processou emails. Corre o workflow no GitHub para começar.</div></div>
+</div>
+
+<!-- CR RUBRICAS -->
+<div class="page" id="page-cr-rubricas">
+  <div class="ph"><h1>💡 Rubricas <span class="tag tag-cris">@cris</span></h1><p>Ideias de rubricas para as tuas redes sociais</p></div>
+  <div class="sec">
+    <div class="form-row">
+      <div class="field" style="flex:1"><label>Nome da rubrica</label><input id="rub-name" type="text" placeholder="ex: Segunda do Self-Care"></div>
+      <div class="field"><label>Plataforma</label><select id="rub-platform"><option>Instagram</option><option>TikTok</option><option>Ambas</option></select></div>
+      <div class="field"><label>Frequência</label><select id="rub-freq"><option>Semanal</option><option>Quinzenal</option><option>Mensal</option></select></div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addRub()">+ Adicionar</button></div>
+    </div>
+    <div class="field" style="margin-bottom:14px;width:100%">
+      <label>Descrição / Conceito</label>
+      <textarea id="rub-desc" placeholder="Descreve a ideia da rubrica, o formato, o tipo de conteúdo..." style="width:100%;height:80px;border:1px solid var(--border);border-radius:8px;padding:10px;font-size:12px;font-family:inherit;resize:vertical"></textarea>
+    </div>
+    <div id="rub-list"><div class="hint">Ainda sem rubricas. Adiciona as tuas ideias de conteúdo recorrente.</div></div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">💡 Ideias de rubricas</div>
+    <div class="card">
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+        <div style="padding:10px;background:var(--bg);border-radius:8px"><strong>🌿 Segunda do Wellness</strong> — Dica semanal de bem-estar, saúde mental, rotinas</div>
+        <div style="padding:10px;background:var(--bg);border-radius:8px"><strong>✈️ Destino da semana</strong> — Lugar que visitei ou quero visitar, dicas de viagem</div>
+        <div style="padding:10px;background:var(--bg);border-radius:8px"><strong>💄 Friday Glow</strong> — Produto de beleza favorito da semana, tutorial rápido</div>
+        <div style="padding:10px;background:var(--bg);border-radius:8px"><strong>👗 Outfit do dia</strong> — Look diário com link para as peças</div>
+        <div style="padding:10px;background:var(--bg);border-radius:8px"><strong>📖 O que estou a ler/ver</strong> — Recomendações semanais autênticas</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 </main>
@@ -1137,6 +1261,108 @@ window.addEventListener('DOMContentLoaded', function() {
   }
   loadDados();
 });
+
+
+// ═══ SD CONTENT PLANNER ═══
+var sdCPEvents = [];
+function addCPSD() {
+  var d = document.getElementById('sdc-date').value;
+  var t = document.getElementById('sdc-title').value.trim();
+  if (!d || !t) return;
+  sdCPEvents.push({date:d, title:t, brand:document.getElementById('sdc-brand').value});
+  sdCPEvents.sort(function(a,b){return a.date.localeCompare(b.date);});
+  document.getElementById('sdc-title').value = '';
+  renderCPBrand('sd');
+}
+
+function renderCPBrand(brand) {
+  var events = brand === 'sd' ? sdCPEvents : crCPEvents;
+  var calId = 'cp-'+brand+'-cal';
+  var listId = 'cp-'+brand+'-list';
+  var calEl = document.getElementById(calId);
+  var listEl = document.getElementById(listId);
+  if (!calEl) return;
+  var yr = new Date().getFullYear(), mo = new Date().getMonth();
+  var fd = new Date(yr,mo,1).getDay(), dm = new Date(yr,mo+1,0).getDate();
+  var bgC = {swift:'#fdf3e3',cris:'#f0edf9',deal:'#e8f9ee',life:'#fdf3e3'};
+  var fcC = {swift:'#c9a96e',cris:'#8b7fc4',deal:'#22a65a',life:'#e07a30'};
+  var h = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'].map(function(d){return '<div class="cal-head">'+d+'</div>';}).join('');
+  for (var i=0;i<fd;i++) h += '<div class="cal-day"></div>';
+  for (var d=1;d<=dm;d++) {
+    var ds = yr+'-'+String(mo+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    var evs = events.filter(function(e){return e.date===ds;});
+    h += '<div class="cal-day"><span class="dn">'+d+'</span>';
+    evs.forEach(function(e){h+='<div class="cal-event" style="background:'+(bgC[e.brand]||'#f3f4f6')+';color:'+(fcC[e.brand]||'#666')+'">'+e.title+'</div>';});
+    h += '</div>';
+  }
+  calEl.innerHTML = h;
+  if (listEl) {
+    if (!events.length) { listEl.innerHTML='<div class="hint">Sem publicações agendadas.</div>'; return; }
+    listEl.innerHTML = events.map(function(e,i){
+      return '<div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-left:3px solid '+(fcC[e.brand]||'#eee')+';border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:7px"><div style="font-size:11px;color:var(--muted);width:70px;flex-shrink:0">'+e.date+'</div><div style="flex:1;font-size:13px">'+e.title+'</div><button onclick="'+(brand==='sd'?'sdCPEvents':'crCPEvents')+'.splice('+i+',1);renderCPBrand(''+brand+'')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px">✕</button></div>';
+    }).join('');
+  }
+}
+
+// ═══ CR CONTENT PLANNER ═══
+var crCPEvents = [];
+function addCPCR() {
+  var d = document.getElementById('crc-date').value;
+  var t = document.getElementById('crc-title').value.trim();
+  if (!d || !t) return;
+  crCPEvents.push({date:d, title:t, brand:document.getElementById('crc-brand').value});
+  crCPEvents.sort(function(a,b){return a.date.localeCompare(b.date);});
+  document.getElementById('crc-title').value = '';
+  renderCPBrand('cr');
+}
+
+// ═══ ADS ═══
+var adsList = [];
+function addAd() {
+  var n = document.getElementById('ad-name').value.trim();
+  if (!n) return;
+  adsList.push({name:n, platform:document.getElementById('ad-platform').value, budget:document.getElementById('ad-budget').value, status:document.getElementById('ad-status').value});
+  document.getElementById('ad-name').value='';
+  document.getElementById('ad-budget').value='';
+  renderAds();
+}
+function renderAds() {
+  var el = document.getElementById('ad-list');
+  if (!el) return;
+  if (!adsList.length) { el.innerHTML='<div class="hint">Sem campanhas.</div>'; return; }
+  var statusColors = {'A planear':'#eff6ff','Ativa':'#e8f9ee','Pausada':'#fdf3e3','Concluída':'#f3f4f6'};
+  var statusText = {'A planear':'#1e40af','Ativa':'#166534','Pausada':'#9a5f00','Concluída':'#6b7280'};
+  el.innerHTML = adsList.map(function(a,i){
+    return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:13px;font-weight:500">'+a.name+'</div><div style="font-size:11px;color:var(--muted);margin-top:3px">'+a.platform+(a.budget?' · €'+a.budget+'/dia':'')+'</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:'+(statusColors[a.status]||'#f3f4f6')+';color:'+(statusText[a.status]||'#666')+'">'+a.status+'</span><button onclick="adsList.splice('+i+',1);renderAds()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px">✕</button></div></div>';
+  }).join('');
+}
+
+// ═══ RUBRICAS ═══
+var rubricasList = [];
+function addRub() {
+  var n = document.getElementById('rub-name').value.trim();
+  if (!n) return;
+  rubricasList.push({name:n, platform:document.getElementById('rub-platform').value, freq:document.getElementById('rub-freq').value, desc:document.getElementById('rub-desc').value.trim()});
+  document.getElementById('rub-name').value='';
+  document.getElementById('rub-desc').value='';
+  renderRubs();
+}
+function renderRubs() {
+  var el = document.getElementById('rub-list');
+  if (!el) return;
+  if (!rubricasList.length) { el.innerHTML='<div class="hint">Ainda sem rubricas.</div>'; return; }
+  el.innerHTML = rubricasList.map(function(r,i){
+    return '<div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--cris);border-radius:0 10px 10px 0;padding:14px;margin-bottom:10px"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:600">'+r.name+'</div><div style="font-size:11px;color:var(--muted);margin-top:3px">'+r.platform+' · '+r.freq+'</div>'+(r.desc?'<div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5">'+r.desc+'</div>':'')+'</div><button onclick="rubricasList.splice('+i+',1);renderRubs()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;flex-shrink:0">✕</button></div></div>';
+  }).join('');
+}
+
+// Update go() to handle new pages
+var originalGo = go;
+go = function(id, el) {
+  originalGo(id, el);
+  if (id === 'sd-content') renderCPBrand('sd');
+  if (id === 'cr-content') renderCPBrand('cr');
+};
 
 // PWA
 if ('serviceWorker' in navigator) {
