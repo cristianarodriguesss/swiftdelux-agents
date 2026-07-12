@@ -34,6 +34,11 @@
       "type": "email",
       "summary": "outro: Email transacional da plataforma Influee contendo um código de confirmação (2BGG05) para concluir o registo na aplicação.",
       "timestamp": "2026-07-12T11:44:03.051641+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Email transacional da plataforma Influee contendo um código de confirmação de registo (2BGG05) para verificação de identidade durante a criação de conta.",
+      "timestamp": "2026-07-12T15:38:30.536753+00:00"
     }
   ],
   "followers": {
