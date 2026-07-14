@@ -846,7 +846,6 @@ const MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julh
 
 // ═══ NAV ═══
 function go(id, el) {
-  try {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
   document.querySelectorAll('.sb-item').forEach(n => n.classList.remove('on'));
   const pg = document.getElementById('page-' + id);
@@ -1377,7 +1376,6 @@ go = function(id, el) {
   originalGo(id, el);
   if (id === 'sd-content') renderCPBrand('sd');
   if (id === 'cr-content') renderCPBrand('cr');
-  } catch(e) { console.error('nav error:', e); }
 };
 
 // PWA
