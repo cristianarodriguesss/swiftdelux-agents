@@ -217,12 +217,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 
   <div class="sb-sec">Marcas</div>
 
-  <div class="sb-brand" id="br-sd" onclick="toggle('sd')">
+  <div class="sb-brand open" id="br-sd" onclick="toggle('sd')">
     <span class="dot" style="background:var(--swift)"></span>
     Swift Delux
     <span class="chev">▶</span>
   </div>
-  <div class="sb-sub" id="sub-sd">
+  <div class="sb-sub open" id="sub-sd">
     <div class="sb-item" onclick="go('sd-feed',this)"><span class="ic">▦</span> Feed Planner</div>
     <div class="sb-item" onclick="go('sd-metrics',this)"><span class="ic">📊</span> Métricas</div>
     <div class="sb-item" onclick="go('sd-goals',this)"><span class="ic">🎯</span> Goals</div>
@@ -232,12 +232,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div class="sb-item" onclick="go('sd-ads',this)"><span class="ic">📢</span> Anúncios Online</div>
   </div>
 
-  <div class="sb-brand" id="br-cr" onclick="toggle('cr')">
+  <div class="sb-brand open" id="br-cr" onclick="toggle('cr')">
     <span class="dot" style="background:var(--cris)"></span>
     Cristiana Rodrigues
     <span class="chev">▶</span>
   </div>
-  <div class="sb-sub" id="sub-cr">
+  <div class="sb-sub open" id="sub-cr">
     <div class="sb-item" onclick="go('cr-feed',this)"><span class="ic">▦</span> Feed Planner</div>
     <div class="sb-item" onclick="go('cr-metrics',this)"><span class="ic">📊</span> Métricas</div>
     <div class="sb-item" onclick="go('cr-goals',this)"><span class="ic">🎯</span> Goals</div>
@@ -846,6 +846,7 @@ const MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julh
 
 // ═══ NAV ═══
 function go(id, el) {
+  try {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
   document.querySelectorAll('.sb-item').forEach(n => n.classList.remove('on'));
   const pg = document.getElementById('page-' + id);
@@ -861,8 +862,10 @@ function go(id, el) {
 }
 
 function toggle(b) {
-  document.getElementById('sub-' + b).classList.toggle('open');
-  document.getElementById('br-' + b).classList.toggle('open');
+  try {
+    document.getElementById('sub-' + b).classList.toggle('open');
+    document.getElementById('br-' + b).classList.toggle('open');
+  } catch(e) { console.error('toggle error:', e); }
 }
 
 function toggleMenu() {
@@ -1374,6 +1377,7 @@ go = function(id, el) {
   originalGo(id, el);
   if (id === 'sd-content') renderCPBrand('sd');
   if (id === 'cr-content') renderCPBrand('cr');
+  } catch(e) { console.error('nav error:', e); }
 };
 
 // PWA
