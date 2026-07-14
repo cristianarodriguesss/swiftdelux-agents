@@ -858,6 +858,8 @@ function go(id, el) {
   if (id === 'sd-deals') renderPipe('sd');
   if (id === 'cr-deals') renderPipe('cr');
   if (id === 'content') renderCP();
+  if (id === 'sd-content') { try { renderCPBrand('sd'); } catch(e){} }
+  if (id === 'cr-content') { try { renderCPBrand('cr'); } catch(e){} }
 }
 
 function toggle(b) {
@@ -1371,12 +1373,7 @@ function renderRubs() {
 }
 
 // Update go() to handle new pages
-var originalGo = go;
-go = function(id, el) {
-  originalGo(id, el);
-  if (id === 'sd-content') renderCPBrand('sd');
-  if (id === 'cr-content') renderCPBrand('cr');
-};
+
 
 // PWA
 if ('serviceWorker' in navigator) {
