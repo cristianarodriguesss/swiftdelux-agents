@@ -124,9 +124,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .email-time{font-size:11px;color:var(--muted);flex-shrink:0;white-space:nowrap}
 
 /* AGENDA */
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0;background:var(--border);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
 .cal-head{background:var(--surface);padding:6px 2px;text-align:center;font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase}
-.cal-day{background:var(--surface);padding:5px 4px;min-height:52px;cursor:pointer;transition:background .1s}
+.cal-day{background:var(--surface);padding:5px 4px;min-height:56px;cursor:pointer;transition:background .1s;border:0.5px solid var(--border)}
 .cal-day:hover{background:#f9f9f7}
 .cal-day.today{border:1.5px solid var(--swift)}
 .cal-day.selected{background:#fdf3e3}
