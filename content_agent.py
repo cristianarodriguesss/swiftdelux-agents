@@ -311,9 +311,6 @@ def main():
     dados = load_dados()
 
     generate_briefing(dados)
-    generate_post_sd()
-    generate_post_cr()
-    generate_story_cr()
     email_summary(dados)
     weekly_summary(dados)
     followers_reminder(dados)
