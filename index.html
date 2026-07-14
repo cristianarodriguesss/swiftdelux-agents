@@ -1315,7 +1315,8 @@ function renderCPBrand(brand) {
   if (listEl) {
     if (!events.length) { listEl.innerHTML='<div class="hint">Sem publicações agendadas.</div>'; return; }
     listEl.innerHTML = events.map(function(e,i){
-      return '<div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-left:3px solid '+(fcC[e.brand]||'#eee')+';border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:7px"><div style="font-size:11px;color:var(--muted);width:70px;flex-shrink:0">'+e.date+'</div><div style="flex:1;font-size:13px">'+e.title+'</div><button onclick="'+(brand==='sd'?'sdCPEvents':'crCPEvents')+'.splice('+i+',1);renderCPBrand(''+brand+'')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px">✕</button></div>';
+      var arr2 = brand==='sd'?'sdCPEvents':'crCPEvents';
+      return '<div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-left:3px solid '+(fcC[e.brand]||'#eee')+';border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:7px"><div style="font-size:11px;color:var(--muted);width:70px;flex-shrink:0">'+e.date+'</div><div style="flex:1;font-size:13px">'+e.title+'</div><button onclick="'+arr2+'.splice('+i+',1);renderCPBrand(\"'+brand+'\")" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px">✕</button></div>';
     }).join('');
   }
 }
