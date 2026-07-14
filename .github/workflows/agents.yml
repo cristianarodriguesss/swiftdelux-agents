@@ -8,6 +8,8 @@ on:
     - cron: "0 9 * * *"
     # Followers agent: 1x por semana, segunda-feira às 8h UTC
     - cron: "0 8 * * 1"
+    # Brand agent: 1x por semana, quarta-feira às 9h UTC
+    - cron: "0 9 * * 3"
   workflow_dispatch:
     inputs:
       followers:
@@ -121,3 +123,19 @@ jobs:
           git diff --staged --quiet || git commit -m "Atualiza metricas manuais"
           git pull --rebase --autostash
           git push
+  brand-agent:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && startsWith(github.event.schedule, '0 9 * * 3'))
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run pip install requests
+        run: pip install requests
+      - name: Run brand agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python brand_agent.py
