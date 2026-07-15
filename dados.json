@@ -49,6 +49,21 @@
       "type": "email",
       "summary": "outro: Email transacional da plataforma Influee com código de confirmação '2BGG05' para concluir um registo na aplicação.",
       "timestamp": "2026-07-12T22:33:01.363249+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "urgente: Alerta de segurança da Google informando um novo início de sessão na conta Gmail de cristianarodriguesss.pr@gmail.com a partir de um dispositivo Apple iPhone.",
+      "timestamp": "2026-07-15T16:59:37.133295+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática da Google informando que a conta cristianarodriguesss.pr@gmail.com foi utilizada para fazer login na aplicação Brandbassador através da funcionalidade 'Iniciar sessão com a Google'.",
+      "timestamp": "2026-07-15T16:59:42.035303+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática da Google informando que a utilizadora cristianarodriguesss.pr@gmail.com autorizou a aplicação Brandbassador a aceder a dados da sua Conta Google através da funcionalidade 'Iniciar sessão com a Google'.",
+      "timestamp": "2026-07-15T16:59:48.174629+00:00"
     }
   ],
   "followers": {
