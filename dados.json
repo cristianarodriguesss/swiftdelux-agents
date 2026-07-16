@@ -94,6 +94,21 @@
       "type": "email",
       "summary": "outro: Notificação automática da Google informando que o utilizador cristianarodriguesss.pr@gmail.com utilizou a funcionalidade 'Iniciar sessão com a Google' para aceder à aplicação Brandbassador.",
       "timestamp": "2026-07-16T13:05:23.523590+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "urgente: Alerta de segurança da Google informando sobre um novo início de sessão na conta Gmail de cristianarodriguesss.pr@gmail.com a partir de um dispositivo Apple iPhone.",
+      "timestamp": "2026-07-16T17:56:00.310496+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática da Google informando que a conta cristianarodriguesss.pr@gmail.com foi utilizada para fazer login na aplicação Brandbassador através da funcionalidade 'Iniciar sessão com a Google'.",
+      "timestamp": "2026-07-16T17:56:05.244432+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática da Google informando que a conta cristianarodriguesss.pr@gmail.com foi utilizada para autenticação via 'Iniciar sessão com a Google' na aplicação Brandbassador.",
+      "timestamp": "2026-07-16T17:56:10.410941+00:00"
     }
   ],
   "followers": {
