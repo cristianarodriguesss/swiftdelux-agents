@@ -128,7 +128,8 @@ Escreve um email em ingles, profissional mas caloroso, curto (max 150 palavras),
 2. Explica porque a marca e perfeita para a Cristiana
 3. Propoe colaboracao (post, story, reel)
 4. Inclui link do media kit
-5. Assina como Artur Santos, Talent Manager
+5. Menciona que estás completamente aberta a receber produtos em troca de um story ou publicação (gifting collaboration)
+6. Assina como Artur Santos, Talent Manager
 
 Responde APENAS em JSON:
 {{"assunto": "...", "corpo": "..."}}"""
@@ -208,24 +209,27 @@ def process_marca_command(handle, state):
             f"<b>Instagram:</b> {full_handle}\n"
             f"<b>Email:</b> <code>{email}</code> {conf_emoji}\n"
             f"<b>Nicho:</b> {brand_info.get('nicho', '')}\n\n"
-            f"<b>Assunto enviado:</b>\n<i>{email_content['assunto']}</i>\n\n"
-            f"<b>Email enviado:</b>\n{email_content['corpo'][:300]}...\n\n"
+            f"<b>Assunto:</b>\n<i>{email_content['assunto']}</i>\n\n"
+            f"<b>Corpo:</b>\n{email_content['corpo']}\n\n"
             f"<i>THE AGENCY · Outreach Agent</i>"
         )
         send_telegram(msg)
         print(f"OK Email enviado para {email} ({handle})", flush=True)
     else:
-        # Email failed - send preview for manual sending
+        # Email failed - send FULL email text ready to copy/paste manually
         line = "─" * 22
         msg = (
-            f"⚠️ <b>EMAIL GERADO (envio manual)</b>\n"
+            f"❌ <b>EMAIL FALHOU — copia e envia manualmente</b>\n"
             f"<code>{line}</code>\n\n"
-            f"<b>Para:</b> <code>{email}</code> {conf_emoji}\n"
-            f"<b>Assunto:</b> {email_content['assunto']}\n\n"
-            f"{email_content['corpo']}\n\n"
+            f"⚠️ O email <code>{email}</code> pode estar errado.\n"
+            f"Pesquisa o email correcto no site: {brand_info.get('website', '')}\n\n"
+            f"<b>ASSUNTO:</b>\n<code>{email_content['assunto']}</code>\n\n"
+            f"<b>CORPO (copia tudo abaixo):</b>\n"
+            f"<code>{email_content['corpo']}</code>\n\n"
             f"<i>THE AGENCY · Outreach Agent</i>"
         )
         send_telegram(msg)
+        print(f"Email falhou para {email} - texto enviado para Telegram", flush=True)
 
 
 def main():
