@@ -1,25 +1,20 @@
 """
 THE AGENCY - Outreach Agent
-Le mensagens do Telegram com /marca @handle
-Pesquisa email da marca e envia email de parceria automaticamente.
-Corre de hora a hora.
+Le mensagens /marca @handle do Telegram e envia emails de parceria.
 """
 
-import os
-import json
-import requests
-import time
-import imaplib
-import smtplib
+import os, json, requests, time, smtplib, base64
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from datetime import datetime, timezone
 
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 TELEGRAM_CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 GMAIL_USER = os.environ.get("GMAIL_USER", "cristianarodriguesss.pr@gmail.com")
 GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD", "")
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
+GITHUB_REPO = "cristianarodriguesss/swiftdelux-agents"
+STATE_FILE = "outreach_state.json"
 
 
 def send_telegram(text):
@@ -42,238 +37,225 @@ def call_claude(prompt, max_tokens=800):
     )
     text = resp.json()["content"][0]["text"].strip()
     if "```" in text:
-        text = text.split("```")[1]
+        parts = text.split("```")
+        text = parts[1] if len(parts) > 1 else text
         if text.startswith("json"):
             text = text[4:]
     return text.strip()
 
 
-def get_telegram_updates(offset=None):
-    """Busca mensagens novas do bot"""
-    params = {"timeout": 5, "allowed_updates": ["message"]}
-    if offset:
-        params["offset"] = offset
+def load_state():
+    """Load state from GitHub repo"""
     try:
         r = requests.get(
-            f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/getUpdates",
-            params=params, timeout=10
+            f"https://api.github.com/repos/{GITHUB_REPO}/contents/{STATE_FILE}",
+            headers={"Authorization": f"token {GITHUB_TOKEN}", "Accept": "application/vnd.github.v3+json"},
+            timeout=10
         )
-        return r.json().get("result", [])
+        if r.status_code == 200:
+            data = r.json()
+            content = base64.b64decode(data['content']).decode('utf-8')
+            state = json.loads(content)
+            state['_sha'] = data['sha']
+            return state
     except Exception as e:
-        print(f"Telegram getUpdates error: {e}", flush=True)
-        return []
+        print(f"Load state error: {e}", flush=True)
+    return {"processed_ids": [], "last_offset": 0, "sent_brands": [], "_sha": None}
 
 
-def load_processed():
-    """Load list of processed update IDs"""
+def save_state(state):
+    """Save state to GitHub repo"""
+    sha = state.pop('_sha', None)
     try:
-        with open("outreach_state.json", "r") as f:
-            return json.load(f)
-    except Exception:
-        return {"processed_ids": [], "last_offset": 0, "sent_brands": []}
-
-
-def save_processed(state):
-    try:
-        with open("outreach_state.json", "w") as f:
-            json.dump(state, f, ensure_ascii=False, indent=2)
+        content = base64.b64encode(json.dumps(state, indent=2, ensure_ascii=False).encode()).decode()
+        payload = {"message": "Update outreach state", "content": content}
+        if sha:
+            payload["sha"] = sha
+        r = requests.put(
+            f"https://api.github.com/repos/{GITHUB_REPO}/contents/{STATE_FILE}",
+            json=payload,
+            headers={"Authorization": f"token {GITHUB_TOKEN}", "Accept": "application/vnd.github.v3+json"},
+            timeout=10
+        )
+        print(f"State saved: {r.status_code}", flush=True)
     except Exception as e:
         print(f"Save state error: {e}", flush=True)
 
 
+def get_telegram_updates(offset=0):
+    try:
+        r = requests.get(
+            f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/getUpdates",
+            params={"offset": offset, "limit": 50, "timeout": 5},
+            timeout=15
+        )
+        return r.json().get("result", [])
+    except Exception as e:
+        print(f"getUpdates error: {e}", flush=True)
+        return []
+
+
 def find_brand_info(handle):
-    """Pesquisa info e email da marca via Claude"""
-    prompt = f"""A marca de Instagram {handle} foi identificada para parceria com Cristiana Rodrigues, influencer portuguesa de lifestyle/wellness/viagens/beleza (6.959 seguidores, público 25-34 anos, Portugal e Brasil).
+    prompt = f"""A marca de Instagram {handle} foi identificada para parceria com Cristiana Rodrigues, influencer portuguesa de lifestyle/wellness/viagens/beleza.
 
-Pesquisa tudo o que sabes sobre esta marca:
-1. Nome oficial da marca
+Com base no teu conhecimento desta marca:
+1. Nome oficial
 2. Website
-3. Email de imprensa ou parcerias (press@, partnerships@, collab@, hello@, info@)
-4. Nicho/categoria
-5. Porque seria uma boa parceria para a Cristiana
+3. Email de imprensa/parcerias (tenta ser preciso - usa press@, partnerships@, influencer@, collab@, pr@, hello@)
+4. Emails alternativos a tentar se o primeiro falhar
+5. Nicho/categoria
+6. Porque seria boa parceria para Cristiana
 
-Se nao conheceres o email exato, sugere o mais provavel baseado no dominio da marca.
-
-Responde APENAS em JSON:
-{{"nome": "...", "website": "...", "email": "...", "emails_alternativos": ["email2@marca.com", "email3@marca.com"], "email_confianca": "alta/media/baixa", "nicho": "...", "razao_parceria": "..."}}"""
+Responde APENAS em JSON valido:
+{{"nome":"...","website":"...","email":"...","emails_alternativos":["alt1@marca.com","alt2@marca.com"],"email_confianca":"alta/media/baixa","nicho":"...","razao_parceria":"..."}}"""
 
     try:
         text = call_claude(prompt, 500)
         return json.loads(text)
     except Exception as e:
-        print(f"Erro find_brand_info: {e}", flush=True)
+        print(f"find_brand_info error: {e}", flush=True)
         return None
 
 
-def generate_outreach_email(brand_info, handle):
-    """Gera email de outreach personalizado"""
-    prompt = f"""Escreve um email de parceria de Cristiana Rodrigues para a marca {brand_info.get('nome', handle)}.
+def generate_email(brand_info, handle):
+    prompt = f"""Escreve um email de parceria de Cristiana Rodrigues para {brand_info.get('nome', handle)}.
 
-Sobre a Cristiana:
+Cristiana Rodrigues:
 - Influencer portuguesa de lifestyle, wellness, viagens e beleza
-- 6.959 seguidores no Instagram (@cristianarodriguesss)
+- 6.959 seguidores Instagram (@cristianarodriguesss)
 - Publico: mulheres 25-34 anos, Portugal (64%) e Brasil (24%)
-- 7.513 visualizacoes ultimos 30 dias, 66,6% nao seguidores
-- Manager: Artur Santos (talent manager)
+- 7.513 views ultimos 30 dias, 66% de nao seguidores
+- Manager: Artur Santos
 - Media kit: https://cristianarodriguesss.my.canva.site/cristianarodriguesss
 
-Sobre a marca:
-- Nome: {brand_info.get('nome', handle)}
-- Instagram: {handle}
-- Nicho: {brand_info.get('nicho', 'moda/lifestyle')}
-- Razao de parceria: {brand_info.get('razao_parceria', '')}
+Marca: {brand_info.get('nome', handle)} | {handle} | {brand_info.get('nicho', '')}
+Razao: {brand_info.get('razao_parceria', '')}
 
-Escreve um email em ingles, profissional mas caloroso, curto (max 150 palavras), que:
-1. Se apresenta brevemente
-2. Explica porque a marca e perfeita para a Cristiana
-3. Propoe colaboracao (post, story, reel)
-4. Inclui link do media kit
-5. Menciona que estás completamente aberta a receber produtos em troca de um story ou publicação (gifting collaboration)
-6. Assina como Artur Santos, Talent Manager
+Email em ingles, profissional mas caloroso, max 150 palavras.
+Deve mencionar que Cristiana esta aberta a receber produtos em troca de um story ou publicacao (gifting collaboration).
+Assina como Artur Santos, Talent Manager.
 
 Responde APENAS em JSON:
-{{"assunto": "...", "corpo": "..."}}"""
+{{"assunto":"...","corpo":"..."}}"""
 
     try:
         text = call_claude(prompt, 600)
         return json.loads(text)
     except Exception as e:
-        print(f"Erro generate_email: {e}", flush=True)
+        print(f"generate_email error: {e}", flush=True)
         return None
 
 
 def send_email(to_email, subject, body):
-    """Envia email via Gmail"""
     try:
         msg = MIMEMultipart()
         msg['From'] = GMAIL_USER
         msg['To'] = to_email
         msg['Subject'] = subject
         msg.attach(MIMEText(body, 'plain'))
-
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=15) as server:
             server.login(GMAIL_USER, GMAIL_APP_PASSWORD)
             server.send_message(msg)
         return True
     except Exception as e:
-        print(f"Erro send_email: {e}", flush=True)
+        print(f"send_email error to {to_email}: {e}", flush=True)
         return False
 
 
-def process_marca_command(handle, state):
-    """Processa comando /marca @handle"""
+def process_marca(handle, state):
     handle = handle.strip().lstrip('@')
     full_handle = f"@{handle}"
+    handle_lower = handle.lower()
 
-    # Check if already sent
-    if handle.lower() in [b.lower() for b in state.get("sent_brands", [])]:
-        send_telegram(f"⚠️ Já enviaste um outreach para <b>{full_handle}</b> anteriormente.")
+    if handle_lower in [b.lower() for b in state.get("sent_brands", [])]:
+        send_telegram(f"⚠️ Ja enviaste outreach para <b>{full_handle}</b> anteriormente.")
         return
 
-    send_telegram(f"🔍 A pesquisar informação sobre <b>{full_handle}</b>...")
+    send_telegram(f"🔍 A pesquisar <b>{full_handle}</b>...")
 
-    # Find brand info
     brand_info = find_brand_info(full_handle)
     if not brand_info:
-        send_telegram(f"❌ Não consegui encontrar informação sobre {full_handle}. Tenta com o nome da marca em vez do handle.")
+        send_telegram(f"❌ Nao encontrei informacao sobre {full_handle}.")
         return
 
-    email = brand_info.get("email")
-    if not email:
-        send_telegram(
-            f"⚠️ <b>{brand_info.get('nome', handle)}</b>\n"
-            f"Não consegui encontrar o email de contacto.\n"
-            f"Website: {brand_info.get('website', 'não encontrado')}\n"
-            f"Tenta encontrar manualmente em: {brand_info.get('website', '')}/contact"
-        )
-        return
-
-    # Generate email
-    email_content = generate_outreach_email(brand_info, full_handle)
+    email_content = generate_email(brand_info, full_handle)
     if not email_content:
         send_telegram(f"❌ Erro ao gerar email para {full_handle}.")
         return
 
-    # Try sending to multiple emails
-    emails_to_try = [email]
-    for alt in brand_info.get("emails_alternativos", []):
-        if alt and alt != email:
+    # Try multiple emails
+    emails_to_try = []
+    if brand_info.get('email'):
+        emails_to_try.append(brand_info['email'])
+    for alt in brand_info.get('emails_alternativos', []):
+        if alt and alt not in emails_to_try:
             emails_to_try.append(alt)
 
     sent = False
     sent_to = None
-    for e in emails_to_try:
-        print(f"A tentar enviar para {e}...", flush=True)
+    for e in emails_to_try[:3]:
+        print(f"Trying {e}...", flush=True)
         if send_email(e, email_content["assunto"], email_content["corpo"]):
             sent = True
             sent_to = e
-            email = e
             break
         time.sleep(2)
 
     conf_emoji = {"alta": "🟢", "media": "🟡", "baixa": "🔴"}.get(brand_info.get("email_confianca", "baixa"), "⚪")
+    line = "─" * 22
 
     if sent:
-        state["sent_brands"].append(handle.lower())
-        line = "─" * 22
+        state["sent_brands"].append(handle_lower)
         msg = (
-            f"✅ <b>EMAIL ENVIADO!</b>\n"
-            f"<code>{line}</code>\n\n"
+            f"✅ <b>EMAIL ENVIADO!</b>\n<code>{line}</code>\n\n"
             f"<b>Marca:</b> {brand_info.get('nome', handle)}\n"
             f"<b>Instagram:</b> {full_handle}\n"
-            f"<b>Email:</b> <code>{sent_to or email}</code> {conf_emoji}\n"
-            f"<b>Nicho:</b> {brand_info.get('nicho', '')}\n\n"
+            f"<b>Email:</b> <code>{sent_to}</code> {conf_emoji}\n\n"
             f"<b>Assunto:</b>\n<i>{email_content['assunto']}</i>\n\n"
             f"<b>Corpo:</b>\n{email_content['corpo']}\n\n"
             f"<i>THE AGENCY · Outreach Agent</i>"
         )
-        send_telegram(msg)
-        print(f"OK Email enviado para {email} ({handle})", flush=True)
     else:
-        # Email failed - send FULL email text ready to copy/paste manually
-        line = "─" * 22
+        # Manual fallback - full email text to copy
+        emails_tried = ", ".join(emails_to_try) if emails_to_try else "nenhum encontrado"
         msg = (
-            f"❌ <b>EMAIL FALHOU — copia e envia manualmente</b>\n"
-            f"<code>{line}</code>\n\n"
-            f"⚠️ O email <code>{email}</code> pode estar errado.\n"
-            f"Pesquisa o email correcto no site: {brand_info.get('website', '')}\n\n"
+            f"❌ <b>Emails falharam — copia e envia manualmente</b>\n<code>{line}</code>\n\n"
+            f"<b>Marca:</b> {brand_info.get('nome', handle)}\n"
+            f"<b>Website:</b> {brand_info.get('website', '')}\n"
+            f"<b>Emails tentados:</b> {emails_tried}\n\n"
             f"<b>ASSUNTO:</b>\n<code>{email_content['assunto']}</code>\n\n"
-            f"<b>CORPO (copia tudo abaixo):</b>\n"
-            f"<code>{email_content['corpo']}</code>\n\n"
+            f"<b>CORPO:</b>\n<code>{email_content['corpo']}</code>\n\n"
             f"<i>THE AGENCY · Outreach Agent</i>"
         )
-        send_telegram(msg)
-        print(f"Email falhou para {email} - texto enviado para Telegram", flush=True)
+
+    send_telegram(msg)
 
 
 def main():
     print("=== OUTREACH AGENT START ===", flush=True)
 
-    state = load_processed()
-    updates = get_telegram_updates(state.get("last_offset", 0))
+    state = load_state()
+    print(f"Last offset: {state.get('last_offset', 0)}", flush=True)
+    print(f"Sent brands: {state.get('sent_brands', [])}", flush=True)
 
-    if not updates:
-        print("Sem mensagens novas", flush=True)
-        return
+    updates = get_telegram_updates(state.get("last_offset", 0))
+    print(f"New updates: {len(updates)}", flush=True)
+
+    new_offset = state.get("last_offset", 0)
 
     for update in updates:
         update_id = update.get("update_id", 0)
-        if update_id <= state.get("last_offset", 0):
-            continue
-
-        state["last_offset"] = update_id + 1
+        new_offset = max(new_offset, update_id + 1)
 
         msg = update.get("message", {})
         text = msg.get("text", "").strip()
         chat_id = str(msg.get("chat", {}).get("id", ""))
 
-        # Only process messages from our chat
         if chat_id != str(TELEGRAM_CHAT_ID):
             continue
 
-        print(f"Message: {text}", flush=True)
+        print(f"Processing: {text}", flush=True)
 
-        # Handle /marca command
         if text.lower().startswith("/marca"):
             parts = text.split(maxsplit=1)
             if len(parts) < 2:
@@ -282,29 +264,23 @@ def main():
                     "<code>/marca @handle_da_marca</code>\n\n"
                     "Exemplos:\n"
                     "<code>/marca @zara</code>\n"
-                    "<code>/marca @mango</code>\n"
                     "<code>/marca @rituals</code>"
                 )
             else:
-                handle = parts[1].strip()
-                process_marca_command(handle, state)
+                process_marca(parts[1].strip(), state)
                 time.sleep(2)
 
-        # Help command
         elif text.lower() in ["/help", "/start", "/ajuda"]:
             send_telegram(
                 "🤝 <b>OUTREACH AGENT</b>\n\n"
-                "Envia-me uma marca para contactar:\n"
+                "Envia uma marca para contactar:\n"
                 "<code>/marca @handle_da_marca</code>\n\n"
-                "Eu vou:\n"
-                "1. Pesquisar o email da marca\n"
-                "2. Gerar um email de parceria personalizado\n"
-                "3. Enviar automaticamente em teu nome\n"
-                "4. Confirmar aqui no Telegram\n\n"
+                "Eu vou pesquisar o email, gerar um email de parceria e enviar automaticamente!\n\n"
                 "<i>THE AGENCY · Outreach Agent</i>"
             )
 
-    save_processed(state)
+    state["last_offset"] = new_offset
+    save_state(state)
     print("=== OUTREACH AGENT DONE ===", flush=True)
 
 
