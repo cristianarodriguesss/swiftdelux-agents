@@ -95,7 +95,7 @@ Pesquisa tudo o que sabes sobre esta marca:
 Se nao conheceres o email exato, sugere o mais provavel baseado no dominio da marca.
 
 Responde APENAS em JSON:
-{{"nome": "...", "website": "...", "email": "...", "email_confianca": "alta/media/baixa", "nicho": "...", "razao_parceria": "..."}}"""
+{{"nome": "...", "website": "...", "email": "...", "emails_alternativos": ["email2@marca.com", "email3@marca.com"], "email_confianca": "alta/media/baixa", "nicho": "...", "razao_parceria": "..."}}"""
 
     try:
         text = call_claude(prompt, 500)
@@ -194,8 +194,22 @@ def process_marca_command(handle, state):
         send_telegram(f"❌ Erro ao gerar email para {full_handle}.")
         return
 
-    # Send email
-    sent = send_email(email, email_content["assunto"], email_content["corpo"])
+    # Try sending to multiple emails
+    emails_to_try = [email]
+    for alt in brand_info.get("emails_alternativos", []):
+        if alt and alt != email:
+            emails_to_try.append(alt)
+
+    sent = False
+    sent_to = None
+    for e in emails_to_try:
+        print(f"A tentar enviar para {e}...", flush=True)
+        if send_email(e, email_content["assunto"], email_content["corpo"]):
+            sent = True
+            sent_to = e
+            email = e
+            break
+        time.sleep(2)
 
     conf_emoji = {"alta": "🟢", "media": "🟡", "baixa": "🔴"}.get(brand_info.get("email_confianca", "baixa"), "⚪")
 
@@ -207,7 +221,7 @@ def process_marca_command(handle, state):
             f"<code>{line}</code>\n\n"
             f"<b>Marca:</b> {brand_info.get('nome', handle)}\n"
             f"<b>Instagram:</b> {full_handle}\n"
-            f"<b>Email:</b> <code>{email}</code> {conf_emoji}\n"
+            f"<b>Email:</b> <code>{sent_to or email}</code> {conf_emoji}\n"
             f"<b>Nicho:</b> {brand_info.get('nicho', '')}\n\n"
             f"<b>Assunto:</b>\n<i>{email_content['assunto']}</i>\n\n"
             f"<b>Corpo:</b>\n{email_content['corpo']}\n\n"
