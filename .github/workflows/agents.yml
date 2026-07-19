@@ -2,8 +2,8 @@ name: Swift Delux Agents
 
 on:
   schedule:
-    # Email + Outreach agent: cada 30 minutos, 8h-23h UTC
-    - cron: "0,30 8-23 * * *"
+    # Email + Outreach agent: cada 15 minutos, 8h-23h UTC
+    - cron: "0,15,30,45 8-23 * * *"
     # Content agent: 1x por dia às 9h UTC
     - cron: "0 9 * * *"
     # Followers agent: 1x por semana, segunda-feira às 8h UTC
