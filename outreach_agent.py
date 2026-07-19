@@ -17,6 +17,34 @@ GITHUB_REPO = "cristianarodriguesss/swiftdelux-agents"
 STATE_FILE = "outreach_state.json"
 
 
+
+# Base de dados de emails conhecidos
+KNOWN_EMAILS = {
+    "rituals": {"email": "press@rituals.com", "alternativas": ["partnerships@rituals.com", "influencer@rituals.com"]},
+    "soldejaneiro": {"email": "press@soldejaneiro.com", "alternativas": ["influencer@soldejaneiro.com", "partnerships@soldejaneiro.com"]},
+    "sol_de_janeiro": {"email": "press@soldejaneiro.com", "alternativas": ["influencer@soldejaneiro.com"]},
+    "safairstore": {"email": "geral@safairstore.com", "alternativas": ["press@safairstore.com", "info@safairstore.com"]},
+    "safair_store": {"email": "geral@safairstore.com", "alternativas": ["press@safairstore.com"]},
+    "sismoactive": {"email": "info@sismoactive.com", "alternativas": ["geral@sismoactive.com", "press@sismoactive.com"]},
+    "sismo_active": {"email": "info@sismoactive.com", "alternativas": ["geral@sismoactive.com"]},
+    "rsvp_paris": {"email": "contact@rsvp-paris.com", "alternativas": ["press@rsvp-paris.com", "info@rsvp-paris.com"]},
+    "rsvpparis": {"email": "contact@rsvp-paris.com", "alternativas": ["press@rsvp-paris.com"]},
+    "zara": {"email": "press@zara.com", "alternativas": ["influencer@zara.com"]},
+    "mango": {"email": "press@mango.com", "alternativas": ["influencer@mango.com", "pr@mango.com"]},
+    "nars": {"email": "press@nars.com", "alternativas": ["influencer@nars.com"]},
+    "narscosmetics": {"email": "press@nars.com", "alternativas": ["influencer@nars.com"]},
+    "lush": {"email": "press@lush.com", "alternativas": ["influencer@lush.co.uk"]},
+    "lushcosmetics": {"email": "press@lush.com", "alternativas": []},
+    "glossier": {"email": "press@glossier.com", "alternativas": ["influencer@glossier.com"]},
+    "cerave": {"email": "pr@cerave.com", "alternativas": ["press@cerave.com"]},
+    "laroche_posay": {"email": "press@laroche-posay.com", "alternativas": []},
+    "loreal": {"email": "press@loreal.com", "alternativas": ["influencer@loreal.com"]},
+    "hm": {"email": "press@hm.com", "alternativas": ["influencer@hm.com"]},
+    "hmofficial": {"email": "press@hm.com", "alternativas": []},
+    "primark": {"email": "press@primark.com", "alternativas": []},
+    "asos": {"email": "press@asos.com", "alternativas": ["influencer@asos.com"]},
+}
+
 def send_telegram(text):
     try:
         requests.post(
@@ -174,6 +202,16 @@ def process_marca(handle, state):
     send_telegram(f"🔍 A pesquisar <b>{full_handle}</b>...")
 
     brand_info = find_brand_info(full_handle)
+    
+    # Override with known correct emails
+    handle_key = handle_lower.replace('.', '_').replace('-', '_')
+    if handle_key in KNOWN_EMAILS:
+        known = KNOWN_EMAILS[handle_key]
+        if brand_info:
+            brand_info['email'] = known['email']
+            brand_info['emails_alternativos'] = known['alternativas']
+            brand_info['email_confianca'] = 'alta'
+        print(f"Using known email for {handle}: {known['email']}", flush=True)
     if not brand_info:
         send_telegram(f"❌ Nao encontrei informacao sobre {full_handle}.")
         return
