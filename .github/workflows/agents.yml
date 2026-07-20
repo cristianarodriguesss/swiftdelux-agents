@@ -125,6 +125,8 @@ jobs:
           git push
   brand-agent:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && startsWith(github.event.schedule, '0 9 * * 3'))
     steps:
       - uses: actions/checkout@v4
@@ -138,6 +140,9 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python brand_agent.py
   outreach-agent:
     runs-on: ubuntu-latest
