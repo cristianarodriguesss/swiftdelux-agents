@@ -269,6 +269,31 @@
       "type": "email",
       "summary": "outro: Notificação de falha na entrega de email enviado para press@domainedefontenille.com. O endereço de destino não foi encontrado ou não aceita emails, com erro 550 5.4.1 de acesso negado.",
       "timestamp": "2026-07-21T10:19:00.815655+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Email automático de confirmação de receção da mensagem enviada para a Organic Basics sobre uma oportunidade de parceria com Cristiana Rodrigues. O email inclui instruções sobre cancelamentos e alterações de morada de entrega, sugerindo que é uma resposta automática genérica do sistema de suporte ao cliente.",
+      "timestamp": "2026-07-21T10:35:41.803541+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: A Organic Basics respondeu a um pedido de parceria paga, informando que não têm oportunidades de parceria paga disponíveis no momento. Sugerem a adesão ao programa Shopify Collabs, disponível para UK e US/Canadá.",
+      "timestamp": "2026-07-21T10:35:46.347484+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de um email enviado para press@strathberry.com. O endereço de destino rejeitou a mensagem com erro 550 5.4.1, indicando que o acesso foi negado ou o endereço não existe.",
+      "timestamp": "2026-07-21T10:35:50.388045+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Email automático da Cult Gaia confirmando o recebimento de uma mensagem sobre uma oportunidade de parceria. Informam que o tempo de resposta é de 3 a 5 dias úteis e que para assuntos urgentes o contato deve ser feito via LiveChat de domingo a sexta, das 9h às 17h PST.",
+      "timestamp": "2026-07-21T10:35:54.416819+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Resposta da marca Cult Gaia agradecendo o contacto de Artur sobre uma oportunidade de parceria com Cristiana Rodrigues. A marca confirmou que irá reencaminhar o pedido e o media kit para a equipa responsável, que entrará em contacto caso haja interesse.",
+      "timestamp": "2026-07-21T10:35:59.183307+00:00"
     }
   ],
   "followers": {
