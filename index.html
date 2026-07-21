@@ -1496,7 +1496,16 @@ function deleteSupplier(i) {
 function loadSuppliers() {
   try {
     var saved = localStorage.getItem('sd-suppliers');
-    if (saved) suppliersList = JSON.parse(saved);
+    if (saved) {
+      suppliersList = JSON.parse(saved);
+    } else {
+      // Fornecedores pré-carregados
+      suppliersList = [
+        {name:'Mistiksilver', product:'Joias prateadas', contact:'', price:'', status:'activo', notes:'Fornecedor de joias', date:'21/07/2026'},
+        {name:'AG Silver Jewelry', product:'Joias prateadas', contact:'', price:'', status:'activo', notes:'Fornecedor de joias', date:'21/07/2026'}
+      ];
+      localStorage.setItem('sd-suppliers', JSON.stringify(suppliersList));
+    }
     renderSuppliers('all');
   } catch(e) {}
 }
