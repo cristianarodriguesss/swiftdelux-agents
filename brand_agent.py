@@ -316,6 +316,10 @@ def main():
                 continue
 
             # Send
+            # Never send to own email
+            if real_email.lower() == GMAIL_USER.lower():
+                print(f"  Skip: would send to own email", flush=True)
+                continue
             if send_email_smtp(real_email, email_content['assunto'], email_content['corpo']):
                 contacted.add(ig)
                 db["contacted"].append(ig)
