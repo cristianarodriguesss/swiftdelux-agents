@@ -174,6 +174,51 @@
       "type": "email",
       "summary": "outro: Notificação automática de falha na entrega de email enviado para press@lush.com. O endereço de email destinatário não existe.",
       "timestamp": "2026-07-21T09:28:27.292068+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "urgente: Email de falha de entrega (bounce) do sistema de correio do Google, indicando que o domínio sismoactive.com não existe ou não está configurado, impedindo a entrega da mensagem enviada para info@sismoactive.com.",
+      "timestamp": "2026-07-21T09:31:45.956570+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de um email enviado para press@girlfriendcollective.com. O endereço de destino não foi encontrado ou não pode receber mensagens, resultando num erro 550 5.1.0.",
+      "timestamp": "2026-07-21T09:31:51.406642+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de um email enviado para press@organicbasics.com. O endereço de destinatário foi rejeitado pelo servidor remoto com erro 550 5.4.1 - acesso negado.",
+      "timestamp": "2026-07-21T09:32:00.183163+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Email de falha de entrega (bounce) do servidor de email da Byoma, indicando que uma mensagem enviada para press@byoma.com não foi entregue devido a configurações de segurança ou políticas do domínio byoma.com.",
+      "timestamp": "2026-07-21T09:32:05.265849+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de email enviado para press@grownalchemist.com. O endereço de destino rejeitou a mensagem com erro 550 5.4.1, indicando que o endereço não existe ou não está a aceitar emails.",
+      "timestamp": "2026-07-21T09:32:10.412298+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "urgente: Email de notificação de falha na entrega de mensagem enviada para press@espaskincare.com. O endereço de email não foi encontrado ou não pode receber correio, resultando num erro 550 5.1.0.",
+      "timestamp": "2026-07-21T09:32:15.216516+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de um email enviado para press@soldejaneiro.com. O endereço de destino não foi encontrado ou não aceita mensagens, retornando erro 550 5.4.1 de acesso negado.",
+      "timestamp": "2026-07-21T09:32:19.389188+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de um email enviado para influencer@rituals.com. O endereço de destino é inválido ou inexistente, resultando num erro 550 (Invalid Recipient).",
+      "timestamp": "2026-07-21T09:32:23.745455+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática do sistema de entrega de emails informando que a mensagem enviada para press@sacheu.com não pôde ser entregue, pois o endereço de email não existe.",
+      "timestamp": "2026-07-21T09:32:27.921529+00:00"
     }
   ],
   "followers": {
