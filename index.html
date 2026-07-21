@@ -230,6 +230,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div class="sb-item" onclick="go('sd-content',this)"><span class="ic">📅</span> Content Planner</div>
     <div class="sb-item" onclick="go('sd-emails',this)"><span class="ic">✉</span> Emails</div>
     <div class="sb-item" onclick="go('sd-ads',this)"><span class="ic">📢</span> Anúncios Online</div>
+    <div class="sb-item" onclick="go('sd-suppliers',this)"><span class="ic">📦</span> Fornecedores</div>
   </div>
 
   <div class="sb-brand open" id="br-cr" onclick="toggle('cr')">
@@ -786,6 +787,43 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
   </div>
 </div>
 
+
+<!-- SD SUPPLIERS -->
+<div class="page" id="page-sd-suppliers">
+  <div class="ph"><h1>📦 Fornecedores <span class="tag tag-swift">Swift Delux</span></h1><p>Gestão de fornecedores e contactos</p></div>
+  <div class="sec">
+    <div class="form-row">
+      <div class="field" style="flex:1"><label>Nome</label><input id="sup-name" type="text" placeholder="ex: Joalharia Silva"></div>
+      <div class="field" style="flex:1"><label>Produto / Serviço</label><input id="sup-product" type="text" placeholder="ex: Correntes douradas"></div>
+      <div class="field"><label>Contacto</label><input id="sup-contact" type="text" placeholder="email ou telefone" style="width:180px"></div>
+      <div class="field"><label>Preço médio</label><input id="sup-price" type="text" placeholder="ex: €12/unid" style="width:100px"></div>
+      <div class="field"><label>Estado</label>
+        <select id="sup-status">
+          <option value="activo">✅ Activo</option>
+          <option value="teste">🔄 Em teste</option>
+          <option value="negociacao">💬 Em negociação</option>
+          <option value="inactivo">❌ Inactivo</option>
+        </select>
+      </div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addSupplier()">+ Adicionar</button></div>
+    </div>
+    <div class="field" style="margin-bottom:16px;max-width:500px">
+      <label>Notas</label>
+      <input id="sup-notes" type="text" placeholder="ex: Mínimo 50 unidades, entrega 15 dias">
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+    <button class="btn btn-o" onclick="filterSuppliers('all')" id="sf-all" style="font-size:11px;padding:5px 12px">Todos</button>
+    <button class="btn btn-o" onclick="filterSuppliers('activo')" style="font-size:11px;padding:5px 12px">✅ Activos</button>
+    <button class="btn btn-o" onclick="filterSuppliers('teste')" style="font-size:11px;padding:5px 12px">🔄 Em teste</button>
+    <button class="btn btn-o" onclick="filterSuppliers('negociacao')" style="font-size:11px;padding:5px 12px">💬 Em negociação</button>
+    <button class="btn btn-o" onclick="filterSuppliers('inactivo')" style="font-size:11px;padding:5px 12px">❌ Inactivos</button>
+  </div>
+
+  <div id="sup-list"><div class="hint">Ainda sem fornecedores. Adiciona o teu primeiro fornecedor.</div></div>
+</div>
 </main>
 
 <!-- FEED MODAL -->
@@ -1275,6 +1313,7 @@ window.addEventListener('DOMContentLoaded', function() {
     STATE.crFiles.push({name:'Media Kit — Cristiana Rodrigues', url:'https://cristianarodriguesss.my.canva.site/cristianarodriguesss', cat:'Media Kit PDF'});
     renderFiles('cr');
   }
+  loadSuppliers();
   loadDados();
 });
 
@@ -1375,6 +1414,92 @@ function renderRubs() {
 
 // Update go() to handle new pages
 
+
+
+// ═══ FORNECEDORES ═══
+var suppliersList = [];
+
+function addSupplier() {
+  var name = document.getElementById('sup-name').value.trim();
+  if (!name) return;
+  suppliersList.push({
+    name: name,
+    product: document.getElementById('sup-product').value.trim(),
+    contact: document.getElementById('sup-contact').value.trim(),
+    price: document.getElementById('sup-price').value.trim(),
+    status: document.getElementById('sup-status').value,
+    notes: document.getElementById('sup-notes').value.trim(),
+    date: new Date().toLocaleDateString('pt-PT')
+  });
+  document.getElementById('sup-name').value = '';
+  document.getElementById('sup-product').value = '';
+  document.getElementById('sup-contact').value = '';
+  document.getElementById('sup-price').value = '';
+  document.getElementById('sup-notes').value = '';
+  try { localStorage.setItem('sd-suppliers', JSON.stringify(suppliersList)); } catch(e) {}
+  renderSuppliers('all');
+}
+
+function filterSuppliers(status) {
+  renderSuppliers(status);
+}
+
+function renderSuppliers(filter) {
+  var el = document.getElementById('sup-list');
+  if (!el) return;
+  var list = filter === 'all' ? suppliersList : suppliersList.filter(function(s) { return s.status === filter; });
+  if (!list.length) {
+    el.innerHTML = '<div class="hint">Sem fornecedores' + (filter !== 'all' ? ' nesta categoria' : '') + '.</div>';
+    return;
+  }
+  var statusColors = {activo:'#22a65a', teste:'#e07a30', negociacao:'#3b82f6', inactivo:'#aaa'};
+  var statusLabels = {activo:'✅ Activo', teste:'🔄 Em teste', negociacao:'💬 Em negociação', inactivo:'❌ Inactivo'};
+  el.innerHTML = list.map(function(s, i) {
+    var realIdx = suppliersList.indexOf(s);
+    return '<div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ' + (statusColors[s.status]||'#eee') + ';border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:10px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+      '<div style="flex:1">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">' +
+      '<div style="font-size:14px;font-weight:600">' + s.name + '</div>' +
+      '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;background:' + (statusColors[s.status]||'#eee') + '22;color:' + (statusColors[s.status]||'#666') + '">' + (statusLabels[s.status]||s.status) + '</span>' +
+      '</div>' +
+      (s.product ? '<div style="font-size:12px;color:var(--muted);margin-bottom:3px">📦 ' + s.product + '</div>' : '') +
+      (s.contact ? '<div style="font-size:12px;color:var(--muted);margin-bottom:3px">📧 ' + s.contact + '</div>' : '') +
+      (s.price ? '<div style="font-size:12px;color:var(--muted);margin-bottom:3px">💰 ' + s.price + '</div>' : '') +
+      (s.notes ? '<div style="font-size:11px;color:var(--muted);margin-top:5px;font-style:italic">' + s.notes + '</div>' : '') +
+      '</div>' +
+      '<div style="display:flex;gap:6px;flex-shrink:0">' +
+      '<select onchange="changeSupplierStatus(' + realIdx + ',this.value)" style="font-size:11px;border:1px solid var(--border);border-radius:6px;padding:3px 6px;background:var(--surface)">' +
+      '<option value="activo"' + (s.status==='activo'?' selected':'') + '>✅ Activo</option>' +
+      '<option value="teste"' + (s.status==='teste'?' selected':'') + '>🔄 Teste</option>' +
+      '<option value="negociacao"' + (s.status==='negociacao'?' selected':'') + '>💬 Negociação</option>' +
+      '<option value="inactivo"' + (s.status==='inactivo'?' selected':'') + '>❌ Inactivo</option>' +
+      '</select>' +
+      '<button onclick="deleteSupplier(' + realIdx + ')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px">✕</button>' +
+      '</div></div></div>';
+  }).join('');
+}
+
+function changeSupplierStatus(i, status) {
+  suppliersList[i].status = status;
+  try { localStorage.setItem('sd-suppliers', JSON.stringify(suppliersList)); } catch(e) {}
+  renderSuppliers('all');
+}
+
+function deleteSupplier(i) {
+  if (!confirm('Eliminar fornecedor?')) return;
+  suppliersList.splice(i, 1);
+  try { localStorage.setItem('sd-suppliers', JSON.stringify(suppliersList)); } catch(e) {}
+  renderSuppliers('all');
+}
+
+function loadSuppliers() {
+  try {
+    var saved = localStorage.getItem('sd-suppliers');
+    if (saved) suppliersList = JSON.parse(saved);
+    renderSuppliers('all');
+  } catch(e) {}
+}
 
 // PWA
 if ('serviceWorker' in navigator) {
