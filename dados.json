@@ -124,6 +124,56 @@
       "type": "email",
       "summary": "outro: Notificação automática da Google informando que a conta cristianarodriguesss.pr@gmail.com foi utilizada para iniciar sessão na aplicação Brandbassador através da funcionalidade 'Iniciar sessão com a Google'.",
       "timestamp": "2026-07-16T20:39:21.527444+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de email enviado para marketing@decathlon.pt. O endereço de destino não existe.",
+      "timestamp": "2026-07-21T09:27:50.148917+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "urgente: Email de notificação de falha na entrega de mensagem para info@sismoactive.com. O domínio sismoactive.com não foi encontrado (NXDOMAIN), indicando que o domínio não existe ou expirou.",
+      "timestamp": "2026-07-21T09:27:53.836663+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de um email enviado para press@cosstores.com. O endereço de destino rejeitou a mensagem com erro 550 5.4.1, indicando que o acesso foi negado ou o endereço não existe.",
+      "timestamp": "2026-07-21T09:27:58.232740+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de um email enviado para press@tous.com. O endereço de destino rejeitou a mensagem com erro 550 5.4.1 - acesso negado.",
+      "timestamp": "2026-07-21T09:28:02.477364+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de email enviado para press@alohas.com. O endereço de email não existe ou não pode receber mensagens.",
+      "timestamp": "2026-07-21T09:28:05.988060+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação de falha na entrega de email enviado para press@veja-store.com. O endereço de destinatário é inválido ou inexistente, retornando erro 550 do servidor remoto.",
+      "timestamp": "2026-07-21T09:28:09.435328+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de um email enviado para press@rituals.com. O endereço de destino é inválido ou inexistente, resultando num erro 550 (Invalid Recipient).",
+      "timestamp": "2026-07-21T09:28:13.426935+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de email enviado para press@soldejaneiro.com. O endereço de destino rejeitou a mensagem com erro 550 5.4.1 - acesso negado.",
+      "timestamp": "2026-07-21T09:28:19.378039+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de um email enviado para press@charlottetilbury.com. O email foi bloqueado pelo servidor de destino devido a políticas de segurança (Mimecast), retornando o código de erro 554.",
+      "timestamp": "2026-07-21T09:28:23.802575+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de email enviado para press@lush.com. O endereço de email destinatário não existe.",
+      "timestamp": "2026-07-21T09:28:27.292068+00:00"
     }
   ],
   "followers": {
