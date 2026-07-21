@@ -219,6 +219,56 @@
       "type": "email",
       "summary": "outro: Notificação automática do sistema de entrega de emails informando que a mensagem enviada para press@sacheu.com não pôde ser entregue, pois o endereço de email não existe.",
       "timestamp": "2026-07-21T09:32:27.921529+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Email de notificação automática de falha na entrega (bounce/undeliverable) de uma mensagem enviada para press@vilavitaparc.com. O endereço de destino não foi encontrado no servidor, sugerindo que o email está incorreto ou não existe.",
+      "timestamp": "2026-07-21T10:18:17.805873+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de um email enviado para marketing@martinhal.com. O endereço de destino rejeitou a mensagem com erro 550 5.4.1, indicando que o endereço não existe ou não está autorizado a receber emails.",
+      "timestamp": "2026-07-21T10:18:22.344451+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de email para press@casadepalmela.pt. O domínio casadepalmela.pt não foi encontrado (erro DNS NXDOMAIN), indicando que o domínio não existe ou está incorreto.",
+      "timestamp": "2026-07-21T10:18:27.211712+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação de falha na entrega de email enviado para press@craveiral.com. O domínio craveiral.com não foi encontrado no DNS, resultando em erro NXDOMAIN.",
+      "timestamp": "2026-07-21T10:18:31.382633+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática do sistema de entrega de email informando que a mensagem enviada para press@labandita.com falhou, pois o endereço de email do destinatário não existe.",
+      "timestamp": "2026-07-21T10:18:39.711858+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de email enviado para press@torrecoccaro.com. O domínio torrecoccaro.com não foi encontrado (erro DNS NXDOMAIN), indicando que o domínio não existe ou foi removido.",
+      "timestamp": "2026-07-21T10:18:43.972203+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de email enviado para press@casasnaareia.com. O endereço de destino não existe ou não está disponível para receber mensagens.",
+      "timestamp": "2026-07-21T10:18:48.554430+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de email enviado para press@vedema.gr. O endereço de destino não foi encontrado ou não está a aceitar correio, com erro 550 5.4.1 de acesso negado.",
+      "timestamp": "2026-07-21T10:18:52.771995+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação automática de falha na entrega de um email enviado para press@gracehotels.com. O endereço de destino rejeitou a mensagem com erro 550 5.4.1, indicando que o acesso foi negado ou o endereço não existe.",
+      "timestamp": "2026-07-21T10:18:56.978665+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Notificação de falha na entrega de email enviado para press@domainedefontenille.com. O endereço de destino não foi encontrado ou não aceita emails, com erro 550 5.4.1 de acesso negado.",
+      "timestamp": "2026-07-21T10:19:00.815655+00:00"
     }
   ],
   "followers": {
