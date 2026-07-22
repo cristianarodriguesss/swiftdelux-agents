@@ -298,7 +298,7 @@ def main():
                 )
             else:
                 process_marca(parts[1].strip(), state)
-                time.sleep(2)
+                time.sleep(300)  # 5 min minimo entre emails
 
         elif text.lower() in ["/help", "/start", "/ajuda"]:
             send_telegram(
