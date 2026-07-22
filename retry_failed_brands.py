@@ -50,15 +50,23 @@ def find_email(website):
     return None
 
 def generate_email(brand_name, cat):
-    prompt = f"""Email de parceria de Cristiana Rodrigues para {brand_name} ({cat}).
-Cristiana: influencer portuguesa lifestyle/wellness/viagens/beleza, 6.959 seg IG (@cristianarodriguesss), 25-34 anos, Portugal 64% Brasil 24%, 7.513 views/mes, 66% nao seguidores.
-Manager: Artur Santos | Media kit: https://cristianarodriguesss.my.canva.site/cristianarodriguesss
-Aberta a gifting. Max 120 palavras, ingles.
-JSON: {{"assunto":"...","corpo":"..."}}"""
-    try:
-        text = call_claude(prompt, 400)
-        return json.loads(text)
-    except: return None
+    """Template FIXO"""
+    subject = f"Partnership Opportunity - Cristiana Rodrigues x {brand_name}"
+    body = f"""Hi {brand_name} team! \U0001F495
+
+I'm Artur Santos, manager of Cristiana Rodrigues (@cristianarodriguesss), a Portuguese lifestyle, wellness & beauty influencer with a highly engaged audience of 6,959 followers on Instagram.
+
+Cristiana's profile reaches 100k+ monthly views, with 66% coming from non-followers \u2014 meaning real organic discovery. Her audience is predominantly women aged 25\u201334, based in Portugal and Brazil, making her a perfect fit for {brand_name}'s world.
+
+We'd love to explore a gifting collaboration \u2014 beautiful pieces in exchange for authentic story/post content.
+
+\U0001F4CE Media Kit: https://cristianarodriguesss.my.canva.site/cristianarodriguesss
+
+Would you be open to chatting?
+
+Warm regards,
+Artur Santos"""
+    return {"assunto": subject, "corpo": body}
 
 def send_email(to, subject, body):
     try:
