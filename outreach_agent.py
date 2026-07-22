@@ -145,33 +145,25 @@ Responde APENAS em JSON valido:
         return None
 
 
-def generate_email(brand_info, handle):
-    prompt = f"""Escreve um email de parceria de Cristiana Rodrigues para {brand_info.get('nome', handle)}.
+def generate_email(brand, category_label=""):
+    """Template FIXO - so substitui o nome da marca"""
+    brand_name = brand.get('nome', brand.get('handle', ''))
+    subject = f"Partnership Opportunity - Cristiana Rodrigues x {brand_name}"
+    body = f"""Hi {brand_name} team! \U0001F495
 
-Cristiana Rodrigues:
-- Influencer portuguesa de lifestyle, wellness, viagens e beleza
-- 6.959 seguidores Instagram (@cristianarodriguesss)
-- Publico: mulheres 25-34 anos, Portugal (64%) e Brasil (24%)
-- 7.513 views ultimos 30 dias, 66% de nao seguidores
-- Manager: Artur Santos
-- Media kit: https://cristianarodriguesss.my.canva.site/cristianarodriguesss
+I'm Artur Santos, manager of Cristiana Rodrigues (@cristianarodriguesss), a Portuguese lifestyle, wellness & beauty influencer with a highly engaged audience of 6,959 followers on Instagram.
 
-Marca: {brand_info.get('nome', handle)} | {handle} | {brand_info.get('nicho', '')}
-Razao: {brand_info.get('razao_parceria', '')}
+Cristiana's profile reaches 100k+ monthly views, with 66% coming from non-followers \u2014 meaning real organic discovery. Her audience is predominantly women aged 25\u201334, based in Portugal and Brazil, making her a perfect fit for {brand_name}'s world.
 
-Email em ingles, profissional mas caloroso, max 150 palavras.
-Deve mencionar que Cristiana esta aberta a receber produtos em troca de um story ou publicacao (gifting collaboration).
-Assina como Artur Santos, Talent Manager.
+We'd love to explore a gifting collaboration \u2014 beautiful pieces in exchange for authentic story/post content.
 
-Responde APENAS em JSON:
-{{"assunto":"...","corpo":"..."}}"""
+\U0001F4CE Media Kit: https://cristianarodriguesss.my.canva.site/cristianarodriguesss
 
-    try:
-        text = call_claude(prompt, 600)
-        return json.loads(text)
-    except Exception as e:
-        print(f"generate_email error: {e}", flush=True)
-        return None
+Would you be open to chatting?
+
+Warm regards,
+Artur Santos"""
+    return {"assunto": subject, "corpo": body}
 
 
 def send_email(to_email, subject, body):
