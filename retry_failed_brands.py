@@ -176,7 +176,7 @@ def main():
             failed_count += 1
 
         save_contacted(dict(db))
-        time.sleep(1800)  # 30 min entre emails
+        time.sleep(300)  # 30 min entre emails
 
     send_telegram(f"🎯 <b>Retry completo!</b>\n✅ Enviados: {sent_count}\n❌ Falharam: {failed_count}")
     print(f"DONE: {sent_count} sent, {failed_count} failed", flush=True)
