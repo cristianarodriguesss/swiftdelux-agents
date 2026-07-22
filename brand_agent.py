@@ -346,7 +346,7 @@ def main():
             else:
                 total_failed += 1
 
-            time.sleep(2)
+            time.sleep(300)  # 5 minutos minimo entre emails
 
         # Save after each category
         save_contacted(db)
