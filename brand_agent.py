@@ -201,25 +201,42 @@ Responde APENAS em JSON:
         return []
 
 
-def generate_email_text(brand, cat_label, is_hotel=False):
+def generate_email_text(brand, cat_label="", is_hotel=False):
+    """Template FIXO - so substitui o nome da marca"""
+    brand_name = brand.get('nome', '')
     if is_hotel:
-        prompt = f"""Email de Cristiana Rodrigues para {brand['nome']} (hotel/resort).
-Cristiana: influencer portuguesa lifestyle/wellness/viagens, 6.959 seg IG (@cristianarodriguesss), 25-34 anos, Portugal 64% Brasil 24%, 7.513 views/mes.
-Manager: Artur Santos | Media kit: https://cristianarodriguesss.my.canva.site/cristianarodriguesss
-Propoe estadia em troca de conteudo. Max 120 palavras, ingles, profissional.
-JSON: {{"assunto":"...","corpo":"..."}}"""
-    else:
-        prompt = f"""Email parceria Cristiana Rodrigues para {brand['nome']} ({cat_label}).
-Cristiana: influencer portuguesa lifestyle/wellness/viagens/beleza, 6.959 seg IG (@cristianarodriguesss), 25-34 anos, Portugal 64% Brasil 24%, 7.513 views/mes, 66% nao seguidores.
-Manager: Artur Santos | Media kit: https://cristianarodriguesss.my.canva.site/cristianarodriguesss
-Aberta a gifting (produtos em troca de story/post). Max 120 palavras, ingles, caloroso.
-JSON: {{"assunto":"...","corpo":"..."}}"""
+        subject = f"Partnership Opportunity - Cristiana Rodrigues x {brand_name}"
+        body = f"""Hi {brand_name} team! \U0001F495
 
-    try:
-        text = call_claude(prompt, 400)
-        return json.loads(text)
-    except:
-        return None
+I'm Artur Santos, manager of Cristiana Rodrigues (@cristianarodriguesss), a Portuguese lifestyle, wellness & travel influencer with a highly engaged audience of 6,959 followers on Instagram.
+
+Cristiana's profile reaches 100k+ monthly views, with 66% coming from non-followers \u2014 meaning real organic discovery. Her audience is predominantly women aged 25\u201334, based in Portugal and Brazil.
+
+We'd love to explore a collaboration \u2014 a stay in exchange for authentic story/post content showcasing {brand_name}.
+
+\U0001F4CE Media Kit: https://cristianarodriguesss.my.canva.site/cristianarodriguesss
+
+Would you be open to chatting?
+
+Warm regards,
+Artur Santos"""
+    else:
+        subject = f"Partnership Opportunity - Cristiana Rodrigues x {brand_name}"
+        body = f"""Hi {brand_name} team! \U0001F495
+
+I'm Artur Santos, manager of Cristiana Rodrigues (@cristianarodriguesss), a Portuguese lifestyle, wellness & beauty influencer with a highly engaged audience of 6,959 followers on Instagram.
+
+Cristiana's profile reaches 100k+ monthly views, with 66% coming from non-followers \u2014 meaning real organic discovery. Her audience is predominantly women aged 25\u201334, based in Portugal and Brazil, making her a perfect fit for {brand_name}'s world.
+
+We'd love to explore a gifting collaboration \u2014 beautiful pieces in exchange for authentic story/post content.
+
+\U0001F4CE Media Kit: https://cristianarodriguesss.my.canva.site/cristianarodriguesss
+
+Would you be open to chatting?
+
+Warm regards,
+Artur Santos"""
+    return {"assunto": subject, "corpo": body}
 
 
 def send_email_smtp(to_email, subject, body):
