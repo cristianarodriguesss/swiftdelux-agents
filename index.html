@@ -1290,6 +1290,10 @@ function saveLS() {
 function loadLS() {
   try {
     const s = localStorage.getItem('agency-state');
+    if (!s) {
+      // Pre-seed: post "life lately" agendado
+      STATE.calTasks['2026-07-24'] = [{title:'Post "Life lately" - unhas, ginasio, jardim Palacio Cristal, hotel Douro, rosas', type:'cris'}];
+    }
     if (s) {
       const d = JSON.parse(s);
       Object.keys(d).forEach(k => { if (STATE.hasOwnProperty(k)) STATE[k] = d[k]; });
