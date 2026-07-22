@@ -294,6 +294,31 @@
       "type": "email",
       "summary": "outro: Resposta da marca Cult Gaia agradecendo o contacto de Artur sobre uma oportunidade de parceria com Cristiana Rodrigues. A marca confirmou que irá reencaminhar o pedido e o media kit para a equipa responsável, que entrará em contacto caso haja interesse.",
       "timestamp": "2026-07-21T10:35:59.183307+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Email automático de confirmação de receção da mensagem enviada para a Organic Basics sobre uma oportunidade de parceria. O email inclui instruções sobre cancelamentos e alterações de morada de entrega, sugerindo que é um template genérico de auto-resposta do serviço de apoio ao cliente.",
+      "timestamp": "2026-07-22T15:38:36.080644+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: A Organic Basics respondeu a um pedido de parceria paga, informando que não têm oportunidades de parceria paga disponíveis no momento. Sugeriram a adesão ao programa Shopify Collabs, disponível para UK e US/Canada.",
+      "timestamp": "2026-07-22T15:38:40.580463+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Resposta automática da Cult Gaia confirmando o recebimento de uma mensagem sobre uma oportunidade de parceria. Informam alto volume de solicitações e prazo de resposta de 3 a 5 dias úteis. Disponibilizam LiveChat de domingo a sexta, das 9h às 17h PST para assuntos urgentes.",
+      "timestamp": "2026-07-22T15:38:45.734190+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Resposta da marca Cult Gaia confirmando o recebimento de uma proposta de parceria para Cristiana Rodrigues. A marca agradece o contato e informa que irá encaminhar o media kit e a proposta para a equipe responsável, que entrará em contato caso haja interesse.",
+      "timestamp": "2026-07-22T15:38:50.798669+00:00"
+    },
+    {
+      "type": "email",
+      "summary": "outro: Email de proposta de parceria/colaboração da marca de joias/acessórios Edblad dirigido a Cristiana Rodrigues, aparentemente para uma colaboração de influencer ou embaixadora de marca. O corpo do email está incompleto/truncado.",
+      "timestamp": "2026-07-22T15:38:55.891732+00:00"
     }
   ],
   "followers": {
