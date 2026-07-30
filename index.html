@@ -231,7 +231,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div class="sb-item" onclick="go('sd-emails',this)"><span class="ic">✉</span> Emails</div>
     <div class="sb-item" onclick="go('sd-ads',this)"><span class="ic">📢</span> Anúncios Online</div>
     <div class="sb-item" onclick="go('sd-suppliers',this)"><span class="ic">📦</span> Fornecedores</div>
+    <div class="sb-item" onclick="go('sd-marketing',this)"><span class="ic">📣</span> Marketing</div>
   </div>
+
 
   <div class="sb-brand open" id="br-cr" onclick="toggle('cr')">
     <span class="dot" style="background:var(--cris)"></span>
@@ -824,7 +826,51 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 
   <div id="sup-list"><div class="hint">Ainda sem fornecedores. Adiciona o teu primeiro fornecedor.</div></div>
 </div>
+
+<!-- SD MARKETING -->
+<div class="page" id="page-sd-marketing">
+  <div class="ph"><h1>📣 Marketing <span class="tag tag-swift">Swift Delux</span></h1><p>Campanhas, canais e acções de marketing</p></div>
+  <div class="sec">
+    <div class="form-row">
+      <div class="field" style="flex:1"><label>Campanha</label><input id="mkt-name" type="text" placeholder="ex: Promo Verão -20%"></div>
+      <div class="field" style="flex:1"><label>Canal</label>
+        <select id="mkt-channel">
+          <option value="instagram">Instagram</option>
+          <option value="email">Email</option>
+          <option value="ads">Anúncios pagos</option>
+          <option value="influencer">Parceria/Influencer</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div class="field"><label>Orçamento</label><input id="mkt-budget" type="text" placeholder="ex: €50" style="width:100px"></div>
+      <div class="field"><label>Estado</label>
+        <select id="mkt-status">
+          <option value="planeada">🗓 Planeada</option>
+          <option value="ativa">✅ Activa</option>
+          <option value="pausada">⏸ Pausada</option>
+          <option value="concluida">🏁 Concluída</option>
+        </select>
+      </div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addMarketing()">+ Adicionar</button></div>
+    </div>
+    <div class="field" style="margin-bottom:16px;max-width:500px">
+      <label>Notas</label>
+      <input id="mkt-notes" type="text" placeholder="ex: Foco em stories, usar código VERAO20">
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+    <button class="btn btn-o" onclick="filterMarketing('all')" style="font-size:11px;padding:5px 12px">Todas</button>
+    <button class="btn btn-o" onclick="filterMarketing('planeada')" style="font-size:11px;padding:5px 12px">🗓 Planeadas</button>
+    <button class="btn btn-o" onclick="filterMarketing('ativa')" style="font-size:11px;padding:5px 12px">✅ Activas</button>
+    <button class="btn btn-o" onclick="filterMarketing('pausada')" style="font-size:11px;padding:5px 12px">⏸ Pausadas</button>
+    <button class="btn btn-o" onclick="filterMarketing('concluida')" style="font-size:11px;padding:5px 12px">🏁 Concluídas</button>
+  </div>
+
+  <div id="mkt-list"><div class="hint">Ainda sem campanhas. Adiciona a primeira campanha de marketing.</div></div>
+</div>
 </main>
+
 
 <!-- FEED MODAL -->
 <div class="modal-bg" id="feed-modal">
@@ -1318,6 +1364,7 @@ window.addEventListener('DOMContentLoaded', function() {
     renderFiles('cr');
   }
   loadSuppliers();
+  loadMarketing();
   loadDados();
 });
 
@@ -1511,6 +1558,88 @@ function loadSuppliers() {
       localStorage.setItem('sd-suppliers', JSON.stringify(suppliersList));
     }
     renderSuppliers('all');
+  } catch(e) {}
+}
+
+// ═══ MARKETING ═══
+var marketingList = [];
+
+function addMarketing() {
+  var name = document.getElementById('mkt-name').value.trim();
+  if (!name) return;
+  marketingList.push({
+    name: name,
+    channel: document.getElementById('mkt-channel').value,
+    budget: document.getElementById('mkt-budget').value.trim(),
+    status: document.getElementById('mkt-status').value,
+    notes: document.getElementById('mkt-notes').value.trim(),
+    date: new Date().toLocaleDateString('pt-PT')
+  });
+  document.getElementById('mkt-name').value = '';
+  document.getElementById('mkt-budget').value = '';
+  document.getElementById('mkt-notes').value = '';
+  try { localStorage.setItem('sd-marketing', JSON.stringify(marketingList)); } catch(e) {}
+  renderMarketing('all');
+}
+
+function filterMarketing(status) {
+  renderMarketing(status);
+}
+
+function renderMarketing(filter) {
+  var el = document.getElementById('mkt-list');
+  if (!el) return;
+  var list = filter === 'all' ? marketingList : marketingList.filter(function(m) { return m.status === filter; });
+  if (!list.length) {
+    el.innerHTML = '<div class="hint">Sem campanhas' + (filter !== 'all' ? ' nesta categoria' : '') + '.</div>';
+    return;
+  }
+  var statusColors = {planeada:'#3b82f6', ativa:'#22a65a', pausada:'#e07a30', concluida:'#888'};
+  var statusLabels = {planeada:'🗓 Planeada', ativa:'✅ Activa', pausada:'⏸ Pausada', concluida:'🏁 Concluída'};
+  var channelLabels = {instagram:'📷 Instagram', email:'✉ Email', ads:'📢 Anúncios pagos', influencer:'🤝 Parceria/Influencer', outro:'🔗 Outro'};
+  el.innerHTML = list.map(function(m) {
+    var realIdx = marketingList.indexOf(m);
+    return '<div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ' + (statusColors[m.status]||'#eee') + ';border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:10px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+      '<div style="flex:1">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">' +
+      '<div style="font-size:14px;font-weight:600">' + m.name + '</div>' +
+      '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;background:' + (statusColors[m.status]||'#eee') + '22;color:' + (statusColors[m.status]||'#666') + '">' + (statusLabels[m.status]||m.status) + '</span>' +
+      '</div>' +
+      (m.channel ? '<div style="font-size:12px;color:var(--muted);margin-bottom:3px">' + (channelLabels[m.channel]||m.channel) + '</div>' : '') +
+      (m.budget ? '<div style="font-size:12px;color:var(--muted);margin-bottom:3px">💰 ' + m.budget + '</div>' : '') +
+      (m.notes ? '<div style="font-size:11px;color:var(--muted);margin-top:5px;font-style:italic">' + m.notes + '</div>' : '') +
+      '</div>' +
+      '<div style="display:flex;gap:6px;flex-shrink:0">' +
+      '<select onchange="changeMarketingStatus(' + realIdx + ',this.value)" style="font-size:11px;border:1px solid var(--border);border-radius:6px;padding:3px 6px;background:var(--surface)">' +
+      '<option value="planeada"' + (m.status==='planeada'?' selected':'') + '>🗓 Planeada</option>' +
+      '<option value="ativa"' + (m.status==='ativa'?' selected':'') + '>✅ Activa</option>' +
+      '<option value="pausada"' + (m.status==='pausada'?' selected':'') + '>⏸ Pausada</option>' +
+      '<option value="concluida"' + (m.status==='concluida'?' selected':'') + '>🏁 Concluída</option>' +
+      '</select>' +
+      '<button onclick="deleteMarketing(' + realIdx + ')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px">✕</button>' +
+      '</div></div></div>';
+  }).join('');
+}
+
+function changeMarketingStatus(i, status) {
+  marketingList[i].status = status;
+  try { localStorage.setItem('sd-marketing', JSON.stringify(marketingList)); } catch(e) {}
+  renderMarketing('all');
+}
+
+function deleteMarketing(i) {
+  if (!confirm('Eliminar campanha?')) return;
+  marketingList.splice(i, 1);
+  try { localStorage.setItem('sd-marketing', JSON.stringify(marketingList)); } catch(e) {}
+  renderMarketing('all');
+}
+
+function loadMarketing() {
+  try {
+    var saved = localStorage.getItem('sd-marketing');
+    if (saved) { marketingList = JSON.parse(saved); }
+    renderMarketing('all');
   } catch(e) {}
 }
 
