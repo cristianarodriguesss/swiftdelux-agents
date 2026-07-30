@@ -232,6 +232,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div class="sb-item" onclick="go('sd-ads',this)"><span class="ic">📢</span> Anúncios Online</div>
     <div class="sb-item" onclick="go('sd-suppliers',this)"><span class="ic">📦</span> Fornecedores</div>
     <div class="sb-item" onclick="go('sd-marketing',this)"><span class="ic">📣</span> Marketing</div>
+    <div class="sb-item" onclick="go('sd-finance',this)"><span class="ic">💰</span> Financeiro</div>
   </div>
 
 
@@ -839,6 +840,44 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 
   <div id="mkt-list"><div class="hint">Ainda sem ideias.</div></div>
 </div>
+
+<!-- SD FINANCEIRO -->
+<div class="page" id="page-sd-finance">
+  <div class="ph"><h1>💰 Financeiro <span class="tag tag-swift">Swift Delux</span></h1><p>Orçamentos de marketing, embalagens, anúncios e outras despesas</p></div>
+  <div class="sec">
+    <div class="form-row">
+      <div class="field" style="flex:1"><label>Descrição</label><input id="fin-desc" type="text" placeholder="ex: Caixas personalizadas"></div>
+      <div class="field"><label>Categoria</label>
+        <select id="fin-category">
+          <option value="marketing">📣 Marketing</option>
+          <option value="embalagens">📦 Embalagens</option>
+          <option value="anuncios">📢 Anúncios</option>
+          <option value="produto">💍 Produto</option>
+          <option value="outro">🔗 Outro</option>
+        </select>
+      </div>
+      <div class="field"><label>Valor</label><input id="fin-amount" type="text" placeholder="ex: €120" style="width:100px"></div>
+      <div class="field"><label>Data</label><input id="fin-date" type="date" style="width:150px"></div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btn-p" onclick="addFinance()">+ Adicionar</button></div>
+    </div>
+    <div class="field" style="margin-bottom:16px;max-width:500px">
+      <label>Notas</label>
+      <input id="fin-notes" type="text" placeholder="ex: Pedido de 200 unidades à Embalagens XPTO">
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
+    <button class="btn btn-o" onclick="filterFinance('all')" style="font-size:11px;padding:5px 12px">Tudo</button>
+    <button class="btn btn-o" onclick="filterFinance('marketing')" style="font-size:11px;padding:5px 12px">📣 Marketing</button>
+    <button class="btn btn-o" onclick="filterFinance('embalagens')" style="font-size:11px;padding:5px 12px">📦 Embalagens</button>
+    <button class="btn btn-o" onclick="filterFinance('anuncios')" style="font-size:11px;padding:5px 12px">📢 Anúncios</button>
+    <button class="btn btn-o" onclick="filterFinance('produto')" style="font-size:11px;padding:5px 12px">💍 Produto</button>
+    <button class="btn btn-o" onclick="filterFinance('outro')" style="font-size:11px;padding:5px 12px">🔗 Outro</button>
+    <div id="fin-total" style="margin-left:auto;font-size:13px;font-weight:600"></div>
+  </div>
+
+  <div id="fin-list"><div class="hint">Ainda sem despesas registadas.</div></div>
+</div>
 </main>
 
 
@@ -1337,6 +1376,7 @@ window.addEventListener('DOMContentLoaded', function() {
   }
   loadSuppliers();
   loadMarketing();
+  loadFinance();
   loadDados();
 });
 
@@ -1583,6 +1623,85 @@ function loadMarketing() {
       localStorage.setItem('sd-marketing', JSON.stringify(marketingList));
     }
     renderMarketing();
+  } catch(e) {}
+}
+
+// ═══ FINANCEIRO ═══
+var financeList = [];
+
+function addFinance() {
+  var desc = document.getElementById('fin-desc').value.trim();
+  if (!desc) return;
+  financeList.push({
+    desc: desc,
+    category: document.getElementById('fin-category').value,
+    amount: document.getElementById('fin-amount').value.trim(),
+    date: document.getElementById('fin-date').value,
+    notes: document.getElementById('fin-notes').value.trim()
+  });
+  document.getElementById('fin-desc').value = '';
+  document.getElementById('fin-amount').value = '';
+  document.getElementById('fin-date').value = '';
+  document.getElementById('fin-notes').value = '';
+  try { localStorage.setItem('sd-finance', JSON.stringify(financeList)); } catch(e) {}
+  renderFinance('all');
+}
+
+function filterFinance(cat) {
+  renderFinance(cat);
+}
+
+function renderFinance(filter) {
+  var el = document.getElementById('fin-list');
+  var totalEl = document.getElementById('fin-total');
+  if (!el) return;
+  var list = filter === 'all' ? financeList : financeList.filter(function(f) { return f.category === filter; });
+
+  var catColors = {marketing:'#a855f7', embalagens:'#e07a30', anuncios:'#3b82f6', produto:'var(--swift)', outro:'#888'};
+  var catLabels = {marketing:'📣 Marketing', embalagens:'📦 Embalagens', anuncios:'📢 Anúncios', produto:'💍 Produto', outro:'🔗 Outro'};
+
+  // total (soma apenas valores numéricos reconhecíveis)
+  var total = 0;
+  list.forEach(function(f) {
+    var num = parseFloat((f.amount||'').replace(/[^\d.,-]/g,'').replace(',', '.'));
+    if (!isNaN(num)) total += num;
+  });
+  if (totalEl) totalEl.textContent = list.length ? ('Total: €' + total.toFixed(2)) : '';
+
+  if (!list.length) {
+    el.innerHTML = '<div class="hint">Sem despesas' + (filter !== 'all' ? ' nesta categoria' : '') + '.</div>';
+    return;
+  }
+  el.innerHTML = list.map(function(f) {
+    var realIdx = financeList.indexOf(f);
+    return '<div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ' + (catColors[f.category]||'#eee') + ';border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:10px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+      '<div style="flex:1">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">' +
+      '<div style="font-size:14px;font-weight:600">' + f.desc + '</div>' +
+      '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;background:' + (catColors[f.category]||'#eee') + '22;color:' + (catColors[f.category]||'#666') + '">' + (catLabels[f.category]||f.category) + '</span>' +
+      '</div>' +
+      (f.amount ? '<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px">💰 ' + f.amount + '</div>' : '') +
+      (f.date ? '<div style="font-size:12px;color:var(--muted);margin-bottom:3px">📅 ' + f.date + '</div>' : '') +
+      (f.notes ? '<div style="font-size:11px;color:var(--muted);margin-top:5px;font-style:italic">' + f.notes + '</div>' : '') +
+      '</div>' +
+      '<button onclick="deleteFinance(' + realIdx + ')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;flex-shrink:0">✕</button>' +
+      '</div></div>';
+  }).join('');
+}
+
+function deleteFinance(i) {
+  if (!confirm('Eliminar despesa?')) return;
+  financeList.splice(i, 1);
+  try { localStorage.setItem('sd-finance', JSON.stringify(financeList)); } catch(e) {}
+  renderFinance('all');
+}
+
+function loadFinance() {
+  try {
+    var saved = localStorage.getItem('sd-finance');
+    if (saved) { financeList = JSON.parse(saved); }
+    renderFinance('all');
   } catch(e) {}
 }
 
