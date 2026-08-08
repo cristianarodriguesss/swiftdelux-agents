@@ -131,7 +131,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && startsWith(github.event.schedule, '0 9 * * 3'))
+    if: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -152,7 +152,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    if: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -177,7 +177,7 @@ jobs:
           retention-days: 30
   send-now:
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    if: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -195,7 +195,7 @@ jobs:
           if [ -f send_now.py ]; then python send_now.py; fi
   ceranoir-agent:
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && startsWith(github.event.schedule, '0 9 * * 5'))
+    if: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -215,7 +215,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && startsWith(github.event.schedule, '0 8 * * 5'))
+    if: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
