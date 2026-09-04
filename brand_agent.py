@@ -1,6 +1,9 @@
 """
-THE AGENCY - Brand Agent v5
+THE AGENCY - Brand Agent v6
 Pesquisa emails reais nos websites antes de enviar.
+Correção: agora verifica TODAS as páginas de contacto possíveis (antes só
+verificava as primeiras 8 de 16, o que fazia perder emails em páginas
+comuns tipo /pages/contact e /contact-us).
 """
 
 import os, json, requests, time, smtplib, base64, re
@@ -24,10 +27,10 @@ HEADERS = {
 CATEGORIES = [
     {"key": "activewear", "label": "🏋️ Activewear & Yoga", "prompt": "marcas europeias de activewear yoga wear sportswear feminino leggings sustentaveis indie premium 10k-500k seguidores Instagram"},
     {"key": "beleza", "label": "✨ Beleza & Skincare", "prompt": "marcas europeias de skincare clean beauty cuidados rosto soros cremes SPF naturais forte presenca Portugal Brasil"},
-    {"key": "acessorios_beleza", "label": "💆 Acessórios de Beleza", "prompt": "marcas de gua sha rolos jade mascaras LED infravermelho massajadores faciais drenagem linfatica ferramentas skincare"},
+    {"key": "acessorios_beleza", "label": "💆 Acessórios de Beleza", "prompt": "marcas de mascaras faciais de red light therapy LED terapia de luz vermelha, gua sha, rolos jade, massajadores faciais, pentes e escovas de cabelo, kits de madeira para modelacao corporal e drenagem linfatica"},
     {"key": "joias", "label": "💍 Joias & Acessórios", "prompt": "marcas de joias minimalistas banhadas ouro prata demi-fine jewelry europeias indie 10k-200k seguidores"},
     {"key": "malas", "label": "👜 Malas & Bolsas", "prompt": "marcas europeias de malas bolsas clutches premium luxo acessivel independentes contemporaneas preco 100-600 euros"},
-    {"key": "calcado", "label": "👠 Calçado", "prompt": "marcas europeias de calcado feminino sapatilhas botas sandалias mules mocassins qualidade media-alta"},
+    {"key": "calcado", "label": "👠 Calçado", "prompt": "marcas europeias de calcado feminino sapatilhas botas sandálias mules mocassins qualidade media-alta"},
     {"key": "hoteis", "label": "🏨 Hotéis & Resorts", "prompt": "hoteis boutique resorts Portugal Espanha Franca Italia Grecia design hotels wellness resorts spa"}
 ]
 
@@ -61,7 +64,6 @@ def extract_emails_from_text(text):
     """Extrai emails de texto HTML"""
     pattern = r'[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}'
     emails = re.findall(pattern, text)
-    # Filter out common false positives
     skip = ['example.com', 'domain.com', 'email.com', 'test.com', 'sentry.io',
             'wixpress.com', 'shopify.com', 'squarespace.com', 'wordpress.com',
             'amazonaws.com', 'cloudfront.net', 'schema.org', 'w3.org']
@@ -78,36 +80,35 @@ def find_press_email(website):
     if not website:
         return None
 
-    # Normalize website
     if not website.startswith('http'):
         website = 'https://' + website
 
     print(f"  Searching website: {website}", flush=True)
 
-    # Pages to check for press/contact emails
+    # CORREÇÃO: lista ampliada e agora verificada por completo (antes só
+    # eram testadas as primeiras 8 de 16 páginas)
     paths_to_check = [
-        '', '/contact', '/contacts', '/press', '/media',
-        '/partnerships', '/influencer', '/collaborate',
+        '', '/contact', '/contacts', '/contact-us', '/press', '/media',
+        '/partnerships', '/influencer', '/influencers', '/collaborate',
         '/work-with-us', '/about', '/legal/contact',
-        '/pages/contact', '/pages/press', '/pages/partnerships',
-        '/about-us', '/get-in-touch'
+        '/pages/contact', '/pages/contact-us', '/pages/press',
+        '/pages/partnerships', '/pages/influencers', '/pages/collaborate',
+        '/about-us', '/get-in-touch', '/pages/about', '/pages/about-us'
     ]
 
     found_emails = []
     priority_emails = []
 
-    for path in paths_to_check[:8]:  # Check first 8 pages
+    for path in paths_to_check:  # agora percorre a lista toda
         try:
             url = website.rstrip('/') + path
             r = requests.get(url, headers=HEADERS, timeout=8, allow_redirects=True)
             if r.status_code != 200:
                 continue
 
-            text = r.text.lower()
             emails = extract_emails_from_text(r.text)
 
             for email in emails:
-                # Priority keywords
                 if any(kw in email for kw in ['press', 'partner', 'influencer', 'collab', 'pr@', 'media']):
                     if email not in priority_emails:
                         priority_emails.append(email)
@@ -116,14 +117,13 @@ def find_press_email(website):
                         found_emails.append(email)
 
             if priority_emails:
-                break  # Found priority email, stop searching
+                break  # já encontrou um email prioritário, pode parar
 
-            time.sleep(0.5)
+            time.sleep(0.4)
 
-        except Exception as e:
+        except Exception:
             continue
 
-    # Return best email found
     if priority_emails:
         return priority_emails[0]
     if found_emails:
@@ -146,7 +146,6 @@ def search_duckduckgo_email(brand_name, website):
                 headers=HEADERS, timeout=8
             )
             data = r.json()
-            # Check abstract and results for emails
             text = data.get('Abstract', '') + ' '.join([r.get('Text', '') for r in data.get('Results', [])])
             emails = extract_emails_from_text(text)
             if emails:
@@ -162,13 +161,11 @@ def find_real_email(brand):
     """Tenta encontrar email real: website primeiro, depois DuckDuckGo"""
     website = brand.get('website', '')
 
-    # 1. Try website
     email = find_press_email(website)
     if email:
         print(f"  ✓ Found on website: {email}", flush=True)
         return email, "website"
 
-    # 2. Try DuckDuckGo
     email = search_duckduckgo_email(brand['nome'], website)
     if email:
         print(f"  ✓ Found via search: {email}", flush=True)
@@ -289,7 +286,7 @@ def save_contacted(db):
 
 
 def main():
-    print("=== BRAND AGENT v5 START ===", flush=True)
+    print("=== BRAND AGENT v6 START ===", flush=True)
 
     db = load_contacted()
     contacted = set(c.lower() for c in db.get("contacted", []))
@@ -318,7 +315,6 @@ def main():
 
             print(f"\n  Brand: {brand['nome']}", flush=True)
 
-            # Find real email from website
             real_email, source = find_real_email(brand)
 
             if not real_email:
@@ -326,14 +322,11 @@ def main():
                 total_not_found += 1
                 continue
 
-            # Generate email
             email_content = generate_email_text(brand, cat_label, is_hotel)
             if not email_content:
                 total_failed += 1
                 continue
 
-            # Send
-            # Never send to own email
             if real_email.lower() == GMAIL_USER.lower():
                 print(f"  Skip: would send to own email", flush=True)
                 continue
@@ -348,10 +341,8 @@ def main():
 
             time.sleep(300)  # 5 minutos minimo entre emails
 
-        # Save after each category
         save_contacted(db)
 
-        # Category update
         msg = f"<b>{cat_label}</b>\n"
         msg += f"✅ {len(cat_sent)} enviados\n"
         if cat_sent:
@@ -363,7 +354,6 @@ def main():
         send_telegram(msg)
         time.sleep(2)
 
-    # Final summary
     send_telegram(
         f"🎯 <b>OUTREACH COMPLETO</b>\n"
         f"{'─'*22}\n\n"
