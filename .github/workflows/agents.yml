@@ -8,8 +8,8 @@ on:
     - cron: "0 9 * * *"
     # Followers agent: 1x por semana, segunda-feira às 8h UTC
     - cron: "0 8 * * 1"
-    # Brand agent: 1x por semana, quarta-feira às 9h UTC
-    - cron: "0 9 * * 3"
+       # Brand agent: 5x por dia, de hora a hora (9h-13h UTC)
+    - cron: "0 9-13 * * *"
     # Retry brands falhadas: sexta-feira às 8h UTC
     - cron: "0 8 * * 5"
     # Ceranoir: sexta-feira às 9h UTC
