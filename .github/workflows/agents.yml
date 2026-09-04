@@ -131,7 +131,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: false
+        if: github.event.schedule == '0 9-13 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.followers == '' && github.event.inputs.cr_followers == '' && github.event.inputs.partnership == '')
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
