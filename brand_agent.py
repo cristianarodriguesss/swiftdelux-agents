@@ -1,369 +1,239 @@
-"""
-THE AGENCY - Brand Agent v6
-Pesquisa emails reais nos websites antes de enviar.
-Correção: agora verifica TODAS as páginas de contacto possíveis (antes só
-verificava as primeiras 8 de 16, o que fazia perder emails em páginas
-comuns tipo /pages/contact e /contact-us).
-"""
-
-import os, json, requests, time, smtplib, base64, re
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from urllib.parse import urljoin, urlparse
-
-ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
-TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
-TELEGRAM_CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
-GMAIL_USER = os.environ.get("GMAIL_USER", "cristianarodriguesss.pr@gmail.com")
-GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD", "")
-GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
-GITHUB_REPO = "cristianarodriguesss/swiftdelux-agents"
-BRANDS_DB_FILE = "brands_contacted.json"
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-}
-
-CATEGORIES = [
-    {"key": "activewear", "label": "🏋️ Activewear & Yoga", "prompt": "marcas europeias de activewear yoga wear sportswear feminino leggings sustentaveis indie premium 10k-500k seguidores Instagram"},
-    {"key": "beleza", "label": "✨ Beleza & Skincare", "prompt": "marcas europeias de skincare clean beauty cuidados rosto soros cremes SPF naturais forte presenca Portugal Brasil"},
-    {"key": "acessorios_beleza", "label": "💆 Acessórios de Beleza", "prompt": "marcas de mascaras faciais de red light therapy LED terapia de luz vermelha, gua sha, rolos jade, massajadores faciais, pentes e escovas de cabelo, kits de madeira para modelacao corporal e drenagem linfatica"},
-    {"key": "joias", "label": "💍 Joias & Acessórios", "prompt": "marcas de joias minimalistas banhadas ouro prata demi-fine jewelry europeias indie 10k-200k seguidores"},
-    {"key": "malas", "label": "👜 Malas & Bolsas", "prompt": "marcas europeias de malas bolsas clutches premium luxo acessivel independentes contemporaneas preco 100-600 euros"},
-    {"key": "calcado", "label": "👠 Calçado", "prompt": "marcas europeias de calcado feminino sapatilhas botas sandálias mules mocassins qualidade media-alta"},
-    {"key": "hoteis", "label": "🏨 Hotéis & Resorts", "prompt": "hoteis boutique resorts Portugal Espanha Franca Italia Grecia design hotels wellness resorts spa"}
-]
-
-
-def send_telegram(text):
-    try:
-        requests.post(
-            f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage",
-            json={"chat_id": TELEGRAM_CHAT_ID, "text": text, "parse_mode": "HTML", "disable_web_page_preview": True},
-            timeout=15
-        )
-    except Exception as e:
-        print(f"Telegram error: {e}", flush=True)
-
-
-def call_claude(prompt, max_tokens=3000):
-    resp = requests.post(
-        "https://api.anthropic.com/v1/messages",
-        headers={"x-api-key": ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json"},
-        json={"model": "claude-sonnet-4-6", "max_tokens": max_tokens, "messages": [{"role": "user", "content": prompt}]},
-        timeout=60
-    )
-    text = resp.json()["content"][0]["text"].strip()
-    if "```" in text:
-        text = text.split("```")[1]
-        if text.startswith("json"): text = text[4:]
-    return text.strip()
-
-
-def extract_emails_from_text(text):
-    """Extrai emails de texto HTML"""
-    pattern = r'[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}'
-    emails = re.findall(pattern, text)
-    skip = ['example.com', 'domain.com', 'email.com', 'test.com', 'sentry.io',
-            'wixpress.com', 'shopify.com', 'squarespace.com', 'wordpress.com',
-            'amazonaws.com', 'cloudfront.net', 'schema.org', 'w3.org']
-    valid = []
-    for e in emails:
-        e_lower = e.lower()
-        if not any(s in e_lower for s in skip):
-            valid.append(e_lower)
-    return list(set(valid))
-
-
-def find_press_email(website):
-    """Vai ao website e procura email de press/partnerships"""
-    if not website:
-        return None
-
-    if not website.startswith('http'):
-        website = 'https://' + website
-
-    print(f"  Searching website: {website}", flush=True)
-
-    # CORREÇÃO: lista ampliada e agora verificada por completo (antes só
-    # eram testadas as primeiras 8 de 16 páginas)
-    paths_to_check = [
-        '', '/contact', '/contacts', '/contact-us', '/press', '/media',
-        '/partnerships', '/influencer', '/influencers', '/collaborate',
-        '/work-with-us', '/about', '/legal/contact',
-        '/pages/contact', '/pages/contact-us', '/pages/press',
-        '/pages/partnerships', '/pages/influencers', '/pages/collaborate',
-        '/about-us', '/get-in-touch', '/pages/about', '/pages/about-us'
-    ]
-
-    found_emails = []
-    priority_emails = []
-
-    for path in paths_to_check:  # agora percorre a lista toda
-        try:
-            url = website.rstrip('/') + path
-            r = requests.get(url, headers=HEADERS, timeout=8, allow_redirects=True)
-            if r.status_code != 200:
-                continue
-
-            emails = extract_emails_from_text(r.text)
-
-            for email in emails:
-                if any(kw in email for kw in ['press', 'partner', 'influencer', 'collab', 'pr@', 'media']):
-                    if email not in priority_emails:
-                        priority_emails.append(email)
-                elif any(kw in email for kw in ['hello', 'info', 'contact', 'hola', 'ciao']):
-                    if email not in found_emails:
-                        found_emails.append(email)
-
-            if priority_emails:
-                break  # já encontrou um email prioritário, pode parar
-
-            time.sleep(0.4)
-
-        except Exception:
-            continue
-
-    if priority_emails:
-        return priority_emails[0]
-    if found_emails:
-        return found_emails[0]
-    return None
-
-
-def search_duckduckgo_email(brand_name, website):
-    """Pesquisa no DuckDuckGo pelo email de press da marca"""
-    try:
-        queries = [
-            f'"{brand_name}" press email influencer contact',
-            f'site:{urlparse(website).netloc} press email' if website else f'"{brand_name}" influencer email contact'
-        ]
-
-        for query in queries[:1]:
-            r = requests.get(
-                "https://api.duckduckgo.com/",
-                params={"q": query, "format": "json", "no_html": 1},
-                headers=HEADERS, timeout=8
-            )
-            data = r.json()
-            text = data.get('Abstract', '') + ' '.join([r.get('Text', '') for r in data.get('Results', [])])
-            emails = extract_emails_from_text(text)
-            if emails:
-                return emails[0]
-
-    except Exception as e:
-        print(f"  DuckDuckGo error: {e}", flush=True)
-
-    return None
-
-
-def find_real_email(brand):
-    """Tenta encontrar email real: website primeiro, depois DuckDuckGo"""
-    website = brand.get('website', '')
-
-    email = find_press_email(website)
-    if email:
-        print(f"  ✓ Found on website: {email}", flush=True)
-        return email, "website"
-
-    email = search_duckduckgo_email(brand['nome'], website)
-    if email:
-        print(f"  ✓ Found via search: {email}", flush=True)
-        return email, "search"
-
-    print(f"  ✗ Email not found for {brand['nome']}", flush=True)
-    return None, None
-
-
-def generate_brands(category):
-    """Gera 20 marcas por categoria"""
-    prompt = f"""Lista 20 marcas de {category['prompt']}.
-
-Para cada marca:
-- nome: nome oficial
-- ig: handle Instagram sem @
-- website: URL completo (https://...)
-
-Escolhe marcas de tamanho medio (nao gigantes como Nike/Zara) que sejam receptivas a gifting com micro-influencers (5k-15k seguidores).
-
-Responde APENAS em JSON:
-{{"marcas": [{{"nome":"...","ig":"...","website":"https://..."}}]}}"""
-
-    try:
-        text = call_claude(prompt, 2000)
-        data = json.loads(text)
-        return data.get("marcas", [])
-    except Exception as e:
-        print(f"generate_brands error: {e}", flush=True)
-        return []
-
-
-def generate_email_text(brand, cat_label="", is_hotel=False):
-    """Template FIXO - so substitui o nome da marca"""
-    brand_name = brand.get('nome', '')
-    if is_hotel:
-        subject = f"Partnership Opportunity - Cristiana Rodrigues x {brand_name}"
-        body = f"""Hi {brand_name} team! \U0001F495
-
-I'm Artur Santos, manager of Cristiana Rodrigues (@cristianarodriguesss), a Portuguese lifestyle, wellness & travel influencer with a highly engaged audience of 6,959 followers on Instagram.
-
-Cristiana's profile reaches 100k+ monthly views, with 66% coming from non-followers \u2014 meaning real organic discovery. Her audience is predominantly women aged 25\u201334, based in Portugal and Brazil.
-
-We'd love to explore a collaboration \u2014 a stay in exchange for authentic story/post content showcasing {brand_name}.
-
-\U0001F4CE Media Kit: https://cristianarodriguesss.my.canva.site/cristianarodriguesss
-
-Would you be open to chatting?
-
-Warm regards,
-Artur Santos"""
-    else:
-        subject = f"Partnership Opportunity - Cristiana Rodrigues x {brand_name}"
-        body = f"""Hi {brand_name} team! \U0001F495
-
-I'm Artur Santos, manager of Cristiana Rodrigues (@cristianarodriguesss), a Portuguese lifestyle, wellness & beauty influencer with a highly engaged audience of 6,959 followers on Instagram.
-
-Cristiana's profile reaches 100k+ monthly views, with 66% coming from non-followers \u2014 meaning real organic discovery. Her audience is predominantly women aged 25\u201334, based in Portugal and Brazil, making her a perfect fit for {brand_name}'s world.
-
-We'd love to explore a gifting collaboration \u2014 beautiful pieces in exchange for authentic story/post content.
-
-\U0001F4CE Media Kit: https://cristianarodriguesss.my.canva.site/cristianarodriguesss
-
-Would you be open to chatting?
-
-Warm regards,
-Artur Santos"""
-    return {"assunto": subject, "corpo": body}
-
-
-def send_email_smtp(to_email, subject, body):
-    try:
-        msg = MIMEMultipart()
-        msg['From'] = GMAIL_USER
-        msg['To'] = to_email
-        msg['Subject'] = subject
-        msg.attach(MIMEText(body, 'plain'))
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=15) as server:
-            server.login(GMAIL_USER, GMAIL_APP_PASSWORD)
-            server.send_message(msg)
-        return True
-    except Exception as e:
-        print(f"SMTP error {to_email}: {e}", flush=True)
-        return False
-
-
-def load_contacted():
-    try:
-        r = requests.get(
-            f"https://api.github.com/repos/{GITHUB_REPO}/contents/{BRANDS_DB_FILE}",
-            headers={"Authorization": f"token {GITHUB_TOKEN}", "Accept": "application/vnd.github.v3+json"},
-            timeout=10
-        )
-        if r.status_code == 200:
-            data = r.json()
-            db = json.loads(base64.b64decode(data['content']).decode())
-            db['_sha'] = data['sha']
-            return db
-    except Exception as e:
-        print(f"Load error: {e}", flush=True)
-    return {"contacted": [], "_sha": None}
-
-
-def save_contacted(db):
-    sha = db.pop('_sha', None)
-    try:
-        content = base64.b64encode(json.dumps(db, indent=2, ensure_ascii=False).encode()).decode()
-        payload = {"message": "Update brands contacted", "content": content}
-        if sha: payload["sha"] = sha
-        requests.put(
-            f"https://api.github.com/repos/{GITHUB_REPO}/contents/{BRANDS_DB_FILE}",
-            json=payload,
-            headers={"Authorization": f"token {GITHUB_TOKEN}", "Accept": "application/vnd.github.v3+json"},
-            timeout=10
-        )
-    except Exception as e:
-        print(f"Save error: {e}", flush=True)
-
-
-def main():
-    print("=== BRAND AGENT v6 START ===", flush=True)
-
-    db = load_contacted()
-    contacted = set(c.lower() for c in db.get("contacted", []))
-    total_sent = 0
-    total_not_found = 0
-    total_failed = 0
-
-    for category in CATEGORIES:
-        cat_label = category['label']
-        is_hotel = category['key'] == 'hoteis'
-
-        print(f"\n{'='*30}", flush=True)
-        print(f"{cat_label}", flush=True)
-        send_telegram(f"🔄 A pesquisar <b>{cat_label}</b>...")
-
-        brands = generate_brands(category)
-        print(f"Generated {len(brands)} brands", flush=True)
-
-        cat_sent = []
-        cat_not_found = []
-
-        for brand in brands:
-            ig = brand.get('ig', '').lower().lstrip('@')
-            if not ig or ig in contacted:
-                continue
-
-            print(f"\n  Brand: {brand['nome']}", flush=True)
-
-            real_email, source = find_real_email(brand)
-
-            if not real_email:
-                cat_not_found.append(brand['nome'])
-                total_not_found += 1
-                continue
-
-            email_content = generate_email_text(brand, cat_label, is_hotel)
-            if not email_content:
-                total_failed += 1
-                continue
-
-            if real_email.lower() == GMAIL_USER.lower():
-                print(f"  Skip: would send to own email", flush=True)
-                continue
-            if send_email_smtp(real_email, email_content['assunto'], email_content['corpo']):
-                contacted.add(ig)
-                db["contacted"].append(ig)
-                cat_sent.append(f"{brand['nome']} → {real_email}")
-                total_sent += 1
-                print(f"  ✅ Sent to {real_email} ({source})", flush=True)
-            else:
-                total_failed += 1
-
-            time.sleep(300)  # 5 minutos minimo entre emails
-
-        save_contacted(db)
-
-        msg = f"<b>{cat_label}</b>\n"
-        msg += f"✅ {len(cat_sent)} enviados\n"
-        if cat_sent:
-            msg += "\n".join(f"  • {n}" for n in cat_sent[:8])
-            if len(cat_sent) > 8:
-                msg += f"\n  +{len(cat_sent)-8} mais"
-        if cat_not_found:
-            msg += f"\n⚠️ {len(cat_not_found)} sem email encontrado"
-        send_telegram(msg)
-        time.sleep(2)
-
-    send_telegram(
-        f"🎯 <b>OUTREACH COMPLETO</b>\n"
-        f"{'─'*22}\n\n"
-        f"✅ Enviados: <b>{total_sent}</b>\n"
-        f"⚠️ Sem email: {total_not_found}\n"
-        f"❌ Falharam: {total_failed}\n\n"
-        f"<i>THE AGENCY · Brand Agent</i>"
-    )
-    print(f"=== DONE: {total_sent} sent ===", flush=True)
-
-
-if __name__ == "__main__":
-    main()
+name: Swift Delux Agents
+
+on:
+  schedule:
+    # Email + Outreach agent: cada 15 minutos, 8h-23h UTC
+    - cron: "0,15,30,45 8-23 * * *"
+    # Content agent: 1x por dia às 9h UTC
+    - cron: "0 9 * * *"
+    # Followers agent: 1x por semana, segunda-feira às 8h UTC
+    - cron: "0 8 * * 1"
+    # Brand agent: 5x por dia, de hora a hora (9h-13h UTC)
+    - cron: "0 9-13 * * *"
+    # Retry brands falhadas: sexta-feira às 8h UTC
+    - cron: "0 8 * * 5"
+    # Ceranoir: sexta-feira às 9h UTC
+    - cron: "0 9 * * 5"
+  workflow_dispatch:
+    inputs:
+      followers:
+        description: "Swift Delux IG seguidores (manual)"
+        required: false
+      cr_followers:
+        description: "Cristiana IG seguidores (manual)"
+        required: false
+      partnership:
+        description: "Descreve a parceria fechada"
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  email-agent:
+    if: github.event.schedule == '0 8-20 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.followers == '' && github.event.inputs.cr_followers == '' && github.event.inputs.partnership == '')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests
+      - name: Run email agent
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python email_agent.py
+      - name: Guardar dados.json
+        run: |
+          git config user.name "swiftdelux-bot"
+          git config user.email "bot@swiftdelux.local"
+          git add dados.json
+          git diff --staged --quiet || git commit -m "Atualiza dados (email agent)"
+          git pull --rebase --autostash
+          git push
+
+  content-agent:
+    if: github.event.schedule == '0 9 * * *' || (github.event_name == 'workflow_dispatch' && github.event.inputs.followers == '' && github.event.inputs.cr_followers == '' && github.event.inputs.partnership == '')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests
+      - name: Run content agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python content_agent.py
+      - name: Guardar dados.json
+        run: |
+          git config user.name "swiftdelux-bot"
+          git config user.email "bot@swiftdelux.local"
+          git add dados.json
+          git diff --staged --quiet || git commit -m "Atualiza dados (content agent)"
+          git pull --rebase --autostash
+          git push
+
+  followers-agent:
+    if: github.event.schedule == '0 8 * * 1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests
+      - name: Fetch followers automaticamente
+        env:
+          SD_FOLLOWERS_FALLBACK: "1254"
+          CR_FOLLOWERS_FALLBACK: "6959"
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python fetch_followers.py
+      - name: Guardar dados.json
+        run: |
+          git config user.name "swiftdelux-bot"
+          git config user.email "bot@swiftdelux.local"
+          git add dados.json
+          git diff --staged --quiet || git commit -m "Atualiza seguidores (auto)"
+          git pull --rebase --autostash
+          git push
+
+  update-metrics:
+    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.followers != '' || github.event.inputs.cr_followers != '' || github.event.inputs.partnership != '')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Update metrics
+        env:
+          FOLLOWERS: ${{ github.event.inputs.followers }}
+          CR_FOLLOWERS: ${{ github.event.inputs.cr_followers }}
+          PARTNERSHIP: ${{ github.event.inputs.partnership }}
+        run: python update_metrics.py
+      - name: Guardar dados.json
+        run: |
+          git config user.name "swiftdelux-bot"
+          git config user.email "bot@swiftdelux.local"
+          git add dados.json
+          git diff --staged --quiet || git commit -m "Atualiza metricas manuais"
+          git pull --rebase --autostash
+          git push
+
+  brand-agent:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run pip install requests
+        run: pip install requests
+      - name: Run brand agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python brand_agent.py
+
+  outreach-agent:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run pip install requests
+        run: pip install requests
+      - name: Run outreach agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python outreach_agent.py
+      - name: Guardar estado
+        uses: actions/upload-artifact@v4
+        with:
+          name: outreach-state
+          path: outreach_state.json
+          retention-days: 30
+
+  send-now:
+    runs-on: ubuntu-latest
+    if: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps
+        run: pip install requests
+      - name: Send email now
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ -f send_now.py ]; then python send_now.py; fi
+
+  ceranoir-agent:
+    runs-on: ubuntu-latest
+    if: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps
+        run: pip install requests
+      - name: Send Ceranoir email
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python send_ceranoir.py
+
+  retry-brands:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps
+        run: pip install requests
+      - name: Retry failed brands
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python retry_failed_brands.py
