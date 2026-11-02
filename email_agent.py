@@ -14,6 +14,8 @@ ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
+PROCESSED_FILE = "emails_processed.json"
+
 print("User: " + GMAIL_USER, flush=True)
 
 
@@ -33,6 +35,21 @@ try:
 except Exception:
     def add_event(t, s):
         pass
+
+
+def load_processed():
+    """Lista de emails que já foram avisados no Telegram (para não repetir)."""
+    try:
+        with open(PROCESSED_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+
+def save_processed(ids):
+    # guarda só os últimos 300 para o ficheiro não crescer sem fim
+    with open(PROCESSED_FILE, "w", encoding="utf-8") as f:
+        json.dump(ids[-300:], f, ensure_ascii=False, indent=2)
 
 
 def get_emails():
@@ -58,6 +75,7 @@ def get_emails():
             else:
                 subject = str(subject_raw)
             sender = msg.get("From", "Unknown")
+            msg_id = msg.get("Message-ID") or (sender + "|" + subject + "|" + str(msg.get("Date", "")))
             body = ""
             if msg.is_multipart():
                 for part in msg.walk():
@@ -72,7 +90,7 @@ def get_emails():
                     body = msg.get_payload(decode=True).decode(errors="ignore")
                 except Exception:
                     body = ""
-            result.append({"subject": subject, "sender": sender, "body": body[:800]})
+            result.append({"id": msg_id.strip(), "subject": subject, "sender": sender, "body": body[:800]})
         except Exception as ex:
             print("Error reading email: " + str(ex), flush=True)
     mail.logout()
@@ -110,17 +128,29 @@ def classify(sender, subject, body):
 
 
 def main():
+    processed = load_processed()
+    # garante que o ficheiro existe (o workflow faz git add dele)
+    save_processed(processed)
+
     try:
         emails = get_emails()
-        if not emails:
-            print("No emails found", flush=True)
-            send_telegram("Sem emails nas ultimas 24h.")
+        new_emails = [e for e in emails if e["id"] not in processed]
+
+        if not new_emails:
+            print("No new emails", flush=True)
             return
 
-        for em in emails:
+        print("New emails: " + str(len(new_emails)), flush=True)
+
+        for em in new_emails:
             try:
                 analysis = classify(em["sender"], em["subject"], em["body"])
                 cat = analysis.get("categoria", "outro")
+
+                # marca como visto, mesmo sendo spam, para não voltar a analisar
+                processed.append(em["id"])
+                save_processed(processed)
+
                 if cat == "spam":
                     print("Spam: " + em["subject"], flush=True)
                     continue
