@@ -1714,3 +1714,236 @@ if ('serviceWorker' in navigator) {
 </script>
 </body>
 </html>
+/* THE AGENCY — Feed Planner novo + correções
+   Colocar no mesmo sítio do index.html e carregar com uma linha antes de </body>:
+   <script src="feed-planner.js"></script> */
+(function () {
+  var COL = { swift: "#c9a96e", life: "#e07a30", deal: "#3b82f6", cris: "#8b7fc4" };
+  var STC = { rascunho: "#e07a30", pronto: "#22a65a", publicado: "#888885" };
+  var TYPES = {
+    sd: [["swift", "Produto"], ["life", "Lifestyle"], ["deal", "Parceria"]],
+    cr: [["cris", "Lifestyle"], ["deal", "Parceria"], ["swift", "Swift Delux"]]
+  };
+
+  /* 1. Correções (têm de correr antes do arranque da dashboard) */
+  try {
+    // faltava o elemento k-posts: dava erro e o briefing nunca era atualizado
+    if (!document.getElementById("k-posts")) {
+      var h = document.createElement("span");
+      h.id = "k-posts"; h.hidden = true; document.body.appendChild(h);
+    }
+    // agenda presa em julho de 2026
+    var now = new Date();
+    STATE.calYear = now.getFullYear();
+    STATE.calMonth = now.getMonth();
+    document.querySelectorAll(".sec-title").forEach(function (t) {
+      var n = t.firstChild;
+      if (n && n.nodeType === 3 && n.textContent.indexOf("Agenda — Julho 2026") > -1) n.textContent = "📅 Agenda";
+    });
+  } catch (e) {}
+
+  /* 2. Estilos */
+  var st = document.createElement("style");
+  st.textContent =
+    ".fp-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}" +
+    ".fp-bar .btn{padding:6px 11px;font-size:11px}" +
+    ".fp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:360px}" +
+    ".fp-t{position:relative;border:0;padding:0;cursor:pointer;overflow:hidden;background:var(--bg);aspect-ratio:var(--r,3/4);font:inherit}" +
+    ".fp-t img{width:100%;height:100%;object-fit:cover;display:block}" +
+    ".fp-t b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}" +
+    ".fp-dot{position:absolute;top:6px;right:6px;width:10px;height:10px;border-radius:50%;border:2px solid #fff}" +
+    ".fp-tp{position:absolute;left:0;right:0;bottom:0;height:3px}" +
+    ".fp-empty{grid-column:1/-1;padding:28px 14px;text-align:center;border:1.5px dashed var(--border);border-radius:8px;color:var(--muted);font-size:12px;line-height:1.6}" +
+    ".fp-leg{display:flex;gap:12px;font-size:11px;color:var(--muted);margin-top:10px;flex-wrap:wrap}" +
+    ".fp-leg i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}" +
+    ".fp-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600;align-items:center;justify-content:center;padding:16px}" +
+    ".fp-ov.on{display:flex}" +
+    ".fp-sh{background:var(--surface);border-radius:16px;padding:18px;width:380px;max-width:100%;max-height:92vh;overflow:auto}" +
+    ".fp-sh img{width:100%;max-height:260px;object-fit:contain;background:var(--bg);border-radius:8px;margin-bottom:10px;display:block}" +
+    ".fp-r{display:flex;gap:8px;margin-bottom:10px}.fp-r>*{flex:1;min-width:0}" +
+    "@media(max-width:768px){#page-sd-feed .row,#page-cr-feed .row{flex-direction:column}}";
+  document.head.appendChild(st);
+
+  /* 3. Utilitários */
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+  function lab(brand, type) {
+    var l = TYPES[brand].filter(function (t) { return t[0] === type; })[0];
+    return l ? l[1] : type;
+  }
+  function shrink(file) {
+    return new Promise(function (res, rej) {
+      var fr = new FileReader();
+      fr.onload = function () {
+        var im = new Image();
+        im.onload = function () {
+          var k = Math.min(1, 720 / Math.max(im.width, im.height));
+          var c = document.createElement("canvas");
+          c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+          c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+          res(c.toDataURL("image/jpeg", 0.72));
+        };
+        im.onerror = rej; im.src = fr.result;
+      };
+      fr.onerror = rej; fr.readAsDataURL(file);
+    });
+  }
+
+  /* 4. Janela de edição (partilhada pelos dois feeds) */
+  var ov, cur;
+  function fill() {
+    var po = cur.p.S.posts[cur.i], im = ov.querySelector("#fpi");
+    im.src = po.img || ""; im.style.display = po.img ? "block" : "none";
+    ov.querySelector("#fpc").value = po.caption || "";
+    ov.querySelector("#fpd").value = po.date || "";
+    ov.querySelector("#fpt").value = po.type;
+    ov.querySelector("#fps").value = po.status;
+    ov.querySelector("#fpp").textContent = "Posição " + (cur.i + 1) + " de " + cur.p.S.posts.length + (cur.i === 0 ? " (o mais recente)" : "");
+  }
+  function modal() {
+    if (ov) return;
+    ov = document.createElement("div"); ov.className = "fp-ov";
+    ov.innerHTML =
+      '<div class="fp-sh"><img id="fpi" alt="">' +
+      '<div class="fp-r"><button class="btn btn-o" data-a="l">← Mover</button><button class="btn btn-o" data-a="r">Mover →</button></div>' +
+      '<div class="hint" id="fpp" style="text-align:center"></div>' +
+      '<div class="field" style="margin-bottom:10px"><label>Legenda</label><textarea id="fpc" rows="4" placeholder="Escreve a legenda…"></textarea></div>' +
+      '<div class="fp-r"><div class="field"><label>Data prevista</label><input type="date" id="fpd"></div>' +
+      '<div class="field"><label>Tipo</label><select id="fpt"></select></div>' +
+      '<div class="field"><label>Estado</label><select id="fps"><option value="rascunho">Rascunho</option><option value="pronto">Pronto</option><option value="publicado">Publicado</option></select></div></div>' +
+      '<div class="fp-r"><button class="btn btn-o" data-a="rep">Trocar imagem</button><button class="btn btn-o" data-a="del" style="color:var(--red)">Apagar</button><button class="btn btn-p" data-a="x">Fechar</button></div>' +
+      '<input type="file" id="fpf" accept="image/*" hidden></div>';
+    document.body.appendChild(ov);
+
+    ov.onclick = function (e) {
+      if (e.target === ov) { ov.classList.remove("on"); return; }
+      var b = e.target.closest("[data-a]"); if (!b) return;
+      var a = b.getAttribute("data-a"), p = cur.p, A = p.S.posts;
+      if (a === "x") ov.classList.remove("on");
+      else if (a === "l" || a === "r") {
+        var j = cur.i + (a === "l" ? -1 : 1);
+        if (j < 0 || j >= A.length) return;
+        var t = A[cur.i]; A[cur.i] = A[j]; A[j] = t; cur.i = j;
+        p.save(); p.render(); fill();
+      } else if (a === "rep") ov.querySelector("#fpf").click();
+      else if (a === "del") {
+        if (!confirm("Apagar este post do planner?")) return;
+        A.splice(cur.i, 1); p.save(); p.render(); ov.classList.remove("on");
+      }
+    };
+    ov.querySelector("#fpc").oninput = function () { cur.p.S.posts[cur.i].caption = this.value; cur.p.save(); };
+    ov.querySelector("#fpd").onchange = function () { cur.p.S.posts[cur.i].date = this.value; cur.p.save(); };
+    ov.querySelector("#fpt").onchange = function () { cur.p.S.posts[cur.i].type = this.value; cur.p.save(); cur.p.render(); };
+    ov.querySelector("#fps").onchange = function () { cur.p.S.posts[cur.i].status = this.value; cur.p.save(); cur.p.render(); };
+    ov.querySelector("#fpf").onchange = function () {
+      var f = this.files[0]; this.value = ""; if (!f) return;
+      shrink(f).then(function (img) {
+        cur.p.S.posts[cur.i].img = img; cur.p.save(); cur.p.render(); fill();
+      }).catch(function () { alert("Não consegui ler a imagem."); });
+    };
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") ov.classList.remove("on"); });
+  }
+  function openPost(p, i) {
+    modal(); cur = { p: p, i: i };
+    ov.querySelector("#fpt").innerHTML = TYPES[p.brand].map(function (t) {
+      return '<option value="' + t[0] + '">' + t[1] + "</option>";
+    }).join("");
+    fill(); ov.classList.add("on");
+  }
+
+  /* 5. Um planner por marca */
+  function make(brand) {
+    var g = document.getElementById("feed-" + brand); if (!g) return;
+    var host = g.parentNode, key = "agency-feed-" + brand, raw = null, S = { ratio: "3/4", posts: [] };
+    try { raw = localStorage.getItem(key); } catch (e) {}
+    if (raw) {
+      try { var o = JSON.parse(raw); if (o && o.posts) S = o; } catch (e) {}
+    } else {
+      // traz as células do planner antigo, se existirem
+      var old = (brand === "sd" ? STATE.sdFeed : STATE.crFeed) || [];
+      S.posts = old.filter(Boolean).map(function (c) {
+        return { id: uid(), img: c.img || "", type: c.type || TYPES[brand][0][0], caption: "", date: "", status: "rascunho" };
+      });
+    }
+    var p = { brand: brand, S: S };
+    p.save = function () {
+      try { localStorage.setItem(key, JSON.stringify(S)); }
+      catch (e) { alert("Sem espaço neste browser. Usa Exportar para guardar uma cópia e apaga fotos antigas."); }
+    };
+
+    host.innerHTML =
+      '<div class="sec-title">Pré-visualização</div>' +
+      '<div class="fp-bar"><button class="btn btn-p" data-a="add">+ Fotos</button><button class="btn btn-o" data-a="ratio"></button>' +
+      '<button class="btn btn-o" data-a="exp">Exportar</button><button class="btn btn-o" data-a="imp">Importar</button></div>' +
+      '<div class="fp-grid"></div>' +
+      '<div class="fp-leg"><span><i style="background:' + STC.rascunho + '"></i>Rascunho</span><span><i style="background:' + STC.pronto + '"></i>Pronto</span><span><i style="background:' + STC.publicado + '"></i>Publicado</span></div>' +
+      '<div class="hint" style="margin-top:6px">Ponto = estado · barra em baixo = tipo de conteúdo. Guardado só neste aparelho: usa Exportar e Importar para passar do PC para o telemóvel.</div>' +
+      '<input type="file" accept="image/*" multiple hidden data-f="1"><input type="file" accept="application/json,.json" hidden data-f="3">';
+
+    var grid = host.querySelector(".fp-grid"), f1 = host.querySelector('[data-f="1"]'), f3 = host.querySelector('[data-f="3"]');
+
+    p.render = function () {
+      grid.style.setProperty("--r", S.ratio);
+      host.querySelector('[data-a="ratio"]').textContent = "Formato " + (S.ratio === "1/1" ? "1:1" : "3:4");
+      grid.innerHTML = "";
+      if (!S.posts.length) {
+        grid.innerHTML = '<div class="fp-empty">Ainda sem posts.<br>Carrega em “+ Fotos” para ver como fica o feed.</div>';
+        return;
+      }
+      S.posts.forEach(function (po, i) {
+        var t = document.createElement("button"), c = COL[po.type] || "#c8c8c5";
+        t.className = "fp-t"; t.setAttribute("aria-label", "Editar post " + (i + 1));
+        if (po.img) {
+          var im = document.createElement("img"); im.src = po.img; im.alt = ""; t.appendChild(im);
+        } else {
+          t.style.background = c + "22";
+          var b = document.createElement("b"); b.style.color = c; b.textContent = lab(brand, po.type); t.appendChild(b);
+        }
+        var d = document.createElement("i"); d.className = "fp-dot"; d.style.background = STC[po.status] || STC.rascunho; t.appendChild(d);
+        var tp = document.createElement("i"); tp.className = "fp-tp"; tp.style.background = c; t.appendChild(tp);
+        t.onclick = function () { openPost(p, i); };
+        grid.appendChild(t);
+      });
+    };
+
+    host.onclick = function (e) {
+      var b = e.target.closest("[data-a]"); if (!b) return;
+      var a = b.getAttribute("data-a");
+      if (a === "add") f1.click();
+      else if (a === "ratio") { S.ratio = S.ratio === "3/4" ? "1/1" : "3/4"; p.save(); p.render(); }
+      else if (a === "exp") {
+        var l = document.createElement("a");
+        l.href = URL.createObjectURL(new Blob([JSON.stringify(S)], { type: "application/json" }));
+        l.download = "feed-" + brand + ".json"; document.body.appendChild(l); l.click(); l.remove();
+      } else if (a === "imp") f3.click();
+    };
+    f1.onchange = function () {
+      var fs = [].slice.call(f1.files); f1.value = "";
+      Promise.all(fs.map(function (f) {
+        return shrink(f).then(function (img) {
+          return { id: uid(), img: img, type: TYPES[brand][0][0], caption: "", date: "", status: "rascunho" };
+        }).catch(function () { return null; });
+      })).then(function (n) {
+        n = n.filter(Boolean);
+        if (n.length < fs.length) alert("Alguma imagem não pôde ser lida.");
+        S.posts = n.concat(S.posts); p.save(); p.render();
+      });
+    };
+    f3.onchange = function () {
+      var f = f3.files[0]; f3.value = ""; if (!f) return;
+      var fr = new FileReader();
+      fr.onload = function () {
+        try {
+          var o = JSON.parse(fr.result); if (!o || !Array.isArray(o.posts)) throw 0;
+          if (!confirm("Substituir o feed atual pelo ficheiro importado?")) return;
+          S.posts = o.posts; S.ratio = o.ratio || "3/4"; p.save(); p.render();
+        } catch (e) { alert("Ficheiro inválido."); }
+      };
+      fr.readAsText(f);
+    };
+    p.render();
+  }
+
+  function init() { make("sd"); make("cr"); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
