@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Feed Planner</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🖼️%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#faf7f4;--surface:#fff;--ink:#241f21;--mute:#7a7074;--line:#e8e0dc;--accent:#b8795f;--warn:#c08a2e;--ok:#4f8a64;--done:#8a8084;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1618;--surface:#241f21;--ink:#f3ede8;--mute:#a09599;--line:#3a3235;--accent:#d49a82;--warn:#dcae5c;--ok:#7bb88f;--done:#8a8084;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1a1618;--surface:#241f21;--ink:#f3ede8;--mute:#a09599;--line:#3a3235;--accent:#d49a82;--warn:#dcae5c;--ok:#7bb88f;--done:#8a8084;color-scheme:dark}
+html,body{height:100%}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.wrap{max-width:480px;margin:0 auto;padding:20px 14px 60px}
+h1{font:600 22px Georgia,"Times New Roman",serif;margin:0 0 2px}
+.sub{color:var(--mute);font-size:13px;margin:0 0 18px}
+.prof{display:flex;gap:16px;align-items:center;margin-bottom:12px}
+.av{flex:none;width:76px;height:76px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:600 30px Georgia,serif;text-transform:uppercase}
+.stats{display:flex;gap:18px;flex:1;justify-content:space-around;text-align:center}
+.stats b{display:block;font-size:16px}
+.stats span{font-size:12px;color:var(--mute)}
+input,textarea,select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+.stats input{width:84px;text-align:center;font-weight:600;padding:2px 4px;border-color:transparent;background:transparent}
+.stats input:focus{border-color:var(--line);background:var(--surface)}
+.handle{font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:2px}
+.handle input{border:0;background:transparent;padding:0;font-weight:600;width:auto;min-width:40px}
+.bio{min-height:56px;resize:vertical;margin-bottom:12px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.b{font:inherit;font-size:13px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.b.p{background:var(--accent);border-color:var(--accent);color:#fff}
+.b.d{color:#b3402f;border-color:#b3402f55}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;--r:3/4}
+.tile{position:relative;aspect-ratio:var(--r);border:0;padding:0;background:var(--line);cursor:pointer;overflow:hidden}
+.tile img{width:100%;height:100%;object-fit:cover;display:block}
+.dot{position:absolute;top:6px;right:6px;width:11px;height:11px;border-radius:50%;border:2px solid #fff;background:var(--warn)}
+.s-pronto{background:var(--ok)}.s-publicado{background:var(--done)}
+.empty{grid-column:1/-1;aspect-ratio:3/2;display:grid;place-items:center;text-align:center;padding:20px;border:1px dashed var(--line);color:var(--mute);font-size:14px}
+.leg{display:flex;gap:14px;font-size:12px;color:var(--mute);margin:10px 0 4px;flex-wrap:wrap}
+.leg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;background:var(--warn)}
+.note{font-size:12px;color:var(--mute);margin-top:14px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center;z-index:10}
+.sheet{background:var(--bg);width:min(460px,100%);max-height:92%;overflow:auto;border-radius:16px 16px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.sheet img{width:100%;max-height:44vh;object-fit:contain;background:var(--line);border-radius:10px;display:block;margin-bottom:12px}
+.row{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}
+.row>*{flex:1}
+label{font-size:12px;color:var(--mute);display:block;margin-top:10px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:10px;font-size:13px;z-index:20;max-width:90%}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Feed Planner</h1>
+  <p class="sub">Prevê e organiza o teu feed antes de publicar.</p>
+
+  <div class="prof">
+    <div class="av" id="av">c</div>
+    <div class="stats">
+      <div><b id="cnt">0</b><span>posts</span></div>
+      <div><input id="fol" placeholder="0" inputmode="numeric" aria-label="Seguidores"><span>seguidores</span></div>
+    </div>
+  </div>
+  <div class="handle">@<input id="user" aria-label="Utilizador"></div>
+  <textarea class="bio" id="bio" placeholder="Bio do perfil…"></textarea>
+
+  <div class="bar">
+    <button class="b p" id="add">+ Fotos</button>
+    <button class="b" id="ratio"></button>
+    <button class="b" id="exp">Exportar</button>
+    <button class="b" id="imp">Importar</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div class="leg"><span><i></i>Rascunho</span><span><i style="background:var(--ok)"></i>Pronto</span><span><i style="background:var(--done)"></i>Publicado</span></div>
+  <p class="note">Os posts ficam guardados só neste aparelho. Usa Exportar e Importar para passar o feed do PC para o telemóvel.</p>
+</div>
+
+<div class="ov" id="ov" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="Editar post">
+    <img id="pimg" alt="">
+    <div class="row"><button class="b" id="left">← Mover</button><button class="b" id="right">Mover →</button></div>
+    <div style="text-align:center;font-size:12px;color:var(--mute)" id="pos"></div>
+    <label for="cap">Legenda</label>
+    <textarea id="cap" rows="4" placeholder="Escreve a legenda…"></textarea>
+    <div class="row">
+      <div><label for="dt">Data prevista</label><input type="date" id="dt"></div>
+      <div><label for="st">Estado</label><select id="st"><option value="rascunho">Rascunho</option><option value="pronto">Pronto</option><option value="publicado">Publicado</option></select></div>
+    </div>
+    <div class="row"><button class="b" id="rep">Trocar imagem</button><button class="b d" id="del">Apagar</button><button class="b p" id="close">Fechar</button></div>
+  </div>
+</div>
+
+<input type="file" id="f1" accept="image/*" multiple hidden>
+<input type="file" id="f2" accept="image/*" hidden>
+<input type="file" id="f3" accept="application/json,.json" hidden>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+var KEY="feedPlanner.v1";
+var S={profile:{user:"cristianarodriguesss",followers:"",bio:""},posts:[],ratio:"3/4"};
+try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&Array.isArray(o.posts))S=o}}catch(e){}
+var cur=null;
+function $(id){return document.getElementById(id)}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast("Sem espaço neste browser. Exporta uma cópia.")}}
+function toast(m){var t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){t.hidden=true},3500)}
+function shrink(file){return new Promise(function(res,rej){
+  var fr=new FileReader();
+  fr.onload=function(){var im=new Image();
+    im.onload=function(){var k=Math.min(1,720/Math.max(im.width,im.height));var c=document.createElement("canvas");
+      c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+      res(c.toDataURL("image/jpeg",.72))};
+    im.onerror=rej;im.src=fr.result};
+  fr.onerror=rej;fr.readAsDataURL(file)})}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+
+function render(){
+  var p=S.profile;
+  $("av").textContent=(p.user||"c").charAt(0);
+  $("cnt").textContent=S.posts.length;
+  $("ratio").textContent="Formato "+(S.ratio==="1/1"?"1:1":"3:4");
+  var g=$("grid");g.innerHTML="";g.style.setProperty("--r",S.ratio);
+  if(!S.posts.length){var e=document.createElement("div");e.className="empty";e.textContent="Ainda sem posts. Carrega em “+ Fotos” para ver como fica o teu feed.";g.appendChild(e);return}
+  S.posts.forEach(function(po,i){
+    var b=document.createElement("button");b.className="tile";b.setAttribute("aria-label","Editar post "+(i+1));
+    var im=document.createElement("img");im.src=po.img;im.alt="";
+    var d=document.createElement("i");d.className="dot s-"+po.status;
+    b.appendChild(im);b.appendChild(d);b.onclick=function(){openPost(i)};g.appendChild(b)});
+}
+function openPost(i){
+  cur=i;var po=S.posts[i];
+  $("pimg").src=po.img;$("cap").value=po.caption||"";$("dt").value=po.date||"";$("st").value=po.status;
+  $("pos").textContent="Posição "+(i+1)+" de "+S.posts.length+(i===0?" (o mais recente)":"");
+  $("ov").hidden=false}
+function closePost(){$("ov").hidden=true;cur=null}
+
+$("user").value=S.profile.user;$("fol").value=S.profile.followers;$("bio").value=S.profile.bio;
+$("user").oninput=function(){S.profile.user=this.value.replace(/^@/,"");$("av").textContent=(S.profile.user||"c").charAt(0);save()};
+$("fol").oninput=function(){S.profile.followers=this.value;save()};
+$("bio").oninput=function(){S.profile.bio=this.value;save()};
+$("ratio").onclick=function(){S.ratio=S.ratio==="3/4"?"1/1":"3/4";save();render()};
+$("add").onclick=function(){$("f1").click()};
+$("f1").onchange=function(){
+  var files=Array.prototype.slice.call(this.files);this.value="";
+  Promise.all(files.map(function(f){return shrink(f).then(function(img){return{id:uid(),img:img,caption:"",date:"",status:"rascunho"}}).catch(function(){return null})}))
+  .then(function(n){n=n.filter(Boolean);if(n.length<files.length)toast("Alguma imagem não pôde ser lida.");
+    S.posts=n.concat(S.posts);save();render()})};
+$("cap").oninput=function(){S.posts[cur].caption=this.value;save()};
+$("dt").onchange=function(){S.posts[cur].date=this.value;save()};
+$("st").onchange=function(){S.posts[cur].status=this.value;save();render()};
+function move(d){var j=cur+d;if(j<0||j>=S.posts.length)return;var t=S.posts[cur];S.posts[cur]=S.posts[j];S.posts[j]=t;save();render();openPost(j)}
+$("left").onclick=function(){move(-1)};$("right").onclick=function(){move(1)};
+$("rep").onclick=function(){$("f2").click()};
+$("f2").onchange=function(){var f=this.files[0];this.value="";if(!f)return;
+  shrink(f).then(function(img){S.posts[cur].img=img;$("pimg").src=img;save();render()}).catch(function(){toast("Não consegui ler a imagem.")})};
+$("del").onclick=function(){if(!confirm("Apagar este post do planner?"))return;S.posts.splice(cur,1);save();closePost();render()};
+$("close").onclick=closePost;
+$("ov").onclick=function(e){if(e.target===this)closePost()};
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!$("ov").hidden)closePost()});
+
+$("exp").onclick=function(){
+  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));
+  a.download="feed-planner.json";document.body.appendChild(a);a.click();a.remove()};
+$("imp").onclick=function(){$("f3").click()};
+$("f3").onchange=function(){var f=this.files[0];this.value="";if(!f)return;
+  var fr=new FileReader();fr.onload=function(){
+    try{var o=JSON.parse(fr.result);if(!o||!Array.isArray(o.posts))throw 0;
+      if(!confirm("Substituir o feed atual pelo ficheiro importado?"))return;
+      S=o;S.profile=S.profile||{user:"",followers:"",bio:""};
+      $("user").value=S.profile.user||"";$("fol").value=S.profile.followers||"";$("bio").value=S.profile.bio||"";
+      save();render();toast("Feed importado.")}
+    catch(e){toast("Ficheiro inválido.")}};
+  fr.readAsText(f)};
+render();
+</script>
+</body>
+</html>
